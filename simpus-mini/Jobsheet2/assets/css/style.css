@@ -77,7 +77,7 @@ section h2 {
 /* ===== Kartu Statistik (CSS Grid) ===== */
 main section:nth-of-type(2) {
     display: grid;
-    grid-template-columns: repeat(1, 1fr);
+    grid-template-columns: repeat(4, fr);
     gap: 1rem;
 }
 
@@ -146,6 +146,12 @@ td button:last-of-type {
     color: #fff;
     font-weight: 700;
 
+}
+
+.btn-detail {
+    background-color: #14c423;
+    color: #fff;
+    font-weight: 700;
 }
 
 /* ===== Form ===== */
