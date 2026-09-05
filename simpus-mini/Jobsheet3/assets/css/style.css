@@ -6,7 +6,7 @@
 }
 
 body {
-  font-family: 'Poppins', 'Futura', 'Century Gothic', sans-serif;
+    font-family: 'Poppins', 'Futura', 'Century Gothic', sans-serif;
     color: rgb(225, 225, 225);
     background-color: rgb(25, 25, 25);
     line-height: 1.5;
@@ -106,7 +106,8 @@ table {
     border-collapse: collapse;
 }
 
-th, td {
+th,
+td {
     text-align: left;
     padding: 0.65rem 0.75rem;
     border-bottom: 1px solid #e2e6ea;
@@ -211,7 +212,7 @@ footer {
 /* ===== Responsive Breakpoints ===== */
 
 /* Tablet ke bawah */
-@media (max-width: 768px) {
+@media (max-width: 900px) {
     main section:nth-of-type(2) {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -234,7 +235,7 @@ footer {
         margin-top: 1rem;
     }
 
-    .nav-toggle:checked ~ nav {
+    .nav-toggle:checked~nav {
         display: block;
     }
 
@@ -250,5 +251,15 @@ footer {
     form input,
     form select {
         max-width: 100%;
+    }
+}
+
+@media (min-width: 1400px) {
+    main {
+        max-width: 1300px;
+    }
+
+    main section:nth-of-type(2) {
+        gap: 1.5rem;
     }
 }
