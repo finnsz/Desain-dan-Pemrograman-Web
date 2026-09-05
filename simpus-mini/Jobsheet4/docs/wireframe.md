@@ -68,3 +68,36 @@ Wireframe riwayat peminjaman per anggota
 |  Bumi Manusia      | 15/07    | -       | Dipinjam    |
 +--------------------------------------+
 
+Wireframe registrasi anggota baru
++-----------------------------------------------------------------------+
+|  Registrasi anggota baru                                              |
++-----------------------------------------------------------------------+
+|                                                                       |
+|  Nama Lengkap                                                         |
+|  [________________]                                                   |
+|                                                                       |
+|  Nomor Identitas (NIM)                                                |
+|  [________________]                                                   |
+|                                                                       |
+|  Email                                                                |
+|  [________________]                                                   |
+|                                                                       |
+|  Nomor Telepon / WhatsApp                                             |
+|  [________________]                                                   |
+|                                                                       |
+|  Alamat Tinggal                                                       |
+|  [________________]                                                   |
+|                                                                       |
+|  [ ] Saya menyetujui seluruh tata tertib & denda perpustakaan         |
+|                                                                       |
+|  [ Daftar Sekarang ]   [ Batal ]                                      |
+|                                                                       |
++-----------------------------------------------------------------------+
+
+Userflow Petugas mencari anggota yang tunggakannya sudah lewat jatuh tempo
+[Petugas Login] -> [Dashboard] -> [Pilih menu "Daftar Peminjaman"]
+-> [Pilih Filter "Lewat Jatuh Tempo"]
+-> [Sistem Tampilkan Daftar Anggota & Buku yang Menunggak]
+-> [Pilih salah satu Anggota] -> [Lihat Rincian Denda & Hari Terlambat]
+-> [Pilih Aksi "Kirim Peringatan" atau "Proses Pengembalian"]
+-> [Kembali ke Dashboard]
