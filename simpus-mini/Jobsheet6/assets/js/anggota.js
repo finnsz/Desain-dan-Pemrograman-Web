@@ -37,4 +37,16 @@ async function muatDaftarAnggota() {
     }
 }
 
-document.addEventListener("DOMContentLoaded", muatDaftarAnggota);
+// Inisialisasi event listener saat halaman dimuat
+document.addEventListener("DOMContentLoaded", function () {
+    // 1. Muat data otomatis pertama kali
+    muatDaftarAnggota();
+
+    // 2. Pasang event listener pada tombol "Muat Ulang"
+    const reloadBtn = document.getElementById("btn-reload");
+    if (reloadBtn) {
+        reloadBtn.addEventListener("click", function () {
+            muatDaftarAnggota();
+        });
+    }
+});

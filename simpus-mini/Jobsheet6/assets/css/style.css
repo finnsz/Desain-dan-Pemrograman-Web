@@ -294,3 +294,38 @@ footer {
         gap: 1.5rem;
     }
 }
+
+/* ===== Penataan Search & Tombol Aksi ===== */
+.search-action {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+/* Tombol Muat Ulang */
+.btn-secondary {
+    background-color: #1d5b8a;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.btn-secondary:hover {
+    background-color: #164869;
+}
+
+/* Indikator Memuat Data */
+#loading-indicator {
+    display: none;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #2d88cd;
+    font-style: italic;
+}
