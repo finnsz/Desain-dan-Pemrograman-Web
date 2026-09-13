@@ -73,6 +73,7 @@ section h2 {
     margin-bottom: 1rem;
     color: #2d88cd;
 }
+
 /* ===== Kolom Pencarian ===== */
 .search-box {
     margin-bottom: 1rem;
@@ -251,14 +252,22 @@ footer {
     }
 
     header nav {
-        display: none;
+        display: block;
         width: 100%;
         order: 3;
-        margin-top: 1rem;
+        margin-top: 0;
+        max-height: 0;
+        /* Tersembunyi karena tingginya 0 */
+        opacity: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease, opacity 0.3s ease, margin-top 0.3s ease;
     }
 
     header nav.nav-open {
-        display: block;
+        max-height: 300px;
+        /* Batas tinggi maksimum menu saat terbuka */
+        opacity: 1;
+        margin-top: 1rem;
     }
 
     header nav ul {
