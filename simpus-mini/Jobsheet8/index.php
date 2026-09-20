@@ -11,12 +11,11 @@ $total_anggota = $pdo->query("SELECT COUNT(*) FROM anggota")->fetchColumn();
 ?>
 
 <section>
-    <h2>Selamat Datang di Sistem Perpustakaan Mini</h2>
-    <p>Aplikasi sederhana untuk mengelola data buku dan anggota perpustakaan.</p>
+    <h2>Selamat Datang di SIMPUS-Mini</h2>
+    <p style="color: var(--text-muted);">Sistem informasi manajemen perpustakaan sederhana berbasis Web & PostgreSQL.</p>
 </section>
 
 <section>
-    <h2>Ringkasan</h2>
     <article>
         <h3>Total Buku</h3>
         <p><?= $total_buku ?></p>

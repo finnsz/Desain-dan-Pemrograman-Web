@@ -13,6 +13,10 @@ $anggota_list = $stmt->fetchAll();
 <section>
     <h2>Daftar Anggota</h2>
 
+    <div class="search-box">
+        <input type="text" id="search-input" placeholder="Cari nama atau no. anggota...">
+    </div>
+
     <div class="table-responsive">
         <table>
             <thead>
@@ -25,12 +29,12 @@ $anggota_list = $stmt->fetchAll();
             </thead>
             <tbody>
                 <?php if (empty($anggota_list)): ?>
-                    <tr><td colspan="4">Belum ada data anggota di database.</td></tr>
+                    <tr><td colspan="4" style="text-align: center; color: var(--text-muted);">Belum ada data anggota di database.</td></tr>
                 <?php else: ?>
                     <?php foreach ($anggota_list as $anggota): ?>
                         <tr>
-                            <td><?= htmlspecialchars($anggota['no_anggota']) ?></td>
-                            <td><?= htmlspecialchars($anggota['nama']) ?></td>
+                            <td><code style="color: var(--accent-cyan);"><?= htmlspecialchars($anggota['no_anggota']) ?></code></td>
+                            <td><strong><?= htmlspecialchars($anggota['nama']) ?></strong></td>
                             <td><?= htmlspecialchars($anggota['alamat'] ?? '-') ?></td>
                             <td><?= htmlspecialchars($anggota['no_hp'] ?? '-') ?></td>
                         </tr>
