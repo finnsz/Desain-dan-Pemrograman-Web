@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once '../config/database.php';
+require_once __DIR__ . '/../config/database.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $no_anggota = trim($_POST['no_anggota'] ?? '');
@@ -15,7 +15,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    // Cek apakah No. Anggota sudah terdaftar di database
     $stmtCek = $pdo->prepare("SELECT COUNT(*) FROM anggota WHERE no_anggota = ?");
     $stmtCek->execute([$no_anggota]);
     if ($stmtCek->fetchColumn() > 0) {
@@ -25,7 +24,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    // Insert ke PostgreSQL
     $sql = "INSERT INTO anggota (no_anggota, nama, alamat, no_hp) VALUES (:no_anggota, :nama, :alamat, :no_hp)";
     $stmt = $pdo->prepare($sql);
     $simpan = $stmt->execute([

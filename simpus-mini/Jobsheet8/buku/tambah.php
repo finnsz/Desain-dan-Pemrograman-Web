@@ -1,7 +1,7 @@
 <?php
 $base = '../';
 $title = 'SIMPUS-Mini | Tambah Buku';
-include '../includes/header.php';
+include __DIR__ . '/../includes/header.php';
 ?>
 
 <section>
@@ -41,4 +41,4 @@ include '../includes/header.php';
     </form>
 </section>
 
-<?php include '../includes/footer.php'; ?>
+<?php include __DIR__ . '/../includes/footer.php'; ?>

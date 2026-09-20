@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once '../config/database.php'; // Panggil PDO
+require_once __DIR__ . '/../config/database.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $judul     = trim($_POST['judul'] ?? '');
@@ -17,7 +17,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    // Gunakan parameter bawaan PDO (:nama_kolom) untuk keamanan dari SQL Injection
     $sql = "INSERT INTO buku (judul, pengarang, tahun, isbn, stok, kategori) 
             VALUES (:judul, :pengarang, :tahun, :isbn, :stok, :kategori)";
     
