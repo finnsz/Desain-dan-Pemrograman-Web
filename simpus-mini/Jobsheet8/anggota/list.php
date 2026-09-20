@@ -2,8 +2,9 @@
 $base = '../';
 $title = 'SIMPUS-Mini | Daftar Anggota';
 
-require_once '../config/database.php';
-include '../includes/header.php';
+// Panggil file koneksi PDO menggunakan __DIR__
+require_once __DIR__ . '/../config/database.php';
+include __DIR__ . '/../includes/header.php';
 
 // Ambil data anggota dari PostgreSQL
 $stmt = $pdo->query("SELECT * FROM anggota ORDER BY id DESC");
@@ -45,4 +46,4 @@ $anggota_list = $stmt->fetchAll();
     </div>
 </section>
 
-<?php include '../includes/footer.php'; ?>
+<?php include __DIR__ . '/../includes/footer.php'; ?>

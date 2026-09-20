@@ -2,9 +2,9 @@
 $base = '../';
 $title = 'SIMPUS-Mini | Daftar Buku';
 
-// Panggil file koneksi PDO
-require_once '../config/database.php';
-include '../includes/header.php';
+// Panggil file koneksi PDO menggunakan __DIR__
+require_once __DIR__ . '/../config/database.php';
+include __DIR__ . '/../includes/header.php';
 
 // Ambil data dari tabel buku PostgreSQL
 $stmt = $pdo->query("SELECT * FROM buku ORDER BY id DESC");
@@ -51,4 +51,4 @@ $buku_list = $stmt->fetchAll();
     </div>
 </section>
 
-<?php include '../includes/footer.php'; ?>
+<?php include __DIR__ . '/../includes/footer.php'; ?>
