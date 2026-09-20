@@ -1,12 +1,11 @@
 <?php
-$host     = "localhost";
-$port     = "5432"; // Port bawaan PostgreSQL
-$dbname   = "simpus_mini";
-$user     = "postgres"; // Username PostgreSQL kamu
-$password = "123"; // Password PostgreSQL kamu
+$host     = getenv('DB_HOST') ?: "localhost";
+$port     = getenv('DB_PORT') ?: "5432";
+$dbname   = getenv('DB_NAME') ?: "simpus_mini";
+$user     = getenv('DB_USER') ?: "postgres";
+$password = getenv('DB_PASSWORD') ?: "123";
 
 try {
-    // Penggunaan driver pgsql untuk PostgreSQL
     $dsn = "pgsql:host=$host;port=$port;dbname=$dbname;";
     $pdo = new PDO($dsn, $user, $password, [
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
