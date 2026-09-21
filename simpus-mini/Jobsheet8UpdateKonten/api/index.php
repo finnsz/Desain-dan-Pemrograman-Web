@@ -1,21 +1,18 @@
 <?php
-// Ambil path dari URL
 $requestUri = $_SERVER['REQUEST_URI'];
 $parseUrl   = parse_url($requestUri, PHP_URL_PATH);
 
-// Tentukan direktori root utama (1 level di atas folder api)
+// Tentukan direktori root utama
 $rootDir = realpath(__DIR__ . '/..');
-
-// Ubah working directory ke root agar include/require internal tidak pecah
 chdir($rootDir);
 
-// 1. Jika akses root domain (/)
+// 1. Jika akses ke root domain (/)
 if ($parseUrl === '/' || $parseUrl === '') {
     require $rootDir . '/index.php';
     exit;
 }
 
-// Susun lokasi file fisik
+// Lokasi file fisik yang dituju
 $file = $rootDir . $parseUrl;
 
 // 2. Jika file PHP dipanggil langsung (misal: /kamar/list.php)
@@ -24,7 +21,7 @@ if (file_exists($file) && is_file($file) && pathinfo($file, PATHINFO_EXTENSION) 
     exit;
 }
 
-// 3. Jika URL tanpa ekstensi .php (misal: /kamar/list)
+// 3. Jika URL dipanggil tanpa .php (misal: /kamar/list)
 if (file_exists($file . '.php') && is_file($file . '.php')) {
     require $file . '.php';
     exit;
@@ -35,6 +32,6 @@ if (file_exists($file) && is_file($file)) {
     return false;
 }
 
-// 5. Tampilan jika file memang tidak ada
+// 5. Tampilan jika file tidak ditemukan
 http_response_code(404);
-echo "404 Not Found - Path: " . htmlspecialchars($parseUrl);
+echo "404 Not Found - Path file: " . htmlspecialchars($parseUrl);
