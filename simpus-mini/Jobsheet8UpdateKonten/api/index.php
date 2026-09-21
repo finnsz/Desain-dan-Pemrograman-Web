@@ -1,40 +1,54 @@
 <?php
-// Ambil path dari URL
 $requestUri = $_SERVER['REQUEST_URI'];
 $parseUrl   = parse_url($requestUri, PHP_URL_PATH);
 
-// Tentukan lokasi root proyek (1 tingkat di atas folder /api)
+// Tentukan root direktori dengan dirname
 $rootDir = dirname(__DIR__);
 
-// Ubah direktori kerja ke root
-chdir($rootDir);
+// Switch/Match Path URL secara eksplisit
+switch ($parseUrl) {
+    case '/':
+    case '':
+    case '/index.php':
+        require $rootDir . '/index.php';
+        break;
 
-// 1. Jika akses ke root domain (/)
-if ($parseUrl === '/' || $parseUrl === '') {
-    require $rootDir . '/index.php';
-    exit;
+    case '/kamar/list.php':
+    case '/kamar/list':
+        require $rootDir . '/kamar/list.php';
+        break;
+
+    case '/kamar/tambah.php':
+    case '/kamar/tambah':
+        require $rootDir . '/kamar/tambah.php';
+        break;
+
+    case '/kamar/proses_tambah.php':
+        require $rootDir . '/kamar/proses_tambah.php';
+        break;
+
+    case '/penghuni/list.php':
+    case '/penghuni/list':
+        require $rootDir . '/penghuni/list.php';
+        break;
+
+    case '/penghuni/tambah.php':
+    case '/penghuni/tambah':
+        require $rootDir . '/penghuni/tambah.php';
+        break;
+
+    case '/penghuni/proses_tambah.php':
+        require $rootDir . '/penghuni/proses_tambah.php';
+        break;
+
+    default:
+        // Coba panggil file dinamis jika ada
+        $targetFile = $rootDir . $parseUrl;
+        if (file_exists($targetFile) && is_file($targetFile)) {
+            require $targetFile;
+        } else {
+            http_response_code(404);
+            echo "404 Not Found - Path file: " . htmlspecialchars($parseUrl);
+        }
+        break;
 }
-
-// Susun path fisik file yang dicari
-$file = $rootDir . $parseUrl;
-
-// 2. Jika file PHP dipanggil langsung (misal: /kamar/list.php)
-if (file_exists($file) && is_file($file) && pathinfo($file, PATHINFO_EXTENSION) === 'php') {
-    require $file;
-    exit;
-}
-
-// 3. Jika URL dipanggil tanpa .php (misal: /kamar/list)
-if (file_exists($file . '.php') && is_file($file . '.php')) {
-    require $file . '.php';
-    exit;
-}
-
-// 4. Jika merujuk ke file statis (CSS/JS)
-if (file_exists($file) && is_file($file)) {
-    return false;
-}
-
-// 5. Tampilan jika file tidak ditemukan
-http_response_code(404);
-echo "404 Not Found - Path file: " . htmlspecialchars($parseUrl);
