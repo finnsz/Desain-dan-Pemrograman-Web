@@ -2,10 +2,32 @@
 $requestUri = $_SERVER['REQUEST_URI'];
 $parseUrl   = parse_url($requestUri, PHP_URL_PATH);
 
-// Tentukan root direktori dengan dirname
+// Tentukan root direktori
 $rootDir = dirname(__DIR__);
 
-// Switch/Match Path URL secara eksplisit
+// 1. Penanganan File Statis (CSS, JS, Gambar)
+$staticFile = $rootDir . $parseUrl;
+if (file_exists($staticFile) && is_file($staticFile)) {
+    $ext = pathinfo($staticFile, PATHINFO_EXTENSION);
+    
+    // Tentukan mime type agar browser membaca CSS dengan benar
+    $mimeTypes = [
+        'css'  => 'text/css',
+        'js'   => 'application/javascript',
+        'png'  => 'image/png',
+        'jpg'  => 'image/jpeg',
+        'jpeg' => 'image/jpeg',
+        'svg'  => 'image/svg+xml'
+    ];
+
+    if (isset($mimeTypes[$ext])) {
+        header('Content-Type: ' . $mimeTypes[$ext]);
+        readfile($staticFile);
+        exit;
+    }
+}
+
+// 2. Routing URL Aplikasi
 switch ($parseUrl) {
     case '/':
     case '':
@@ -42,13 +64,7 @@ switch ($parseUrl) {
         break;
 
     default:
-        // Coba panggil file dinamis jika ada
-        $targetFile = $rootDir . $parseUrl;
-        if (file_exists($targetFile) && is_file($targetFile)) {
-            require $targetFile;
-        } else {
-            http_response_code(404);
-            echo "404 Not Found - Path file: " . htmlspecialchars($parseUrl);
-        }
+        http_response_code(404);
+        echo "404 Not Found - Path file: " . htmlspecialchars($parseUrl);
         break;
 }
