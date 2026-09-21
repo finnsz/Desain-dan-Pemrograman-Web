@@ -1,9 +1,12 @@
 <?php
+// Ambil path dari URL
 $requestUri = $_SERVER['REQUEST_URI'];
 $parseUrl   = parse_url($requestUri, PHP_URL_PATH);
 
-// Tentukan direktori root utama
-$rootDir = realpath(__DIR__ . '/..');
+// Tentukan lokasi root proyek (1 tingkat di atas folder /api)
+$rootDir = dirname(__DIR__);
+
+// Ubah direktori kerja ke root
 chdir($rootDir);
 
 // 1. Jika akses ke root domain (/)
@@ -12,7 +15,7 @@ if ($parseUrl === '/' || $parseUrl === '') {
     exit;
 }
 
-// Lokasi file fisik yang dituju
+// Susun path fisik file yang dicari
 $file = $rootDir . $parseUrl;
 
 // 2. Jika file PHP dipanggil langsung (misal: /kamar/list.php)
