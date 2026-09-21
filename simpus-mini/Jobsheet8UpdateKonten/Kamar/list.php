@@ -8,7 +8,6 @@ include __DIR__ . '/../includes/header.php';
 $stmt = $pdo->query("SELECT * FROM kamar ORDER BY nomor_kamar ASC");
 $kamar_list = $stmt->fetchAll();
 ?>
-
 <section class="card-section">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
         <h2>Daftar Kamar Kost</h2>
