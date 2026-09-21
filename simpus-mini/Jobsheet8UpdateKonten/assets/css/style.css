@@ -1,0 +1,446 @@
+/* ===== SIMKOS Modern Light Theme - UI Redesign ===== */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+:root {
+    --bg-app: #f8fafc;
+    --bg-card: #ffffff;
+    --bg-sidebar: #0f172a;
+    --border-color: #e2e8f0;
+    --primary: #4f46e5;
+    --primary-hover: #4338ca;
+    --primary-light: #eef2ff;
+    --accent-teal: #0d9488;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #94a3b8;
+    --success-bg: #dcfce7;
+    --success-text: #15803d;
+    --warning-bg: #fef3c7;
+    --warning-text: #b45309;
+    --danger-bg: #fee2e2;
+    --danger-text: #b91c1c;
+    --sidebar-width: 250px;
+}
+
+/* Reset & Base Layout */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: var(--bg-app);
+    color: var(--text-primary);
+    display: flex;
+    min-height: 100vh;
+}
+
+a { color: var(--primary); text-decoration: none; }
+a:hover { color: var(--primary-hover); }
+
+/* Layout App Container */
+.app-container {
+    display: flex;
+    width: 100%;
+}
+
+
+/* Styling Accordion / Collapse Sidebar */
+aside.app-sidebar nav .nav-accordion {
+    margin-top: 0.5rem;
+}
+
+aside.app-sidebar nav .nav-accordion summary.nav-group-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: #64748b;
+    padding: 0.6rem 0.75rem;
+    text-transform: uppercase;
+    cursor: pointer;
+    list-style: none; /* Sembunyikan panah default HTML */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 6px;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+aside.app-sidebar nav .nav-accordion summary.nav-group-title:hover {
+    color: #f8fafc;
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Kustom Tanda Panah Indikator */
+aside.app-sidebar nav .nav-accordion summary.nav-group-title::after {
+    content: '❯';
+    font-size: 0.65rem;
+    transition: transform 0.2s ease;
+}
+
+aside.app-sidebar nav .nav-accordion[open] summary.nav-group-title::after {
+    transform: rotate(90deg);
+}
+
+/* Indentasi / Tab Sub-menu di dalam Collapse */
+aside.app-sidebar nav .nav-accordion ul {
+    padding-left: 0.5rem;
+    margin-top: 0.2rem;
+}
+/* Sidebar Layout */
+aside.app-sidebar {
+    width: var(--sidebar-width);
+    background-color: var(--bg-sidebar);
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem 1rem;
+    position: fixed;
+    height: 100vh;
+    z-index: 100;
+}
+
+aside.app-sidebar .brand {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #38bdf8;
+    padding: 0.5rem 0.75rem;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+aside.app-sidebar nav ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+aside.app-sidebar nav a {
+    color: #94a3b8;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 0.9rem;
+    display: block;
+    transition: all 0.2s ease;
+}
+
+aside.app-sidebar nav a:hover,
+aside.app-sidebar nav a.active {
+    background-color: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+}
+
+/* Main Content Area */
+.app-main {
+    margin-left: var(--sidebar-width);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+header.topbar {
+    background-color: var(--bg-card);
+    border-bottom: 1px solid var(--border-color);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 90;
+}
+
+header.topbar .page-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+header.topbar .user-info {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+main.content {
+    padding: 2rem;
+    max-width: 1200px;
+}
+
+/* Flash Alert */
+.alert {
+    padding: 0.85rem 1.25rem;
+    border-radius: 10px;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+.alert-success { background-color: var(--success-bg); color: var(--success-text); }
+.alert-danger { background-color: var(--danger-bg); color: var(--danger-text); }
+
+/* Dashboard Cards Grid */
+.grid-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+}
+
+.stat-card h3 {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+}
+
+.stat-card .value {
+    font-size: 2.25rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+/* Sections & Cards */
+section.card-section {
+    background-color: var(--bg-card);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+}
+
+section.card-section h2 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 1.25rem;
+    color: var(--text-primary);
+}
+
+/* Search Box */
+.search-box input {
+    width: 100%;
+    max-width: 320px;
+    padding: 0.6rem 0.9rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 0.875rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.search-box input:focus {
+    border-color: var(--primary);
+}
+
+/* Table Design */
+.table-responsive {
+    overflow-x: auto;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+}
+
+th {
+    background-color: #f1f5f9;
+    color: var(--text-secondary);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    padding: 0.75rem 1rem;
+    text-align: left;
+}
+
+td {
+    padding: 0.9rem 1rem;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-primary);
+}
+
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover { background-color: #f8fafc; }
+
+/* Status Badges */
+.badge {
+    padding: 0.25rem 0.6rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    display: inline-block;
+}
+.badge-success { background-color: var(--success-bg); color: var(--success-text); }
+.badge-warning { background-color: var(--warning-bg); color: var(--warning-text); }
+
+/* Forms & Buttons */
+form p { margin-bottom: 1.25rem; }
+form label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-secondary); /*[cite: 2] */
+    margin-bottom: 0.35rem;
+}
+
+form input[type="text"],
+form input[type="number"],
+form select {
+    width: 100%;
+    max-width: 440px;
+    padding: 0.65rem 0.9rem;
+    border: 1px solid var(--border-color); /*[cite: 2] */
+    border-radius: 8px;
+    font-size: 0.9rem;
+    outline: none;
+    background-color: #ffffff; /*[cite: 2] */
+    color: #0f172a !important; /* TAMBAHKAN INI: Memaksa teks input/select berwarna gelap */
+}
+
+/* TAMBAHKAN RULE INI: Memastikan teks di dropdown option terlihat jelas */
+form select option {
+    background-color: #ffffff;
+    color: #0f172a;
+    padding: 0.5rem;
+}
+
+form input:focus, form select:focus {
+    border-color: var(--primary); /*[cite: 2] */
+    box-shadow: 0 0 0 3px var(--primary-light); /*[cite: 2] */
+}
+
+button[type="submit"], .btn-primary {
+    background-color: var(--primary);
+    color: #ffffff;
+    border: none;
+    padding: 0.65rem 1.5rem;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+button[type="submit"]:hover, .btn-primary:hover {
+    background-color: var(--primary-hover);
+}
+
+/* Footer */
+footer {
+    padding: 2rem;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    margin-top: auto;
+}
+/* ===== Fix Layout Banner Welcome Beranda ===== */
+section.welcome-banner {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%) !important;
+    border-left: 4px solid var(--primary) !important;
+    flex-wrap: wrap !important;
+    gap: 1rem !important;
+    position: relative !important;
+}
+
+.quick-actions {
+    display: flex !important;
+    gap: 0.5rem !important;
+    align-items: center !important;
+    margin-top: 0.5rem !important;
+}
+
+.btn-secondary {
+    background-color: #e2e8f0 !important;
+    color: var(--text-primary) !important;
+    border: none !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    text-decoration: none !important;
+    display: inline-block !important;
+    transition: background-color 0.2s !important;
+}
+
+.btn-secondary:hover {
+    background-color: #cbd5e1 !important;
+    color: var(--text-primary) !important;
+}
+
+.btn-primary {
+    text-decoration: none !important;
+    display: inline-block !important;
+}
+/* Fix Hover Tombol Banner Beranda */
+.btn-primary {
+    background-color: var(--primary) !important;
+    color: #ffffff !important;
+    text-decoration: none !important;
+    display: inline-block !important;
+}
+
+/* Memastikan teks tetap putih terang saat di-hover */
+.btn-primary:hover {
+    background-color: var(--primary-hover) !important;
+    color: #ffffff !important;
+}
+
+.btn-secondary {
+    background-color: #e2e8f0 !important;
+    color: var(--text-primary) !important;
+    border: none !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    text-decoration: none !important;
+    display: inline-block !important;
+    transition: background-color 0.2s !important;
+}
+
+.btn-secondary:hover {
+    background-color: #cbd5e1 !important;
+    color: var(--text-primary) !important;
+}
+
+/* ===== Fix Tampilan Input Pencarian ===== */
+.search-box input,
+#search-input {
+    width: 100% !important;
+    max-width: 320px !important;
+    padding: 0.65rem 1rem !important;
+    background-color: #ffffff !important; /* Warna latar putih */
+    color: #0f172a !important;            /* Teks warna gelap */
+    border: 1px solid #cbd5e1 !important;  /* Border abu-abu halus */
+    border-radius: 8px !important;
+    font-size: 0.875rem !important;
+    outline: none !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
+    transition: all 0.2s ease !important;
+}
+
+/* Style saat input diklik / fokus */
+.search-box input:focus,
+#search-input:focus {
+    border-color: var(--primary) !important;
+    box-shadow: 0 0 0 3px var(--primary-light) !important;
+}
+
+/* Warna teks placeholder agar terlihat jelas */
+.search-box input::placeholder,
+#search-input::placeholder {
+    color: #94a3b8 !important;
+    opacity: 1 !important;
+}
