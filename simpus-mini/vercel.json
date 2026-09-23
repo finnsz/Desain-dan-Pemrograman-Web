@@ -1,14 +1,22 @@
 {
   "functions": {
-    "**/*.php": {
+    "api/**/*.php": {
+      "runtime": "vercel-php@0.6.0"
+    },
+    "index.php": {
+      "runtime": "vercel-php@0.6.0"
+    },
+    "Jobsheet7/**/*.php": {
+      "runtime": "vercel-php@0.6.0"
+    },
+    "Jobsheet8/**/*.php": {
+      "runtime": "vercel-php@0.6.0"
+    },
+    "Jobsheet8UpdateKonten/**/*.php": {
       "runtime": "vercel-php@0.6.0"
     }
   },
   "routes": [
-    {
-      "src": "/",
-      "dest": "/index.php"
-    },
     {
       "src": "/(.*)",
       "dest": "/$1"
