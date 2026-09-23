@@ -11,15 +11,12 @@
         :root {
             --bg-app: #f8fafc;
             --bg-card: #ffffff;
-            --bg-sidebar: #0f172a;
             --border-color: #e2e8f0;
             --primary: #4f46e5;
             --primary-hover: #4338ca;
-            --primary-light: #eef2ff;
             --text-primary: #0f172a;
             --text-secondary: #475569;
             --text-muted: #94a3b8;
-            --accent-teal: #0d9488;
         }
 
         * {
@@ -36,32 +33,6 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-        }
-
-        /* Topbar Header */
-        header.topbar {
-            background-color: var(--bg-card);
-            border-bottom: 1px solid var(--border-color);
-            padding: 1.25rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
-        }
-
-        header.topbar .brand {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--primary);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        header.topbar .user-info {
-            font-size: 0.875rem;
-            color: var(--text-secondary);
-            font-weight: 500;
         }
 
         /* Main Content Container */
@@ -98,7 +69,7 @@
         /* Grid Task Links */
         .jobsheet-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
             gap: 1.25rem;
         }
 
@@ -106,12 +77,13 @@
             background-color: var(--bg-card);
             border: 1px solid var(--border-color);
             border-radius: 12px;
-            padding: 1.25rem 1.5rem;
+            padding: 1.5rem;
             text-decoration: none;
             color: var(--text-primary);
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            min-height: 110px;
             transition: all 0.2s ease;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
         }
@@ -122,42 +94,20 @@
             box-shadow: 0 8px 16px -4px rgba(79, 70, 229, 0.08);
         }
 
-        .jobsheet-card .badge {
-            align-self: flex-start;
-            padding: 0.25rem 0.6rem;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            margin-bottom: 0.75rem;
-            background-color: var(--primary-light);
-            color: var(--primary);
-        }
-
-        .jobsheet-card.featured .badge {
-            background-color: #dcfce7;
-            color: #15803d;
-        }
-
         .jobsheet-card h2 {
-            font-size: 1.05rem;
+            font-size: 1.1rem;
             font-weight: 700;
             color: var(--text-primary);
-            margin-bottom: 0.25rem;
-        }
-
-        .jobsheet-card p {
-            font-size: 0.825rem;
-            color: var(--text-muted);
-            margin-bottom: 1rem;
         }
 
         .jobsheet-card .arrow-link {
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             font-weight: 600;
             color: var(--primary);
             display: flex;
             align-items: center;
             gap: 0.25rem;
+            margin-top: 1rem;
         }
 
         .jobsheet-card:hover .arrow-link {
@@ -178,101 +128,57 @@
 </head>
 <body>
 
-    <!-- Topbar Header -->
-    <header class="topbar">
-        <div class="brand">
-            <span>PEMROGRAMAN WEB</span>
-        </div>
-        <div class="user-info">Daftar Portofolio Tugas</div>
-    </header>
-
     <!-- Main Content -->
     <main class="container">
         <div class="welcome-card">
-            <h1>Daftar Jobsheet Практикум</h1>
+            <h1>Daftar Jobsheet Praktikum</h1>
             <p>Pilih salah satu materi jobsheet di bawah ini untuk memeriksa hasil pengerjaan aplikasi web:</p>
         </div>
 
         <div class="jobsheet-grid">
             <a href="/Jobsheet1/index.html" class="jobsheet-card">
-                <div>
-                    <span class="badge">HTML Basic</span>
-                    <h2>Jobsheet 1</h2>
-                    <p>Dasar Struktur HTML & Layout Sederhana</p>
-                </div>
+                <h2>Jobsheet 1</h2>
                 <div class="arrow-link">Buka Tugas &rarr;</div>
             </a>
 
             <a href="/Jobsheet2/index.html" class="jobsheet-card">
-                <div>
-                    <span class="badge">CSS Styling</span>
-                    <h2>Jobsheet 2</h2>
-                    <p>Penerapan CSS Styling & Desain UI</p>
-                </div>
+                <h2>Jobsheet 2</h2>
                 <div class="arrow-link">Buka Tugas &rarr;</div>
             </a>
 
             <a href="/Jobsheet3/index.html" class="jobsheet-card">
-                <div>
-                    <span class="badge">Responsive</span>
-                    <h2>Jobsheet 3</h2>
-                    <p>Flexbox, CSS Grid & Media Queries</p>
-                </div>
+                <h2>Jobsheet 3</h2>
                 <div class="arrow-link">Buka Tugas &rarr;</div>
             </a>
 
             <a href="/Jobsheet4/index.html" class="jobsheet-card">
-                <div>
-                    <span class="badge">UX Design</span>
-                    <h2>Jobsheet 4</h2>
-                    <p>Wireframing & Desain Alur Userflow</p>
-                </div>
+                <h2>Jobsheet 4</h2>
                 <div class="arrow-link">Buka Tugas &rarr;</div>
             </a>
 
             <a href="/Jobsheet5/index.html" class="jobsheet-card">
-                <div>
-                    <span class="badge">JavaScript</span>
-                    <h2>Jobsheet 5</h2>
-                    <p>Interaktivitas DOM & Validasi Form</p>
-                </div>
+                <h2>Jobsheet 5</h2>
                 <div class="arrow-link">Buka Tugas &rarr;</div>
             </a>
 
             <a href="/Jobsheet6/index.html" class="jobsheet-card">
-                <div>
-                    <span class="badge">Async JS</span>
-                    <h2>Jobsheet 6</h2>
-                    <p>AJAX, Fetch API & Pengolahan Data JSON</p>
-                </div>
+                <h2>Jobsheet 6</h2>
                 <div class="arrow-link">Buka Tugas &rarr;</div>
             </a>
 
             <a href="/Jobsheet7/index.php" class="jobsheet-card">
-                <div>
-                    <span class="badge">PHP Basic</span>
-                    <h2>Jobsheet 7</h2>
-                    <p>Backend PHP, Form Handler & Session</p>
-                </div>
+                <h2>Jobsheet 7</h2>
                 <div class="arrow-link">Buka Tugas &rarr;</div>
             </a>
 
             <a href="/Jobsheet8/index.php" class="jobsheet-card">
-                <div>
-                    <span class="badge">Database</span>
-                    <h2>Jobsheet 8</h2>
-                    <p>Integrasi Database PostgreSQL & PDO</p>
-                </div>
+                <h2>Jobsheet 8</h2>
                 <div class="arrow-link">Buka Tugas &rarr;</div>
             </a>
 
-            <a href="/Jobsheet8UpdateKonten/index.php" class="jobsheet-card featured">
-                <div>
-                    <span class="badge">Modern UI & Cloud DB</span>
-                    <h2>Jobsheet 8 (Update Konten)</h2>
-                    <p>Aplikasi SIMKOS dengan Supabase & Modern Light Theme</p>
-                </div>
-                <div class="arrow-link">Buka Aplikasi &rarr;</div>
+            <a href="/Jobsheet8UpdateKonten/index.php" class="jobsheet-card">
+                <h2>SIMKOS</h2>
+                <div class="arrow-link">Buka Tugas &rarr;</div>
             </a>
         </div>
     </main>
