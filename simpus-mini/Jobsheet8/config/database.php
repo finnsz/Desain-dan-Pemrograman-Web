@@ -1,4 +1,5 @@
 <?php
+// Ambil variabel dari Vercel / Environment, atau gunakan default jika di lokal
 $host     = getenv('host') ?: "localhost";
 $port     = getenv('port') ?: "5432";
 $dbname   = getenv('database') ?: "simpus_mini";
