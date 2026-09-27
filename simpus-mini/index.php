@@ -182,7 +182,7 @@
             </a>
 
             <a href="/Jobsheet9/index.php" class="jobsheet-card">
-                <h2>SIMKOS</h2>
+                <h2>Jobsheet 9</h2>
                 <div class="arrow-link">Buka Tugas &rarr;</div>
             </a>
         </div>
