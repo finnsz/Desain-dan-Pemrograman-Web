@@ -1,17 +1,19 @@
 <?php
-$requestUri = $_SERVER['REQUEST_URI'];
+$requestUri = $_SERVER['REQUEST_URI'] ?? '/';
 $parseUrl   = parse_url($requestUri, PHP_URL_PATH);
 
-// Tentukan root direktori
+// Tentukan direktori root aplikasi (naik 1 tingkat dari folder /api)
 $rootDir = dirname(__DIR__);
 
-// Normalisasi URL: Jika URL diawali dengan "/Jobsheet9", hapus prefix tersebut
+// Normalisasi URL: Hapus prefix /Jobsheet9 jika ada di URL
 $cleanUrl = $parseUrl;
 if (strpos($cleanUrl, '/Jobsheet9') === 0) {
     $cleanUrl = substr($cleanUrl, strlen('/Jobsheet9'));
-    if ($cleanUrl === '' || $cleanUrl === '/') {
-        $cleanUrl = '/index.php';
-    }
+}
+
+// Jika URL bersih adalah kosong atau '/', arahkan ke /index.php
+if ($cleanUrl === '' || $cleanUrl === '/') {
+    $cleanUrl = '/index.php';
 }
 
 // 1. Penanganan File Statis (CSS, JS, Gambar)
@@ -34,7 +36,7 @@ if (file_exists($staticFile) && is_file($staticFile)) {
     }
 }
 
-// 2. Routing URL ke File PHP
+// 2. Eksekusi File PHP
 $targetFile = $rootDir . $cleanUrl;
 
 if (file_exists($targetFile) && is_file($targetFile)) {
@@ -42,12 +44,6 @@ if (file_exists($targetFile) && is_file($targetFile)) {
     exit;
 }
 
-// Route default jika membuka root domain
-if ($cleanUrl === '/' || $cleanUrl === '' || $cleanUrl === '/index.php') {
-    require $rootDir . '/index.php';
-    exit;
-}
-
-// Jika file tidak ditemukan
+// 3. Fallback jika masih tidak ditemukan (404)
 http_response_code(404);
-echo "404 Not Found - Path file: " . htmlspecialchars($parseUrl);
+echo "404 Not Found - Path file: " . htmlspecialchars($parseUrl) . " (Target: " . htmlspecialchars($cleanUrl) . ")";
