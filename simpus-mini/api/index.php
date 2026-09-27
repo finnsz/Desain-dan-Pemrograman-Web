@@ -54,9 +54,24 @@ echo "<p>File atau URL yang kamu minta tidak ditemukan.</p>";
 echo "<hr>";
 echo "<p><b>URL dipanggil:</b> " . htmlspecialchars($parseUrl) . "</p>";
 echo "<p><b>Server mencari di path:</b> " . htmlspecialchars($targetFile) . "</p>";
-echo "<h3>Cek 2 hal ini:</h3>";
-echo "<ol>";
-echo "<li><b>Huruf Besar/Kecil:</b> Vercel sangat ketat. Pastikan nama folder di repositori GitHub benar-benar persis <b>Jobsheet9</b> (J besar), bukan <b>jobsheet9</b> (j kecil).</li>";
-echo "<li><b>Deploy Vercel:</b> Pastikan vercel.json sudah diset <code>\"includeFiles\": \"**\"</code></li>";
-echo "</ol></div>";
+echo "<hr>";
+
+// --- TAMBAHAN DEBUG: tampilkan isi folder asli di server ---
+echo "<p><b>Isi \$rootDir ($rootDir):</b></p>";
+if (is_dir($rootDir)) {
+    echo "<pre>" . htmlspecialchars(print_r(scandir($rootDir), true)) . "</pre>";
+} else {
+    echo "<p style='color:red'>\$rootDir bahkan tidak ditemukan sebagai folder!</p>";
+}
+
+$jobsheetPath = $rootDir . '/Jobsheet9';
+echo "<p><b>Isi $jobsheetPath:</b></p>";
+if (is_dir($jobsheetPath)) {
+    echo "<pre>" . htmlspecialchars(print_r(scandir($jobsheetPath), true)) . "</pre>";
+} else {
+    echo "<p style='color:red'>Folder Jobsheet9 TIDAK ditemukan di server pada path ini.</p>";
+}
+// --- AKHIR TAMBAHAN ---
+
+echo "</div>";
 ?>
