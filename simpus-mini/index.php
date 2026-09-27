@@ -185,6 +185,11 @@
                 <h2>Jobsheet 9</h2>
                 <div class="arrow-link">Buka Tugas &rarr;</div>
             </a>
+
+            <a href="/Jobsheet10/index.php" class="jobsheet-card">
+                <h2>Jobsheet 10</h2>
+                <div class="arrow-link">Buka Tugas &rarr;</div>
+            </a>
         </div>
     </main>
 
