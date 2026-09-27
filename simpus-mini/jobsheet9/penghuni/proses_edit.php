@@ -1,5 +1,5 @@
 <?php
-require_once '../config/koneksi.php';
+require_once __DIR__ . '/../config/database.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt = $pdo->prepare("UPDATE penghuni SET nama_lengkap = :nama, no_hp = :no_hp, kamar_id = :kamar_id, tgl_masuk = :tgl_masuk WHERE id = :id");
     $stmt->execute([

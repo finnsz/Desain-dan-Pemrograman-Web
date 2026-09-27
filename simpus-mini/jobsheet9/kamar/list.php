@@ -1,5 +1,5 @@
 <?php
-require_once '../config/koneksi.php'; // Sesuaikan path koneksi Anda
+require_once __DIR__ . '/../config/database.php';
 
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 $limit = 5;
