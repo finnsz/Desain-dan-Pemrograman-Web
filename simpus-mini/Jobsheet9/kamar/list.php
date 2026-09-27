@@ -1,5 +1,9 @@
 <?php
+// kamar/list.php
+$base = '../';
+$title = 'SIMKOS | Daftar Kamar';
 require_once __DIR__ . '/../config/database.php';
+include __DIR__ . '/../includes/header.php';
 
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 $limit = 5;
@@ -31,35 +35,41 @@ $stmt->execute();
 $kamar = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
-<form method="GET">
-    <input type="text" name="q" value="<?= htmlspecialchars($search) ?>" placeholder="Cari kamar...">
-    <button type="submit">Cari</button>
-</form>
+<section>
+    <h2>Daftar Kamar</h2>
 
-<table border="1">
-    <tr>
-        <th>ID</th><th>Nomor Kamar</th><th>Tipe</th><th>Harga</th><th>Status</th><th>Aksi</th>
-    </tr>
-    <?php foreach ($kamar as $k): ?>
-    <tr>
-        <td><?= $k['id'] ?></td>
-        <td><?= htmlspecialchars($k['nomor_kamar']) ?></td>
-        <td><?= htmlspecialchars($k['tipe']) ?></td>
-        <td><?= $k['harga'] ?></td>
-        <td><?= $k['status'] ?></td>
-        <td>
-            <a href="edit.php?id=<?= $k['id'] ?>">Edit</a>
-            <form action="hapus.php" method="POST" class="form-hapus" style="display:inline;" onsubmit="return confirm('Yakin hapus?');">
-                <input type="hidden" name="id" value="<?= $k['id'] ?>">
-                <button type="submit">Hapus</button>
-            </form>
-        </td>
-    </tr>
-    <?php endforeach; ?>
-</table>
+    <form method="GET">
+        <input type="text" name="q" value="<?= htmlspecialchars($search) ?>" placeholder="Cari kamar...">
+        <button type="submit">Cari</button>
+    </form>
 
-<div>
-    <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-        <a href="?page=<?= $i ?>&q=<?= urlencode($search) ?>"><?= $i ?></a>
-    <?php endfor; ?>
-</div>
+    <table border="1">
+        <tr>
+            <th>ID</th><th>Nomor Kamar</th><th>Tipe</th><th>Harga</th><th>Status</th><th>Aksi</th>
+        </tr>
+        <?php foreach ($kamar as $k): ?>
+        <tr>
+            <td><?= $k['id'] ?></td>
+            <td><?= htmlspecialchars($k['nomor_kamar']) ?></td>
+            <td><?= htmlspecialchars($k['tipe']) ?></td>
+            <td><?= $k['harga'] ?></td>
+            <td><?= $k['status'] ?></td>
+            <td>
+                <a href="edit.php?id=<?= $k['id'] ?>">Edit</a>
+                <form action="hapus.php" method="POST" class="form-hapus" style="display:inline;" onsubmit="return confirm('Yakin hapus?');">
+                    <input type="hidden" name="id" value="<?= $k['id'] ?>">
+                    <button type="submit">Hapus</button>
+                </form>
+            </td>
+        </tr>
+        <?php endforeach; ?>
+    </table>
+
+    <div>
+        <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+            <a href="?page=<?= $i ?>&q=<?= urlencode($search) ?>"><?= $i ?></a>
+        <?php endfor; ?>
+    </div>
+</section>
+
+<?php include __DIR__ . '/../includes/footer.php'; ?>

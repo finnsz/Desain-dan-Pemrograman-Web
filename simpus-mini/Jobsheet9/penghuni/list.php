@@ -1,5 +1,9 @@
 <?php
+// penghuni/list.php
+$base = '../';
+$title = 'SIMKOS | Daftar Penghuni';
 require_once __DIR__ . '/../config/database.php';
+include __DIR__ . '/../includes/header.php';
 
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 $limit = 5;
@@ -31,35 +35,41 @@ $stmt->execute();
 $penghuni = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
-<form method="GET">
-    <input type="text" name="q" value="<?= htmlspecialchars($search) ?>" placeholder="Cari nama penghuni...">
-    <button type="submit">Cari</button>
-</form>
+<section>
+    <h2>Daftar Penghuni</h2>
 
-<table border="1">
-    <tr>
-        <th>ID</th><th>Nama</th><th>No HP</th><th>Nomor Kamar</th><th>Tgl Masuk</th><th>Aksi</th>
-    </tr>
-    <?php foreach ($penghuni as $p): ?>
-    <tr>
-        <td><?= $p['id'] ?></td>
-        <td><?= htmlspecialchars($p['nama_lengkap']) ?></td>
-        <td><?= htmlspecialchars($p['no_hp']) ?></td>
-        <td><?= htmlspecialchars($p['nomor_kamar'] ?? '-') ?></td>
-        <td><?= $p['tgl_masuk'] ?></td>
-        <td>
-            <a href="edit.php?id=<?= $p['id'] ?>">Edit</a>
-            <form action="hapus.php" method="POST" class="form-hapus" style="display:inline;" onsubmit="return confirm('Yakin hapus?');">
-                <input type="hidden" name="id" value="<?= $p['id'] ?>">
-                <button type="submit">Hapus</button>
-            </form>
-        </td>
-    </tr>
-    <?php endforeach; ?>
-</table>
+    <form method="GET">
+        <input type="text" name="q" value="<?= htmlspecialchars($search) ?>" placeholder="Cari nama penghuni...">
+        <button type="submit">Cari</button>
+    </form>
 
-<div>
-    <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-        <a href="?page=<?= $i ?>&q=<?= urlencode($search) ?>"><?= $i ?></a>
-    <?php endfor; ?>
-</div>
+    <table border="1">
+        <tr>
+            <th>ID</th><th>Nama</th><th>No HP</th><th>Nomor Kamar</th><th>Tgl Masuk</th><th>Aksi</th>
+        </tr>
+        <?php foreach ($penghuni as $p): ?>
+        <tr>
+            <td><?= $p['id'] ?></td>
+            <td><?= htmlspecialchars($p['nama_lengkap']) ?></td>
+            <td><?= htmlspecialchars($p['no_hp']) ?></td>
+            <td><?= htmlspecialchars($p['nomor_kamar'] ?? '-') ?></td>
+            <td><?= $p['tgl_masuk'] ?></td>
+            <td>
+                <a href="edit.php?id=<?= $p['id'] ?>">Edit</a>
+                <form action="hapus.php" method="POST" class="form-hapus" style="display:inline;" onsubmit="return confirm('Yakin hapus?');">
+                    <input type="hidden" name="id" value="<?= $p['id'] ?>">
+                    <button type="submit">Hapus</button>
+                </form>
+            </td>
+        </tr>
+        <?php endforeach; ?>
+    </table>
+
+    <div>
+        <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+            <a href="?page=<?= $i ?>&q=<?= urlencode($search) ?>"><?= $i ?></a>
+        <?php endfor; ?>
+    </div>
+</section>
+
+<?php include __DIR__ . '/../includes/footer.php'; ?>
