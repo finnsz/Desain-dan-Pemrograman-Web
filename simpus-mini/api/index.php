@@ -1,20 +1,15 @@
 <?php
-$requestUri = $_SERVER['REQUEST_URI'] ?? '/';
+$requestUri = $_SERVER['REQUEST_URI'];
 $parseUrl   = parse_url($requestUri, PHP_URL_PATH);
 
-// Root direktori (folder simpus-mini)
+// Tentukan root direktori
 $rootDir = dirname(__DIR__);
 
-// Jika buka root domain utama, arahkan ke index.php utama
-if ($parseUrl === '/' || $parseUrl === '') {
-    $parseUrl = '/index.php';
-}
-
-$targetFile = $rootDir . $parseUrl;
-
 // 1. Penanganan File Statis (CSS, JS, Gambar)
-if (file_exists($targetFile) && is_file($targetFile)) {
-    $ext = pathinfo($targetFile, PATHINFO_EXTENSION);
+$staticFile = $rootDir . $parseUrl;
+if (file_exists($staticFile) && is_file($staticFile)) {
+    $ext = pathinfo($staticFile, PATHINFO_EXTENSION);
+    
     $mimeTypes = [
         'css'  => 'text/css',
         'js'   => 'application/javascript',
@@ -26,26 +21,107 @@ if (file_exists($targetFile) && is_file($targetFile)) {
 
     if (isset($mimeTypes[$ext])) {
         header('Content-Type: ' . $mimeTypes[$ext]);
-        readfile($targetFile);
-        exit;
-    }
-
-    // 2. Jika file yang diminta adalah file PHP (termasuk /Jobsheet9/index.php)
-    if ($ext === 'php') {
-        require $targetFile;
+        readfile($staticFile);
         exit;
     }
 }
 
-// 3. Jika mengakses folder (misal: /Jobsheet9/), otomatis cari index.php di dalam folder tersebut
-if (is_dir($targetFile)) {
-    $indexPath = rtrim($targetFile, '/') . '/index.php';
-    if (file_exists($indexPath)) {
-        require $indexPath;
-        exit;
-    }
-}
+// 2. Routing URL Aplikasi
+switch ($parseUrl) {
+    case '/':
+    case '':
+    case '/index.php':
+        require $rootDir . '/index.php';
+        break;
 
-// 4. Jika file benar-benar tidak ada
-http_response_code(404);
-echo "404 Not Found - File tidak ditemukan: " . htmlspecialchars($parseUrl);
+    // Route Kamar
+    case '/kamar/list.php':
+    case '/kamar/list':
+        require $rootDir . '/kamar/list.php';
+        break;
+
+    case '/kamar/tambah.php':
+    case '/kamar/tambah':
+        require $rootDir . '/kamar/tambah.php';
+        break;
+
+    case '/kamar/proses_tambah.php':
+        require $rootDir . '/kamar/proses_tambah.php';
+        break;
+
+    case '/kamar/edit.php':
+    case '/kamar/edit':
+        require $rootDir . '/kamar/edit.php';
+        break;
+
+    case '/kamar/proses_edit.php':
+        require $rootDir . '/kamar/proses_edit.php';
+        break;
+
+    case '/kamar/hapus.php':
+        require $rootDir . '/kamar/hapus.php';
+        break;
+
+    // Route Penghuni
+    case '/penghuni/list.php':
+    case '/penghuni/list':
+        require $rootDir . '/penghuni/list.php';
+        break;
+
+    case '/penghuni/tambah.php':
+    case '/penghuni/tambah':
+        require $rootDir . '/penghuni/tambah.php';
+        break;
+
+    case '/penghuni/proses_tambah.php':
+        require $rootDir . '/penghuni/proses_tambah.php';
+        break;
+
+    case '/penghuni/edit.php':
+    case '/penghuni/edit':
+        require $rootDir . '/penghuni/edit.php';
+        break;
+
+    case '/penghuni/proses_edit.php':
+        require $rootDir . '/penghuni/proses_edit.php';
+        break;
+
+    case '/penghuni/hapus.php':
+        require $rootDir . '/penghuni/hapus.php';
+        break;
+
+    // 3. Fallback Dynamic Routing (Pencarian otomatis untuk Jobsheet & file/folder lain)
+    default:
+        $targetPath = $rootDir . $parseUrl;
+
+        // Jika path merujuk ke file PHP yang ada langsung
+        if (file_exists($targetPath) && is_file($targetPath)) {
+            $ext = pathinfo($targetPath, PATHINFO_EXTENSION);
+            if ($ext === 'php') {
+                require $targetPath;
+                exit;
+            } elseif ($ext === 'html') {
+                readfile($targetPath);
+                exit;
+            }
+        }
+
+        // Jika path merujuk ke folder (misal: /Jobsheet9/), cari index.php atau index.html di dalamnya
+        if (is_dir($targetPath)) {
+            $indexPathPhp  = rtrim($targetPath, '/') . '/index.php';
+            $indexPathHtml = rtrim($targetPath, '/') . '/index.html';
+
+            if (file_exists($indexPathPhp)) {
+                require $indexPathPhp;
+                exit;
+            } elseif (file_exists($indexPathHtml)) {
+                readfile($indexPathHtml);
+                exit;
+            }
+        }
+
+        // Jika benar-benar tidak ditemukan
+        http_response_code(404);
+        echo "404 Not Found - Path file: " . htmlspecialchars($parseUrl);
+        break;
+}
