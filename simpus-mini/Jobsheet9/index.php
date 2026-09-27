@@ -2,14 +2,13 @@
 $requestUri = $_SERVER['REQUEST_URI'];
 $parseUrl   = parse_url($requestUri, PHP_URL_PATH);
 
-// Tentukan root direktori
-$rootDir = __DIR__;
+// Tentukan root direktori utama project (bukan folder api)
+$rootDir = dirname(__DIR__);
 
-// 1. Penanganan File Statis (CSS, JS, Gambar)
+// 1. Penanganan File Statis
 $staticFile = $rootDir . $parseUrl;
 if (file_exists($staticFile) && is_file($staticFile)) {
     $ext = pathinfo($staticFile, PATHINFO_EXTENSION);
-    
     $mimeTypes = [
         'css'  => 'text/css',
         'js'   => 'application/javascript',
@@ -18,7 +17,6 @@ if (file_exists($staticFile) && is_file($staticFile)) {
         'jpeg' => 'image/jpeg',
         'svg'  => 'image/svg+xml'
     ];
-
     if (isset($mimeTypes[$ext])) {
         header('Content-Type: ' . $mimeTypes[$ext]);
         readfile($staticFile);
@@ -39,25 +37,20 @@ switch ($parseUrl) {
     case '/kamar/list':
         require $rootDir . '/kamar/list.php';
         break;
-
     case '/kamar/tambah.php':
     case '/kamar/tambah':
         require $rootDir . '/kamar/tambah.php';
         break;
-
     case '/kamar/proses_tambah.php':
         require $rootDir . '/kamar/proses_tambah.php';
         break;
-
     case '/kamar/edit.php':
     case '/kamar/edit':
         require $rootDir . '/kamar/edit.php';
         break;
-
     case '/kamar/proses_edit.php':
         require $rootDir . '/kamar/proses_edit.php';
         break;
-
     case '/kamar/hapus.php':
         require $rootDir . '/kamar/hapus.php';
         break;
@@ -67,27 +60,28 @@ switch ($parseUrl) {
     case '/penghuni/list':
         require $rootDir . '/penghuni/list.php';
         break;
-
     case '/penghuni/tambah.php':
     case '/penghuni/tambah':
         require $rootDir . '/penghuni/tambah.php';
         break;
-
     case '/penghuni/proses_tambah.php':
         require $rootDir . '/penghuni/proses_tambah.php';
         break;
-
     case '/penghuni/edit.php':
     case '/penghuni/edit':
         require $rootDir . '/penghuni/edit.php';
         break;
-
     case '/penghuni/proses_edit.php':
         require $rootDir . '/penghuni/proses_edit.php';
         break;
-
     case '/penghuni/hapus.php':
         require $rootDir . '/penghuni/hapus.php';
+        break;
+
+    // Route Jobsheet 9 (TAMBAHKAN INI)
+    case '/Jobsheet9/index.php':
+    case '/Jobsheet9/':
+        require $rootDir . '/Jobsheet9/index.php';
         break;
 
     default:
