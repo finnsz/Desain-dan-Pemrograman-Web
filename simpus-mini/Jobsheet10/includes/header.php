@@ -1,7 +1,5 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+require_once __DIR__ . '/session.php';
 $base = $base ?? './';
 $sudahLogin = isset($_SESSION['user_id']);
 ?>

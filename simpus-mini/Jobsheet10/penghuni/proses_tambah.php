@@ -1,6 +1,5 @@
 <?php
 require __DIR__ . '/../includes/auth.php';
-session_start();
 require_once __DIR__ . '/../config/database.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
