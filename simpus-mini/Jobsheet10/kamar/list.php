@@ -5,6 +5,7 @@ $title = 'Daftar Kamar';
 
 require_once __DIR__ . '/../config/database.php';
 include __DIR__ . '/../includes/header.php';
+require_once __DIR__ . '/../includes/role.php';
 
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 $limit = 5;
@@ -70,11 +71,20 @@ $kamar_list = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 </span>
                             </td>
                             <td>
-                                <a href="edit.php?id=<?= $kamar['id'] ?>">Edit</a>
-                                <form action="hapus.php" method="POST" class="form-hapus" style="display:inline;" onsubmit="return confirm('Yakin hapus?');">
-                                    <input type="hidden" name="id" value="<?= $kamar['id'] ?>">
-                                    <button type="submit">Hapus</button>
-                                </form>
+                                <div class="aksi">
+                                    <?php if ($sudahLogin): ?>
+                                        <a href="edit.php?id=<?= $kamar['id'] ?>" class="btn-edit">Edit</a>
+                                    <?php endif; ?>
+                                    <?php if (is_admin()): ?>
+                                        <form action="hapus.php" method="POST" class="form-hapus" onsubmit="return confirm('Yakin hapus data ini?');">
+                                            <input type="hidden" name="id" value="<?= $kamar['id'] ?>">
+                                            <button type="submit" class="btn-hapus">Hapus</button>
+                                        </form>
+                                    <?php endif; ?>
+                                    <?php if (!$sudahLogin): ?>
+                                        <span style="color: var(--text-muted);">-</span>
+                                    <?php endif; ?>
+                                </div>
                             </td>
                         </tr>
                     <?php endforeach; ?>

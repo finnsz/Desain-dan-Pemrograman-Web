@@ -23,6 +23,12 @@ include __DIR__ . '/../includes/header.php';
             <label for="password">Password</label>
             <input type="password" id="password" name="password" required>
         </p>
+        <p class="remember-me">
+            <label for="remember">
+                <input type="checkbox" id="remember" name="remember" value="1">
+                Ingat saya (30 hari)
+            </label>
+        </p>
         <p style="margin-top: 1.5rem;">
             <button type="submit" class="btn-primary">Masuk</button>
         </p>

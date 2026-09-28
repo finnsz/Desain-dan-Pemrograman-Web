@@ -6,6 +6,7 @@ $title = 'Daftar Penghuni';
 
 require_once __DIR__ . '/../config/database.php';
 include __DIR__ . '/../includes/header.php';
+require_once __DIR__ . '/../includes/role.php';
 
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 $limit = 5;
@@ -81,11 +82,20 @@ $penghuni_list = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <td>Rp <?= number_format($penghuni['harga'] ?? 0, 0, ',', '.') ?></td>
                             <td><?= !empty($penghuni['tgl_masuk']) ? date('d M Y', strtotime($penghuni['tgl_masuk'])) : '-' ?></td>
                             <td>
-                                <a href="edit.php?id=<?= $penghuni['id'] ?>">Edit</a>
-                                <form action="hapus.php" method="POST" class="form-hapus" style="display:inline;" onsubmit="return confirm('Yakin hapus?');">
-                                    <input type="hidden" name="id" value="<?= $penghuni['id'] ?>">
-                                    <button type="submit">Hapus</button>
-                                </form>
+                                <div class="aksi">
+                                    <?php if ($sudahLogin): ?>
+                                        <a href="edit.php?id=<?= $penghuni['id'] ?>" class="btn-edit">Edit</a>
+                                    <?php endif; ?>
+                                    <?php if (is_admin()): ?>
+                                        <form action="hapus.php" method="POST" class="form-hapus" onsubmit="return confirm('Yakin hapus data ini?');">
+                                            <input type="hidden" name="id" value="<?= $penghuni['id'] ?>">
+                                            <button type="submit" class="btn-hapus">Hapus</button>
+                                        </form>
+                                    <?php endif; ?>
+                                    <?php if (!$sudahLogin): ?>
+                                        <span style="color: var(--text-muted);">-</span>
+                                    <?php endif; ?>
+                                </div>
                             </td>
                         </tr>
                     <?php endforeach; ?>

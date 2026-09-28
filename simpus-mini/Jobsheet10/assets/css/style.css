@@ -468,3 +468,62 @@ form input::placeholder {
     -webkit-text-fill-color: #94a3b8;
     opacity: 1;
 }
+
+
+/* ===== Checkbox Ingat Saya ===== */
+form .remember-me { margin-bottom: 0; }
+form .remember-me label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+    cursor: pointer;
+}
+form .remember-me input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--primary);
+}
+
+/* ===== Tombol Aksi (Edit & Hapus) ===== */
+.aksi {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.aksi form { margin: 0; display: inline-flex; }
+
+.aksi a.btn-edit,
+.aksi form button.btn-hapus[type="submit"] {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.4rem 0.9rem;
+    font-family: inherit;
+    font-size: 0.8rem;
+    font-weight: 600;
+    line-height: 1.2;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.aksi a.btn-edit {
+    background-color: var(--primary-light);
+    color: var(--primary);
+    border: 1px solid #c7d2fe;
+}
+.aksi a.btn-edit:hover {
+    background-color: #e0e7ff;
+    color: var(--primary-hover);
+}
+
+.aksi form button.btn-hapus[type="submit"] {
+    background-color: var(--danger-bg);
+    color: var(--danger-text);
+    border: 1px solid #fecaca;
+}
+.aksi form button.btn-hapus[type="submit"]:hover {
+    background-color: #fecaca;
+    color: #991b1b;
+}

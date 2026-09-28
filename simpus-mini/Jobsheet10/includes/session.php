@@ -75,4 +75,8 @@ if (session_status() === PHP_SESSION_NONE) {
         'samesite' => 'Lax',
     ]);
     session_start();
+
+    // Login otomatis lewat cookie "Ingat Saya" (jika ada)
+    require_once __DIR__ . '/remember.php';
+    remember_check($pdo);
 }
