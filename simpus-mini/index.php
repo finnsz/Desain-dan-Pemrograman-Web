@@ -176,7 +176,7 @@
                 <div class="arrow-link">Buka Tugas &rarr;</div>
             </a>
 
-            <a href="/Jobsheet8UpdateKonten/index.php" class="jobsheet-card">
+            <a href="/SimKos/index.php" class="jobsheet-card">
                 <h2>SIMKOS</h2>
                 <div class="arrow-link">Buka Tugas &rarr;</div>
             </a>

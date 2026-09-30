@@ -1,8 +1,7 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+require_once __DIR__ . '/session.php';
 $base = $base ?? './';
+$sudahLogin = isset($_SESSION['user_id']);
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -28,12 +27,15 @@ $base = $base ?? './';
                             <summary class="nav-group-title">KAMAR</summary>
                             <ul>
                                 <li><a href="<?= $base ?>kamar/list.php">Daftar Kamar</a></li>
+                                <?php if ($sudahLogin): ?>
                                 <li><a href="<?= $base ?>kamar/tambah.php">Tambah Kamar</a></li>
+                                <?php endif; ?>
                             </ul>
                         </details>
                     </li>
 
-                    <!-- Grup Penghuni (Collapsible) -->
+                    <!-- Grup Penghuni (Collapsible) - seluruhnya terkunci -->
+                    <?php if ($sudahLogin): ?>
                     <li>
                         <details open class="nav-accordion">
                             <summary class="nav-group-title">PENGHUNI</summary>
@@ -43,6 +45,7 @@ $base = $base ?? './';
                             </ul>
                         </details>
                     </li>
+                    <?php endif; ?>
                 </ul>
             </nav>
         </aside>
@@ -51,7 +54,15 @@ $base = $base ?? './';
         <div class="app-main">
             <header class="topbar">
                 <div class="page-title"><?= $title ?? 'Dashboard' ?></div>
-                <div class="user-info">Petugas Admin</div>
+                <div class="user-info">
+                    <?php if ($sudahLogin): ?>
+                        <?= htmlspecialchars($_SESSION['nama']) ?>
+                        &nbsp;|&nbsp;
+                        <a href="<?= $base ?>auth/logout.php">Logout</a>
+                    <?php else: ?>
+                        <a href="<?= $base ?>auth/login.php">Login</a>
+                    <?php endif; ?>
+                </div>
             </header>
 
             <main class="content">

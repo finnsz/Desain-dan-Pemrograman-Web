@@ -1,6 +1,16 @@
-/* ===== SIMKOS Modern Light Theme - UI Redesign ===== */
+/* ==========================================================================
+   SIMKOS - Modern Light Theme
+   Daftar isi:
+     1. Variabel & Reset
+     2. Layout (sidebar, topbar, konten)
+     3. Komponen (alert, kartu, tabel, badge)
+     4. Form & Tombol
+     5. Halaman khusus (beranda, pencarian, aksi tabel)
+     6. Footer
+   ========================================================================== */
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 
+/* ===== 1. Variabel & Reset ===== */
 :root {
     --bg-app: #f8fafc;
     --bg-card: #ffffff;
@@ -22,8 +32,8 @@
     --sidebar-width: 250px;
 }
 
-/* Reset & Base Layout */
 * { box-sizing: border-box; margin: 0; padding: 0; }
+
 body {
     font-family: 'Plus Jakarta Sans', sans-serif;
     background-color: var(--bg-app);
@@ -35,56 +45,13 @@ body {
 a { color: var(--primary); text-decoration: none; }
 a:hover { color: var(--primary-hover); }
 
-/* Layout App Container */
+/* ===== 2. Layout ===== */
 .app-container {
     display: flex;
     width: 100%;
 }
 
-
-/* Styling Accordion / Collapse Sidebar */
-aside.app-sidebar nav .nav-accordion {
-    margin-top: 0.5rem;
-}
-
-aside.app-sidebar nav .nav-accordion summary.nav-group-title {
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    color: #64748b;
-    padding: 0.6rem 0.75rem;
-    text-transform: uppercase;
-    cursor: pointer;
-    list-style: none; /* Sembunyikan panah default HTML */
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-radius: 6px;
-    transition: background-color 0.2s, color 0.2s;
-}
-
-aside.app-sidebar nav .nav-accordion summary.nav-group-title:hover {
-    color: #f8fafc;
-    background-color: rgba(255, 255, 255, 0.05);
-}
-
-/* Kustom Tanda Panah Indikator */
-aside.app-sidebar nav .nav-accordion summary.nav-group-title::after {
-    content: '❯';
-    font-size: 0.65rem;
-    transition: transform 0.2s ease;
-}
-
-aside.app-sidebar nav .nav-accordion[open] summary.nav-group-title::after {
-    transform: rotate(90deg);
-}
-
-/* Indentasi / Tab Sub-menu di dalam Collapse */
-aside.app-sidebar nav .nav-accordion ul {
-    padding-left: 0.5rem;
-    margin-top: 0.2rem;
-}
-/* Sidebar Layout */
+/* --- Sidebar --- */
 aside.app-sidebar {
     width: var(--sidebar-width);
     background-color: var(--bg-sidebar);
@@ -131,7 +98,49 @@ aside.app-sidebar nav a.active {
     color: #ffffff;
 }
 
-/* Main Content Area */
+/* --- Sidebar: accordion (details/summary) --- */
+aside.app-sidebar nav .nav-accordion {
+    margin-top: 0.5rem;
+}
+
+aside.app-sidebar nav .nav-accordion summary.nav-group-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: #64748b;
+    padding: 0.6rem 0.75rem;
+    text-transform: uppercase;
+    cursor: pointer;
+    list-style: none; /* sembunyikan panah bawaan HTML */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 6px;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+aside.app-sidebar nav .nav-accordion summary.nav-group-title:hover {
+    color: #f8fafc;
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* panah indikator kustom */
+aside.app-sidebar nav .nav-accordion summary.nav-group-title::after {
+    content: '❯';
+    font-size: 0.65rem;
+    transition: transform 0.2s ease;
+}
+
+aside.app-sidebar nav .nav-accordion[open] summary.nav-group-title::after {
+    transform: rotate(90deg);
+}
+
+aside.app-sidebar nav .nav-accordion ul {
+    padding-left: 0.5rem;
+    margin-top: 0.2rem;
+}
+
+/* --- Area utama --- */
 .app-main {
     margin-left: var(--sidebar-width);
     flex: 1;
@@ -168,7 +177,9 @@ main.content {
     max-width: 1200px;
 }
 
-/* Flash Alert */
+/* ===== 3. Komponen ===== */
+
+/* --- Alert / flash message --- */
 .alert {
     padding: 0.85rem 1.25rem;
     border-radius: 10px;
@@ -177,9 +188,9 @@ main.content {
     font-weight: 500;
 }
 .alert-success { background-color: var(--success-bg); color: var(--success-text); }
-.alert-danger { background-color: var(--danger-bg); color: var(--danger-text); }
+.alert-danger  { background-color: var(--danger-bg);  color: var(--danger-text); }
 
-/* Dashboard Cards Grid */
+/* --- Kartu statistik --- */
 .grid-stats {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -192,7 +203,7 @@ main.content {
     border: 1px solid var(--border-color);
     border-radius: 12px;
     padding: 1.5rem;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
 }
 
 .stat-card h3 {
@@ -209,14 +220,14 @@ main.content {
     color: var(--primary);
 }
 
-/* Sections & Cards */
+/* --- Section / kartu --- */
 section.card-section {
     background-color: var(--bg-card);
     border-radius: 12px;
     border: 1px solid var(--border-color);
     padding: 1.5rem;
     margin-bottom: 1.5rem;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
 }
 
 section.card-section h2 {
@@ -226,23 +237,7 @@ section.card-section h2 {
     color: var(--text-primary);
 }
 
-/* Search Box */
-.search-box input {
-    width: 100%;
-    max-width: 320px;
-    padding: 0.6rem 0.9rem;
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    font-size: 0.875rem;
-    outline: none;
-    transition: border-color 0.2s;
-}
-
-.search-box input:focus {
-    border-color: var(--primary);
-}
-
-/* Table Design */
+/* --- Tabel --- */
 .table-responsive {
     overflow-x: auto;
     border-radius: 8px;
@@ -275,7 +270,7 @@ td {
 tbody tr:last-child td { border-bottom: none; }
 tbody tr:hover { background-color: #f8fafc; }
 
-/* Status Badges */
+/* --- Badge status --- */
 .badge {
     padding: 0.25rem 0.6rem;
     border-radius: 20px;
@@ -286,43 +281,81 @@ tbody tr:hover { background-color: #f8fafc; }
 .badge-success { background-color: var(--success-bg); color: var(--success-text); }
 .badge-warning { background-color: var(--warning-bg); color: var(--warning-text); }
 
-/* Forms & Buttons */
+/* ===== 4. Form & Tombol ===== */
 form p { margin-bottom: 1.25rem; }
+
 form label {
     display: block;
     font-size: 0.85rem;
     font-weight: 600;
-    color: var(--text-secondary); /*[cite: 2] */
+    color: var(--text-secondary);
     margin-bottom: 0.35rem;
 }
 
 form input[type="text"],
+form input[type="password"],
 form input[type="number"],
 form select {
     width: 100%;
     max-width: 440px;
     padding: 0.65rem 0.9rem;
-    border: 1px solid var(--border-color); /*[cite: 2] */
+    border: 1px solid var(--border-color);
     border-radius: 8px;
     font-size: 0.9rem;
     outline: none;
-    background-color: #ffffff; /*[cite: 2] */
-    color: #0f172a !important; /* TAMBAHKAN INI: Memaksa teks input/select berwarna gelap */
+    background-color: #ffffff;
+    color: var(--text-primary);
+    caret-color: var(--text-primary);
+    /* paksa teks tetap gelap (mencegah teks "hilang" saat autofill browser) */
+    -webkit-text-fill-color: var(--text-primary) !important;
 }
 
-/* TAMBAHKAN RULE INI: Memastikan teks di dropdown option terlihat jelas */
 form select option {
     background-color: #ffffff;
-    color: #0f172a;
+    color: var(--text-primary);
     padding: 0.5rem;
 }
 
-form input:focus, form select:focus {
-    border-color: var(--primary); /*[cite: 2] */
-    box-shadow: 0 0 0 3px var(--primary-light); /*[cite: 2] */
+form input:focus,
+form select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--primary-light);
 }
 
-button[type="submit"], .btn-primary {
+form input::placeholder {
+    color: var(--text-muted);
+    -webkit-text-fill-color: var(--text-muted);
+    opacity: 1;
+}
+
+/* autofill browser: latar putih + teks gelap */
+form input:-webkit-autofill,
+form input:-webkit-autofill:hover,
+form input:-webkit-autofill:focus {
+    -webkit-text-fill-color: var(--text-primary) !important;
+    -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
+    box-shadow: 0 0 0 1000px #ffffff inset !important;
+    transition: background-color 9999s ease-in-out 0s;
+}
+
+/* checkbox "Ingat Saya" */
+form .remember-me { margin-bottom: 0; }
+form .remember-me label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+    cursor: pointer;
+}
+form .remember-me input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--primary);
+}
+
+/* --- Tombol utama & sekunder --- */
+button[type="submit"],
+.btn-primary {
     background-color: var(--primary);
     color: #ffffff;
     border: none;
@@ -334,96 +367,64 @@ button[type="submit"], .btn-primary {
     transition: background-color 0.2s;
 }
 
-button[type="submit"]:hover, .btn-primary:hover {
+button[type="submit"]:hover,
+.btn-primary:hover {
     background-color: var(--primary-hover);
+    color: #ffffff; /* teks tetap putih saat hover pada link */
 }
 
-/* Footer */
-footer {
-    padding: 2rem;
-    text-align: center;
-    color: var(--text-muted);
-    font-size: 0.8rem;
-    margin-top: auto;
+.btn-primary,
+.btn-secondary {
+    display: inline-block;
+    text-decoration: none;
 }
-/* ===== Fix Layout Banner Welcome Beranda ===== */
+
+.btn-secondary {
+    background-color: #e2e8f0;
+    color: var(--text-primary);
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: background-color 0.2s;
+}
+
+.btn-secondary:hover {
+    background-color: #cbd5e1;
+    color: var(--text-primary);
+}
+
+/* ===== 5. Halaman khusus ===== */
+
+/* --- Banner selamat datang (beranda) --- */
 section.welcome-banner {
-    display: flex !important;
-    justify-content: space-between !important;
-    align-items: center !important;
-    background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%) !important;
-    border-left: 4px solid var(--primary) !important;
-    flex-wrap: wrap !important;
-    gap: 1rem !important;
-    position: relative !important;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    position: relative;
+    background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
+    border-left: 4px solid var(--primary);
 }
 
 .quick-actions {
-    display: flex !important;
-    gap: 0.5rem !important;
-    align-items: center !important;
-    margin-top: 0.5rem !important;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    margin-top: 0.5rem;
 }
 
-.btn-secondary {
-    background-color: #e2e8f0 !important;
-    color: var(--text-primary) !important;
-    border: none !important;
-    border-radius: 8px !important;
-    font-weight: 600 !important;
-    text-decoration: none !important;
-    display: inline-block !important;
-    transition: background-color 0.2s !important;
-}
-
-.btn-secondary:hover {
-    background-color: #cbd5e1 !important;
-    color: var(--text-primary) !important;
-}
-
-.btn-primary {
-    text-decoration: none !important;
-    display: inline-block !important;
-}
-/* Fix Hover Tombol Banner Beranda */
-.btn-primary {
-    background-color: var(--primary) !important;
-    color: #ffffff !important;
-    text-decoration: none !important;
-    display: inline-block !important;
-}
-
-/* Memastikan teks tetap putih terang saat di-hover */
-.btn-primary:hover {
-    background-color: var(--primary-hover) !important;
-    color: #ffffff !important;
-}
-
-.btn-secondary {
-    background-color: #e2e8f0 !important;
-    color: var(--text-primary) !important;
-    border: none !important;
-    border-radius: 8px !important;
-    font-weight: 600 !important;
-    text-decoration: none !important;
-    display: inline-block !important;
-    transition: background-color 0.2s !important;
-}
-
-.btn-secondary:hover {
-    background-color: #cbd5e1 !important;
-    color: var(--text-primary) !important;
-}
-
-/* ===== Fix Tampilan Input Pencarian ===== */
+/* --- Kotak pencarian ---
+   !important dipertahankan di sini karena input ada di dalam <form>,
+   sehingga harus mengalahkan aturan "form input[type=text]" di atas. */
 .search-box input,
 #search-input {
     width: 100% !important;
     max-width: 320px !important;
     padding: 0.65rem 1rem !important;
-    background-color: #ffffff !important; /* Warna latar putih */
-    color: #0f172a !important;            /* Teks warna gelap */
-    border: 1px solid #cbd5e1 !important;  /* Border abu-abu halus */
+    background-color: #ffffff !important;
+    color: var(--text-primary) !important;
+    border: 1px solid #cbd5e1 !important;
     border-radius: 8px !important;
     font-size: 0.875rem !important;
     outline: none !important;
@@ -431,16 +432,66 @@ section.welcome-banner {
     transition: all 0.2s ease !important;
 }
 
-/* Style saat input diklik / fokus */
 .search-box input:focus,
 #search-input:focus {
     border-color: var(--primary) !important;
     box-shadow: 0 0 0 3px var(--primary-light) !important;
 }
 
-/* Warna teks placeholder agar terlihat jelas */
 .search-box input::placeholder,
 #search-input::placeholder {
-    color: #94a3b8 !important;
+    color: var(--text-muted) !important;
     opacity: 1 !important;
+}
+
+/* --- Tombol aksi di tabel (Edit & Hapus) --- */
+.aksi {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.aksi form { margin: 0; display: inline-flex; }
+
+.aksi a.btn-edit,
+.aksi form button.btn-hapus[type="submit"] {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.4rem 0.9rem;
+    font-family: inherit;
+    font-size: 0.8rem;
+    font-weight: 600;
+    line-height: 1.2;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.aksi a.btn-edit {
+    background-color: var(--primary-light);
+    color: var(--primary);
+    border: 1px solid #c7d2fe;
+}
+.aksi a.btn-edit:hover {
+    background-color: #e0e7ff;
+    color: var(--primary-hover);
+}
+
+.aksi form button.btn-hapus[type="submit"] {
+    background-color: var(--danger-bg);
+    color: var(--danger-text);
+    border: 1px solid #fecaca;
+}
+.aksi form button.btn-hapus[type="submit"]:hover {
+    background-color: #fecaca;
+    color: #991b1b;
+}
+
+/* ===== 6. Footer ===== */
+footer {
+    padding: 2rem;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    margin-top: auto;
 }

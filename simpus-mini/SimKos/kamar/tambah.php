@@ -1,4 +1,5 @@
 <?php
+require __DIR__ . '/../includes/auth.php';
 // kamar/tambah.php
 $base = '../';
 $title = 'SIMKOS | Tambah Kamar';
