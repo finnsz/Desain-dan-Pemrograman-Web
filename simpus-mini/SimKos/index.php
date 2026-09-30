@@ -19,37 +19,51 @@ $query_penghuni = "SELECT p.nama_lengkap, p.no_hp, p.tgl_masuk, k.nomor_kamar
 $penghuni_terbaru = $pdo->query($query_penghuni)->fetchAll();
 ?>
 
-<!-- Banner Welcome + Quick Action Buttons -->
+<!-- Welcome Banner -->
 <section class="card-section welcome-banner">
     <div>
-        <h2>Selamat Datang di SIMKOS</h2>
-        <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.25rem;">
-            Sistem Pengelolaan Data Kamar & Penghuni Kost Berbasis Web & PostgreSQL.
-        </p>
+        <h2>Selamat Datang, <?= isset($_SESSION['nama']) ? htmlspecialchars($_SESSION['nama']) : 'Admin' ?></h2>
+        <p>Sistem Pengelolaan Data Kamar & Penghuni Kost Berbasis Web & PostgreSQL.</p>
     </div>
     <div class="quick-actions">
-        <a href="kamar/tambah.php" class="btn-primary" style="font-size: 0.8rem; padding: 0.5rem 1rem;">+ Kamar Baru</a>
-        <a href="penghuni/tambah.php" class="btn-secondary" style="font-size: 0.8rem; padding: 0.5rem 1rem;">+ Penghuni Baru</a>
+        <?php if ($sudahLogin): ?>
+            <a href="kamar/tambah.php" class="btn-primary">+ Kamar Baru</a>
+            <a href="penghuni/tambah.php" class="btn-secondary">+ Penghuni Baru</a>
+        <?php else: ?>
+            <a href="auth/login.php" class="btn-primary">Masuk Akun</a>
+        <?php endif; ?>
     </div>
 </section>
 
-<!-- Card Stats Grid (Menjadi 4 Kartu) -->
+<!-- Card Stats Grid -->
 <div class="grid-stats">
     <div class="stat-card">
-        <h3>Total Kamar</h3>
+        <div class="stat-header">
+            <h3>Total Kamar</h3>
+            <div class="stat-icon stat-icon-blue"><i class="fas fa-door-open"></i></div>
+        </div>
         <div class="value"><?= $total_kamar ?></div>
     </div>
     <div class="stat-card">
-        <h3>Kamar Terisi</h3>
-        <div class="value" style="color: var(--warning-text);"><?= $kamar_terisi ?></div>
+        <div class="stat-header">
+            <h3>Kamar Terisi</h3>
+            <div class="stat-icon stat-icon-orange"><i class="fas fa-check-circle"></i></div>
+        </div>
+        <div class="value"><?= $kamar_terisi ?></div>
     </div>
     <div class="stat-card">
-        <h3>Kamar Kosong</h3>
-        <div class="value" style="color: var(--success-text);"><?= $kamar_kosong ?></div>
+        <div class="stat-header">
+            <h3>Kamar Kosong</h3>
+            <div class="stat-icon stat-icon-green"><i class="fas fa-unlock"></i></div>
+        </div>
+        <div class="value"><?= $kamar_kosong ?></div>
     </div>
     <div class="stat-card">
-        <h3>Total Penghuni</h3>
-        <div class="value" style="color: #2563eb;"><?= $total_penghuni ?></div>
+        <div class="stat-header">
+            <h3>Total Penghuni</h3>
+            <div class="stat-icon stat-icon-purple"><i class="fas fa-users"></i></div>
+        </div>
+        <div class="value"><?= $total_penghuni ?></div>
     </div>
 </div>
 

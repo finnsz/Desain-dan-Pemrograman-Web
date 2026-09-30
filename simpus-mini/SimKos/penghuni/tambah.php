@@ -6,8 +6,8 @@ $title = 'SIMKOS | Tambah Penghuni';
 require_once __DIR__ . '/../config/database.php';
 include __DIR__ . '/../includes/header.php';
 
-// Ambil list kamar yang masih KOSONG
-$kamar_kosong = $pdo->query("SELECT * FROM kamar WHERE status = 'KOSONG' ORDER BY nomor_kamar ASC")->fetchAll();
+// Ambil unique tipe kamar
+$tipe_list = $pdo->query("SELECT DISTINCT tipe FROM kamar ORDER BY tipe ASC")->fetchAll(PDO::FETCH_COLUMN);
 ?>
 
 <section class="card-section">
@@ -22,12 +22,18 @@ $kamar_kosong = $pdo->query("SELECT * FROM kamar WHERE status = 'KOSONG' ORDER B
             <input type="text" id="no_hp" name="no_hp" placeholder="08xxxxxxxxxx" required>
         </p>
         <p>
-            <label for="kamar_id">Pilih Kamar (Status Kosong)</label>
-            <select id="kamar_id" name="kamar_id" required>
-                <option value="">-- Pilih Kamar --</option>
-                <?php foreach ($kamar_kosong as $k): ?>
-                    <option value="<?= $k['id'] ?>"><?= htmlspecialchars($k['nomor_kamar']) ?> - <?= htmlspecialchars($k['tipe']) ?></option>
+            <label for="tipe">Pilih Tipe Kamar</label>
+            <select id="tipe" name="tipe" required>
+                <option value="">-- Pilih Tipe Kamar --</option>
+                <?php foreach ($tipe_list as $t): ?>
+                    <option value="<?= htmlspecialchars($t) ?>"><?= htmlspecialchars($t) ?></option>
                 <?php endforeach; ?>
+            </select>
+        </p>
+        <p>
+            <label for="kamar_id">Pilih Kamar Kosong</label>
+            <select id="kamar_id" name="kamar_id" required>
+                <option value="">-- Pilih Tipe Kamar Terlebih Dahulu --</option>
             </select>
         </p>
         <p style="margin-top: 1.5rem;">
@@ -36,5 +42,35 @@ $kamar_kosong = $pdo->query("SELECT * FROM kamar WHERE status = 'KOSONG' ORDER B
         </p>
     </form>
 </section>
+
+<script>
+document.getElementById('tipe').addEventListener('change', function() {
+    const tipe = this.value;
+    const kamarSelect = document.getElementById('kamar_id');
+
+    if (!tipe) {
+        kamarSelect.innerHTML = '<option value="">-- Pilih Tipe Kamar Terlebih Dahulu --</option>';
+        return;
+    }
+
+    // Fetch kamar kosong berdasarkan tipe
+    fetch('get_kamar.php?tipe=' + encodeURIComponent(tipe))
+        .then(res => res.json())
+        .then(data => {
+            kamarSelect.innerHTML = '<option value="">-- Pilih Kamar --</option>';
+            if (data.length === 0) {
+                kamarSelect.innerHTML += '<option disabled>Tidak ada kamar kosong</option>';
+            } else {
+                data.forEach(k => {
+                    const opt = document.createElement('option');
+                    opt.value = k.id;
+                    opt.textContent = `${k.nomor_kamar} - Rp ${parseInt(k.harga).toLocaleString('id-ID')}`;
+                    kamarSelect.appendChild(opt);
+                });
+            }
+        })
+        .catch(err => console.error('Error:', err));
+});
+</script>
 
 <?php include __DIR__ . '/../includes/footer.php'; ?>
