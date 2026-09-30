@@ -11,6 +11,14 @@ $sudahLogin = isset($_SESSION['user_id']);
     <title><?= $title ?? 'SIMKOS' ?></title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="<?= $base ?>assets/css/style.css">
+    <script>
+        // Apply sidebar state sebelum render (cegah FOUC)
+        (function() {
+            if (localStorage.getItem('sidebarCollapsed') === 'true') {
+                document.documentElement.classList.add('sidebar-is-collapsed');
+            }
+        })();
+    </script>
 </head>
 <body>
 <!-- Sidebar Navigation -->
@@ -36,8 +44,8 @@ $sudahLogin = isset($_SESSION['user_id']);
 
                     <!-- Grup Kamar -->
                     <li>
-                        <details open class="nav-accordion">
-                            <summary class="nav-group-title">
+                        <details class="nav-accordion">
+                            <summary class="nav-group-title" onclick="return false;">
                                 <div>
                                     <i class="fas fa-door-open"></i>
                                     <span class="nav-text">KAMAR</span>
@@ -55,8 +63,8 @@ $sudahLogin = isset($_SESSION['user_id']);
                     <!-- Grup Penghuni -->
                     <?php if ($sudahLogin): ?>
                     <li>
-                        <details open class="nav-accordion">
-                            <summary class="nav-group-title">
+                        <details class="nav-accordion">
+                            <summary class="nav-group-title" onclick="return false;">
                                 <div>
                                     <i class="fas fa-users"></i>
                                     <span class="nav-text">PENGHUNI</span>
@@ -109,18 +117,86 @@ document.addEventListener('DOMContentLoaded', function() {
     const toggleBtn = document.getElementById('sidebarToggle');
     const appMain = document.querySelector('.app-main');
 
+    // Restore sidebar state from localStorage
+    const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+    if (isCollapsed) {
+        sidebar.classList.add('collapsed');
+        appMain.classList.add('sidebar-collapsed');
+        document.documentElement.classList.add('sidebar-is-collapsed');
+        const icon = toggleBtn.querySelector('i');
+        icon.classList.remove('fa-chevron-left');
+        icon.classList.add('fa-chevron-right');
+    }
+
     toggleBtn.addEventListener('click', function() {
         sidebar.classList.toggle('collapsed');
         appMain.classList.toggle('sidebar-collapsed');
+        document.documentElement.classList.toggle('sidebar-is-collapsed');
 
-        // Rotate icon
         const icon = toggleBtn.querySelector('i');
         if (sidebar.classList.contains('collapsed')) {
             icon.classList.remove('fa-chevron-left');
             icon.classList.add('fa-chevron-right');
+            localStorage.setItem('sidebarCollapsed', 'true');
         } else {
             icon.classList.remove('fa-chevron-right');
             icon.classList.add('fa-chevron-left');
+            localStorage.setItem('sidebarCollapsed', 'false');
+
+            // Close all popups when expanding
+            document.querySelectorAll('.sidebar-popup-menu').forEach(menu => {
+                menu.remove();
+            });
+        }
+    });
+
+    // Handle accordion clicks
+    sidebar.addEventListener('click', function(e) {
+        const summary = e.target.closest('.nav-accordion summary');
+        if (!summary) return;
+
+        const accordion = summary.parentElement;
+
+        if (sidebar.classList.contains('collapsed')) {
+            // Collapsed state - show popup
+            e.preventDefault();
+            e.stopPropagation();
+
+            // Close other popups
+            document.querySelectorAll('.sidebar-popup-menu').forEach(menu => {
+                menu.remove();
+            });
+
+            const ul = accordion.querySelector('ul');
+            if (!ul) return;
+
+            // Create popup dan append ke body
+            const popup = document.createElement('div');
+            popup.className = 'sidebar-popup-menu show';
+            popup.dataset.accordionId = accordion.className;
+
+            const newUl = ul.cloneNode(true);
+            popup.appendChild(newUl);
+            document.body.appendChild(popup);
+
+            const rect = summary.getBoundingClientRect();
+            popup.style.top = rect.top + 'px';
+        } else {
+            // Expanded state - toggle details normally
+            if (accordion.hasAttribute('open')) {
+                accordion.removeAttribute('open');
+            } else {
+                accordion.setAttribute('open', '');
+            }
+        }
+    });
+
+    // Close popup when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.app-sidebar') && !e.target.closest('.sidebar-popup-menu')) {
+            document.querySelectorAll('.sidebar-popup-menu').forEach(menu => {
+                menu.remove();
+            });
         }
     });
 });

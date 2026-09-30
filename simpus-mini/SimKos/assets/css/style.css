@@ -19,7 +19,7 @@
     --primary: #3b82f6;
     --primary-hover: #2563eb;
     --primary-light: #dbeafe;
-    --accent-yellow: #facc15;
+    --accent-yellow: #D8EB13;
     --text-primary: #111827;
     --text-secondary: #6b7280;
     --text-muted: #9ca3af;
@@ -66,18 +66,11 @@ aside.app-sidebar {
     height: 100vh;
     z-index: 100;
     border-right: 1px solid var(--border-color);
-    transition: width 0.3s ease;
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 aside.app-sidebar.collapsed {
     width: 70px;
-}
-
-aside.app-sidebar.collapsed .nav-text,
-aside.app-sidebar.collapsed .brand-text {
-    opacity: 0;
-    width: 0;
-    overflow: hidden;
 }
 
 aside.app-sidebar.collapsed .nav-accordion {
@@ -86,26 +79,108 @@ aside.app-sidebar.collapsed .nav-accordion {
 
 aside.app-sidebar.collapsed .nav-accordion summary {
     pointer-events: auto;
+    cursor: pointer;
+}
+
+aside.app-sidebar.collapsed .nav-accordion[open] {
+    pointer-events: none;
 }
 
 aside.app-sidebar.collapsed .nav-accordion summary::after {
     opacity: 0;
 }
 
-aside.app-sidebar.collapsed .nav-accordion ul {
+aside.app-sidebar.collapsed .nav-accordion > ul {
+    display: none !important;
+}
+
+aside.app-sidebar.collapsed .nav-accordion[open] > ul {
+    display: none !important;
+}
+
+/* Collapsed menu popup */
+.sidebar-popup-menu {
+    position: fixed;
+    left: 70px;
+    background: var(--bg-sidebar);
+    border: 1px solid var(--border-color);
+    border-radius: 0;
+    padding: 0;
+    box-shadow: 4px 4px 16px rgba(0, 0, 0, 0.15);
+    z-index: 9999;
+    min-width: 200px;
     display: none;
+    pointer-events: auto !important;
+}
+
+.sidebar-popup-menu.show {
+    display: block;
+    pointer-events: auto !important;
+}
+
+.sidebar-popup-menu.show {
+    display: block;
+}
+
+.sidebar-popup-menu ul {
+    list-style: none;
+    padding: 0.5rem 0;
+    margin: 0;
+}
+
+.sidebar-popup-menu li {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar-popup-menu li a {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    color: var(--sidebar-text);
+    padding: 0.7rem 1rem !important;
+    font-size: 0.875rem;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.sidebar-popup-menu li a:hover {
+    background-color: #f3f4f6;
+    color: var(--text-primary);
+}
+
+.sidebar-popup-menu li a i {
+    width: 20px;
+    text-align: center;
+    color: var(--sidebar-icon);
+}
+
+.sidebar-popup-menu li a .nav-text {
+    opacity: 1 !important;
+    width: auto !important;
+    overflow: visible !important;
 }
 
 .sidebar-header {
-    padding: 0 1rem;
+    padding: 0.75rem;
     margin-bottom: 1.5rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    transition: gap 0.3s ease, padding 0.3s ease;
+}
+
+aside.app-sidebar.collapsed .sidebar-header {
+    flex-direction: column;
+    gap: 0.5rem;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
 }
 
 aside.app-sidebar .brand {
-    font-size: 1.25rem;
+    font-size: 1rem;
     font-weight: 700;
     color: var(--primary);
     display: flex;
@@ -113,20 +188,35 @@ aside.app-sidebar .brand {
     gap: 0.65rem;
     padding: 0;
     margin: 0;
+    transition: gap 0.3s ease;
 }
 
-.brand-text {
-    transition: opacity 0.3s ease, width 0.3s ease;
+aside.app-sidebar .brand i {
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    transition: all 0.3s ease;
 }
 
+aside.app-sidebar.collapsed .brand {
+    gap: 0;
+}
+
+aside.app-sidebar.collapsed .brand .brand-text {
+    display: none;
+}
+
+/* Toggle button smooth transition */
 .sidebar-toggle {
+    padding: 0.5rem;
     background: none;
     border: none;
     color: var(--text-muted);
     cursor: pointer;
-    padding: 0.35rem;
     border-radius: 6px;
-    transition: all 0.2s;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -134,7 +224,40 @@ aside.app-sidebar .brand {
 
 .sidebar-toggle:hover {
     background-color: #f3f4f6;
-    color: var(--primary);
+    color: var(--accent-yellow);
+}
+
+aside.app-sidebar nav .nav-accordion summary.nav-group-title::after {
+    content: '❯';
+    font-size: 0.65rem;
+    color: var(--accent-yellow);
+    transition: transform 0.2s ease;
+}
+
+aside.app-sidebar nav .nav-accordion[open] summary.nav-group-title::after {
+    transform: rotate(90deg);
+}
+
+aside.app-sidebar.collapsed .sidebar-toggle {
+    padding: 0.25rem;
+}
+
+aside.app-sidebar.collapsed .sidebar-toggle i {
+    font-size: 0.7rem;
+}
+
+/* Smooth animation for brand layout */
+.brand-text {
+    opacity: 1;
+    transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.2s, width 0.3s ease;
+}
+
+aside.app-sidebar.collapsed .brand-text,
+html.sidebar-is-collapsed .brand-text {
+    opacity: 0;
+    width: 0;
+    overflow: hidden;
+    transition: opacity 0.2s ease, width 0.3s ease;
 }
 
 aside.app-sidebar nav {
@@ -189,11 +312,6 @@ aside.app-sidebar nav a.active i,
 aside.app-sidebar .nav-link:hover i,
 aside.app-sidebar .nav-link.active i {
     color: var(--primary);
-}
-
-.nav-text {
-    transition: opacity 0.3s ease, width 0.3s ease;
-    white-space: nowrap;
 }
 
 /* --- Sidebar: accordion --- */
@@ -273,11 +391,40 @@ aside.app-sidebar nav .nav-accordion ul li a {
     flex: 1;
     display: flex;
     flex-direction: column;
-    transition: margin-left 0.3s ease;
+    transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.app-main.sidebar-collapsed {
+.app-main.sidebar-collapsed,
+html.sidebar-is-collapsed .app-main {
     margin-left: 70px;
+}
+
+html.sidebar-is-collapsed aside.app-sidebar {
+    width: 70px;
+}
+
+aside.app-sidebar .nav-text,
+aside.app-sidebar .brand-text,
+aside.app-sidebar nav a .nav-text,
+aside.app-sidebar .nav-accordion .nav-text {
+    opacity: 1;
+    width: auto;
+    white-space: nowrap;
+    transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.1s, width 0.4s ease 0.1s;
+}
+
+html.sidebar-is-collapsed aside.app-sidebar .nav-text,
+html.sidebar-is-collapsed aside.app-sidebar .brand-text,
+html.sidebar-is-collapsed aside.app-sidebar nav a .nav-text,
+html.sidebar-is-collapsed aside.app-sidebar .nav-accordion .nav-text,
+aside.app-sidebar.collapsed .nav-text,
+aside.app-sidebar.collapsed .brand-text,
+aside.app-sidebar.collapsed nav a .nav-text,
+aside.app-sidebar.collapsed .nav-accordion .nav-text {
+    opacity: 0;
+    width: 0;
+    overflow: hidden;
+    transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1), width 0.3s ease;
 }
 
 header.topbar {
