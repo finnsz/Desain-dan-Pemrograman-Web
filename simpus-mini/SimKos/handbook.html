@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Handbook SIMKOS - Dokumentasi Teknis</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+        :root {
+            --bg-app: #f8f9fb;
+            --bg-card: #ffffff;
+            --bg-sidebar: #ffffff;
+            --border-color: #e5e7eb;
+            --primary: #3b82f6;
+            --primary-hover: #2563eb;
+            --primary-light: #dbeafe;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --text-muted: #9ca3af;
+            --sidebar-text: #6b7280;
+            --sidebar-icon: #9ca3af;
+            --sidebar-width: 280px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-app);
+            color: var(--text-primary);
+            display: flex;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        aside.app-sidebar {
+            width: var(--sidebar-width);
+            background-color: var(--bg-sidebar);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            border-right: 1px solid var(--border-color);
+            padding: 1.5rem 0;
+            z-index: 100;
+        }
+
+        .sidebar-header {
+            padding: 0 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .brand {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .brand i {
+            font-size: 1.75rem;
+        }
+
+        .sidebar-search {
+            padding: 0 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .sidebar-nav {
+            padding: 0 1rem;
+        }
+
+        .nav-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .nav-section-title {
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+            padding: 0.5rem 1rem;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.7rem 1rem;
+            color: var(--sidebar-text);
+            text-decoration: none;
+            border-radius: 10px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            margin-bottom: 0.25rem;
+        }
+
+        .nav-link:hover {
+            background-color: #f3f4f6;
+            color: var(--text-primary);
+        }
+
+        .nav-link.active {
+            background-color: var(--primary-light);
+            color: var(--primary);
+        }
+
+        .nav-link i {
+            width: 20px;
+            text-align: center;
+            color: var(--sidebar-icon);
+        }
+
+        .nav-link.active i {
+            color: var(--primary);
+        }
+
+        .app-main {
+            margin-left: var(--sidebar-width);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header.topbar {
+            background-color: var(--bg-card);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1.25rem 2rem;
+            position: relative;
+        }
+
+        .page-title {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        #search-box {
+            width: 100%;
+            padding: 0.7rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            font-size: 0.875rem;
+            outline: none;
+            transition: all 0.2s ease;
+            background-color: #f9fafb;
+            color: var(--text-primary);
+        }
+
+        #search-box::placeholder {
+            color: var(--text-muted);
+        }
+
+        #search-box:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+            background-color: #ffffff;
+        }
+
+        main.content {
+            padding: 2rem;
+            max-width: 1200px;
+        }
+
+        .content section {
+            background-color: var(--bg-card);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 0.5rem;
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-top: 1rem;
+            margin-bottom: 0.75rem;
+            color: var(--primary);
+        }
+
+        p {
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        ul, ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+            font-size: 0.875rem;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        th {
+            background-color: #f9fafb;
+            color: var(--text-secondary);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+            padding: 0.875rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        td {
+            padding: 0.875rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        tbody tr:hover {
+            background-color: #f9fafb;
+        }
+
+        code {
+            background-color: #f3f4f6;
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+            color: #dc2626;
+        }
+
+        pre {
+            background-color: #1f2937;
+            color: #e5e7eb;
+            padding: 1.5rem;
+            border-radius: 12px;
+            overflow-x: auto;
+            margin-bottom: 1.5rem;
+            font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+            font-size: 0.85rem;
+            line-height: 1.7;
+            border: 1px solid #374151;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        pre code {
+            background: none;
+            padding: 0;
+            color: #e5e7eb;
+            font-family: inherit;
+        }
+
+        .highlight {
+            background-color: #fef3c7;
+            padding: 0.1rem 0.2rem;
+            border-radius: 3px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.35rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .badge-primary {
+            background-color: var(--primary-light);
+            color: var(--primary);
+        }
+
+        strong {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        @media (max-width: 768px) {
+            aside.app-sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+
+            aside.app-sidebar.mobile-open {
+                transform: translateX(0);
+            }
+
+            .app-main {
+                margin-left: 0;
+            }
+
+            #search-box {
+                width: 100%;
+            }
+
+            main.content {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <aside class="app-sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="brand">
+                <i class="fas fa-book"></i>
+                <span>HANDBOOK SIMKOS</span>
+            </div>
+        </div>
+
+        <div class="sidebar-search">
+            <input type="text" id="search-box" placeholder="Cari dalam dokumentasi...">
+        </div>
+
+        <nav class="sidebar-nav">
+            <div class="nav-section">
+                <div class="nav-section-title">Dokumentasi</div>
+                <a href="#pendahuluan" class="nav-link active">
+                    <i class="fas fa-home"></i>
+                    <span>Pendahuluan</span>
+                </a>
+                <a href="#struktur-folder" class="nav-link">
+                    <i class="fas fa-folder-tree"></i>
+                    <span>Struktur Folder</span>
+                </a>
+                <a href="#desain-visual" class="nav-link">
+                    <i class="fas fa-palette"></i>
+                    <span>Desain Visual</span>
+                </a>
+                <a href="#palet-warna" class="nav-link">
+                    <i class="fas fa-swatchbook"></i>
+                    <span>Palet Warna</span>
+                </a>
+                <a href="#tipografi" class="nav-link">
+                    <i class="fas fa-font"></i>
+                    <span>Tipografi</span>
+                </a>
+                <a href="#komponen-ui" class="nav-link">
+                    <i class="fas fa-layer-group"></i>
+                    <span>Komponen UI</span>
+                </a>
+                <a href="#layout-responsive" class="nav-link">
+                    <i class="fas fa-mobile-alt"></i>
+                    <span>Layout & Responsive</span>
+                </a>
+                <a href="#alur-halaman" class="nav-link">
+                    <i class="fas fa-sitemap"></i>
+                    <span>Alur Halaman</span>
+                </a>
+                <a href="#teknologi" class="nav-link">
+                    <i class="fas fa-cogs"></i>
+                    <span>Teknologi</span>
+                </a>
+                <a href="#kesimpulan" class="nav-link">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Kesimpulan</span>
+                </a>
+            </div>
+        </nav>
+    </aside>
+
+    <div class="app-main">
+        <header class="topbar">
+            <div class="page-title">Dokumentasi Teknis SIMKOS</div>
+        </header>
+
+        <main class="content">
+            <section id="pendahuluan">
+                
+                <h2>1. Pendahuluan</h2>
+
+                <h3>1.1 Tujuan Website</h3>
+                <p>SIMKOS (Sistem Informasi Manajemen Kost) adalah aplikasi web untuk mengelola data kamar kost dan penghuni secara digital. Website ini memudahkan pengelola kost dalam:</p>
+                <ul>
+                    <li>Mencatat dan memantau ketersediaan kamar (kosong/terisi)</li>
+                    <li>Mengelola data penghuni yang tinggal di kost</li>
+                    <li>Melihat statistik okupansi dan data terbaru secara real-time</li>
+                    <li>Mengelola akses dengan sistem login petugas dan admin</li>
+                </ul>
+
+                <h3>1.2 Fitur Utama</h3>
+
+                <h4>Dashboard</h4>
+                <ul>
+                    <li>Kartu statistik: total kamar, kamar terisi, kamar kosong, total penghuni</li>
+                    <li>Tabel penghuni terbaru (5 data terakhir)</li>
+                    <li>Quick action buttons untuk tambah kamar/penghuni</li>
+                </ul>
+
+                <h4>Manajemen Kamar</h4>
+                <ul>
+                    <li>Daftar kamar dengan pagination (5 per halaman)</li>
+                    <li>Pencarian kamar berdasarkan nomor atau tipe</li>
+                    <li>Tambah kamar baru (nomor, tipe, harga)</li>
+                    <li>Edit data kamar (termasuk status KOSONG/TERISI)</li>
+                    <li>Hapus kamar (hanya admin)</li>
+                </ul>
+
+                <h4>Manajemen Penghuni</h4>
+                <ul>
+                    <li>Daftar penghuni dengan pagination (5 per halaman)</li>
+                    <li>Pencarian penghuni berdasarkan nama atau nomor HP</li>
+                    <li>Tambah penghuni dengan dropdown dinamis (pilih tipe → kamar kosong muncul)</li>
+                    <li>Edit penghuni (otomatis update status kamar lama jadi KOSONG, kamar baru jadi TERISI)</li>
+                    <li>Hapus penghuni (hanya admin)</li>
+                </ul>
+
+                <h4>Autentikasi & Otorisasi</h4>
+                <ul>
+                    <li>Register petugas baru (role default: petugas)</li>
+                    <li>Login dengan username/password (support "Ingat saya" 30 hari via cookie)</li>
+                    <li>Role-based access: petugas bisa tambah/edit, admin bisa tambah/edit/hapus</li>
+                    <li>Logout dengan session destroy</li>
+                </ul>
+            </section>
+
+            <section id="struktur-folder">
+                <h2>2. Struktur Folder</h2>
+
+                <pre><code>SimKos/
+│
+├── index.php                  # Dashboard utama (statistik + penghuni terbaru)
+│
+├── assets/
+│   ├── css/
+│   │   └── style.css         # File CSS utama (1026 baris, fully documented)
+│   └── js/
+│       └── app.js            # JavaScript client-side table filter
+│
+├── includes/
+│   ├── header.php            # Header + sidebar + topbar (menu navigasi, user info)
+│   ├── footer.php            # Footer + closing tags + load app.js
+│   ├── session.php           # Custom DB session handler (SessionHandlerInterface)
+│   ├── auth.php              # Guard: redirect jika belum login
+│   ├── role.php              # Fungsi is_admin() dan require_admin()
+│   └── remember.php          # "Ingat saya" logic (selector:validator pattern)
+│
+├── config/
+│   └── database.php          # Koneksi PDO PostgreSQL (support Supabase via DATABASE_URL)
+│
+├── auth/
+│   ├── login.php             # Form login (username, password, checkbox "Ingat saya")
+│   ├── proses_login.php      # Proses login + issue remember token
+│   ├── register.php          # Form registrasi petugas
+│   ├── proses_register.php   # Proses registrasi + password hashing
+│   └── logout.php            # Logout + forget remember token + destroy session
+│
+├── kamar/
+│   ├── list.php              # Daftar kamar (pagination + search)
+│   ├── tambah.php            # Form tambah kamar (nomor_kamar, tipe, harga)
+│   ├── proses_tambah.php     # Proses insert kamar
+│   ├── edit.php              # Form edit kamar (termasuk dropdown status)
+│   ├── proses_edit.php       # Proses update kamar
+│   └── hapus.php             # Hapus kamar (require admin)
+│
+├── penghuni/
+│   ├── list.php              # Daftar penghuni (pagination + search + JOIN kamar)
+│   ├── tambah.php            # Form tambah penghuni (dropdown dinamis tipe→kamar)
+│   ├── proses_tambah.php     # Proses insert penghuni + update status kamar TERISI
+│   ├── edit.php              # Form edit penghuni (dropdown kamar kosong + kamar lama)
+│   ├── proses_edit.php       # Proses update penghuni + sinkronisasi status kamar
+│   ├── hapus.php             # Hapus penghuni (require admin)
+│   └── get_kamar.php         # API JSON: ambil kamar kosong berdasarkan tipe
+│
+└── database/
+    ├── schema.sql            # Skema database lengkap (5 tabel + constraint)
+    └── seed_data.sql         # Data dummy (20 kamar + 10 penghuni)</code></pre>
+
+                <p><strong>Catatan:</strong> <span class="highlight">schema.sql</span> di root folder sudah <strong>outdated</strong> (tidak punya tabel users/sessions/remember_tokens). Pakai <span class="highlight">database/schema.sql</span> sebagai skema resmi.</p>
+            </section>
+
+            <section id="desain-visual">
+                <h2>3. Desain Visual</h2>
+
+                <h3>3.1 Konsep Desain</h3>
+                <p>SIMKOS menggunakan desain <strong>modern minimalis</strong> dengan prinsip:</p>
+                <ul>
+                    <li><strong>Clean & Spacious:</strong> Banyak whitespace, padding generous, tidak penuh sesak</li>
+                    <li><strong>Hierarchy Jelas:</strong> Typography dengan size bertingkat (judul besar → subjudul → teks biasa)</li>
+                    <li><strong>Konsistensi Komponen:</strong> Semua card, button, tabel pakai border-radius 10-12px</li>
+                    <li><strong>Visual Feedback:</strong> Hover effects (translateY, box-shadow), status badges berwarna</li>
+                </ul>
+
+                <h3>3.2 Alasan Pemilihan Warna Biru (#3b82f6)</h3>
+                <p><strong>Warna biru dipilih sebagai primary color karena:</strong></p>
+                <ol>
+                    <li><strong>Trust & Professionalism:</strong> Biru identik dengan kepercayaan, cocok untuk sistem manajemen data</li>
+                    <li><strong>Readability:</strong> Biru cerah (#3b82f6) kontras tinggi dengan background putih, mudah dibaca</li>
+                    <li><strong>Universal Appeal:</strong> Tidak terlalu feminine/masculine, cocok untuk semua audiens</li>
+                    <li><strong>Trend Modern:</strong> Mengikuti design system populer (Tailwind CSS, Material Design menggunakan blue sebagai default)</li>
+                </ol>
+
+                <h3>3.3 Font Plus Jakarta Sans</h3>
+                <p><strong>Alasan pemilihan:</strong></p>
+                <ol>
+                    <li><strong>Modern Geometric Sans-Serif:</strong> Desain bersih, profesional, tidak kaku</li>
+                    <li><strong>Legibility Tinggi:</strong> Mudah dibaca di layar bahkan di ukuran kecil (0.75rem)</li>
+                    <li><strong>Variable Weight:</strong> Mendukung 400/500/600/700 untuk hierarchy yang jelas</li>
+                    <li><strong>Google Fonts:</strong> Gratis, fast CDN, tidak perlu hosting sendiri</li>
+                </ol>
+            </section>
+
+            <section id="palet-warna">
+                <h2>4. Palet Warna</h2>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Kategori</th>
+                            <th>Variabel CSS</th>
+                            <th>Hex Code</th>
+                            <th>Fungsi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td rowspan="3"><strong>Background</strong></td>
+                            <td><code>--bg-app</code></td>
+                            <td><strong>#f8f9fb</strong></td>
+                            <td>Background halaman utama (abu-abu sangat terang)</td>
+                        </tr>
+                        <tr>
+                            <td><code>--bg-card</code></td>
+                            <td><strong>#ffffff</strong></td>
+                            <td>Background card, sidebar, topbar (putih bersih)</td>
+                        </tr>
+                        <tr>
+                            <td><code>--bg-sidebar</code></td>
+                            <td><strong>#ffffff</strong></td>
+                            <td>Background sidebar (putih)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Border</strong></td>
+                            <td><code>--border-color</code></td>
+                            <td><strong>#e5e7eb</strong></td>
+                            <td>Garis pembatas (abu-abu muda)</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="3"><strong>Primary Color</strong></td>
+                            <td><code>--primary</code></td>
+                            <td><strong>#3b82f6</strong></td>
+                            <td>Tombol, link, highlight utama (biru cerah)</td>
+                        </tr>
+                        <tr>
+                            <td><code>--primary-hover</code></td>
+                            <td><strong>#2563eb</strong></td>
+                            <td>Hover state button (biru lebih gelap)</td>
+                        </tr>
+                        <tr>
+                            <td><code>--primary-light</code></td>
+                            <td><strong>#dbeafe</strong></td>
+                            <td>Background menu aktif (biru sangat terang)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Text</strong></td>
+                            <td><code>--text-primary</code></td>
+                            <td><strong>#111827</strong></td>
+                            <td>Teks utama (hitam pekat)</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td><code>--text-secondary</code></td>
+                            <td><strong>#6b7280</strong></td>
+                            <td>Teks secondary/label (abu-abu)</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td><code>--text-muted</code></td>
+                            <td><strong>#9ca3af</strong></td>
+                            <td>Teks placeholder/disabled (abu-abu terang)</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="2"><strong>Status Success</strong></td>
+                            <td><code>--success-bg</code></td>
+                            <td><strong>#d1fae5</strong></td>
+                            <td>Background badge/alert sukses (hijau terang)</td>
+                        </tr>
+                        <tr>
+                            <td><code>--success-text</code></td>
+                            <td><strong>#047857</strong></td>
+                            <td>Teks sukses (hijau gelap)</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="2"><strong>Status Warning</strong></td>
+                            <td><code>--warning-bg</code></td>
+                            <td><strong>#fef3c7</strong></td>
+                            <td>Background badge warning (kuning terang)</td>
+                        </tr>
+                        <tr>
+                            <td><code>--warning-text</code></td>
+                            <td><strong>#b45309</strong></td>
+                            <td>Teks warning (kuning gelap)</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="2"><strong>Status Danger</strong></td>
+                            <td><code>--danger-bg</code></td>
+                            <td><strong>#fee2e2</strong></td>
+                            <td>Background badge/alert error (merah terang)</td>
+                        </tr>
+                        <tr>
+                            <td><code>--danger-text</code></td>
+                            <td><strong>#dc2626</strong></td>
+                            <td>Teks error (merah gelap)</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h4>Alasan Palet:</h4>
+                <ul>
+                    <li><strong>Kontras Tinggi:</strong> Background #f8f9fb + teks #111827 → WCAG AA compliant</li>
+                    <li><strong>Status Color Semantic:</strong> Hijau = sukses/kosong, Kuning = warning/terisi, Merah = error/bahaya</li>
+                    <li><strong>Consistent Lightness:</strong> Semua background status punya lightness 90%+, teks 30-40% → konsisten</li>
+                </ul>
+            </section>
+
+            <section id="tipografi">
+                <h2>5. Tipografi</h2>
+
+                <h3>5.1 Font Family</h3>
+                <pre><code>font-family: 'Plus Jakarta Sans', sans-serif;</code></pre>
+                <p>Loaded via Google Fonts CDN dengan weight 400, 500, 600, 700.</p>
+
+                <h3>5.2 Hierarchy & Ukuran</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Elemen</th>
+                            <th>Font Size</th>
+                            <th>Font Weight</th>
+                            <th>Fungsi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Stat Card Value</strong></td>
+                            <td>2rem (32px)</td>
+                            <td>700</td>
+                            <td>Angka statistik di dashboard</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Page Title (Topbar)</strong></td>
+                            <td>1.35rem (21.6px)</td>
+                            <td>700</td>
+                            <td>Judul halaman di header</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Welcome Banner H2</strong></td>
+                            <td>1.5rem (24px)</td>
+                            <td>700</td>
+                            <td>Judul sambutan dashboard</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Section H2</strong></td>
+                            <td>1.15rem (18.4px)</td>
+                            <td>700</td>
+                            <td>Judul section/card</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Body Text</strong></td>
+                            <td>1rem (16px)</td>
+                            <td>400</td>
+                            <td>Teks normal paragraph</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Form Label</strong></td>
+                            <td>0.9rem (14.4px)</td>
+                            <td>600</td>
+                            <td>Label input form</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Button</strong></td>
+                            <td>0.9rem (14.4px)</td>
+                            <td>600</td>
+                            <td>Teks tombol</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Nav Link</strong></td>
+                            <td>0.875rem (14px)</td>
+                            <td>500</td>
+                            <td>Menu sidebar</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Table Header</strong></td>
+                            <td>0.75rem (12px)</td>
+                            <td>600</td>
+                            <td>Header tabel (uppercase)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section id="komponen-ui">
+                <h2>6. Komponen UI</h2>
+
+                <h3>6.1 Kartu Statistik (Stat Card)</h3>
+                <p><strong>Deskripsi:</strong> Kartu dengan angka besar di tengah, ikon berwarna di kanan atas, digunakan di dashboard.</p>
+                <h4>Styling:</h4>
+                <ul>
+                    <li>Background: putih (#ffffff)</li>
+                    <li>Border: 1px solid #e5e7eb</li>
+                    <li>Border-radius: 12px</li>
+                    <li>Padding: 1.5rem 1.25rem</li>
+                    <li>Hover effect: naik 4px + bayangan lebih besar</li>
+                    <li>Value font: 2rem / 700</li>
+                </ul>
+
+                <h3>6.2 Tombol (Buttons)</h3>
+                <h4>Primary Button</h4>
+                <ul>
+                    <li>Background: #3b82f6</li>
+                    <li>Color: white</li>
+                    <li>Padding: 0.75rem 1.75rem</li>
+                    <li>Border-radius: 10px</li>
+                    <li>Hover: naik 2px + box-shadow biru</li>
+                </ul>
+
+                <h4>Secondary Button</h4>
+                <ul>
+                    <li>Background: #e5e7eb</li>
+                    <li>Color: #111827</li>
+                    <li>Hover: background #d1d5db + naik 2px</li>
+                </ul>
+
+                <h3>6.3 Badge (Status Label)</h3>
+                <ul>
+                    <li><span class="badge badge-primary">KOSONG</span> - background #d1fae5, color #047857</li>
+                    <li><span class="badge" style="background-color: #fef3c7; color: #b45309;">TERISI</span> - background #fef3c7, color #b45309</li>
+                </ul>
+
+                <h3>6.4 Form Input</h3>
+                <p>Styling umum:</p>
+                <ul>
+                    <li>Width: 100%, max-width: 500px</li>
+                    <li>Padding: 0.75rem 1rem</li>
+                    <li>Border: 1px solid #e5e7eb</li>
+                    <li>Border-radius: 10px</li>
+                    <li>Focus: border #3b82f6 + box-shadow 0 0 0 4px #dbeafe</li>
+                </ul>
+
+                <h3>6.5 Alert (Flash Message)</h3>
+                <ul>
+                    <li><strong>Success:</strong> background #d1fae5, color #047857</li>
+                    <li><strong>Danger:</strong> background #fee2e2, color #dc2626</li>
+                </ul>
+            </section>
+
+            <section id="layout-responsive">
+                <h2>7. Layout & Responsive</h2>
+
+                <h3>7.1 Struktur Layout</h3>
+                <pre><code>&lt;body&gt;
+  &lt;aside class="app-sidebar"&gt;...&lt;/aside&gt;
+  &lt;div class="app-main"&gt;
+    &lt;header class="topbar"&gt;...&lt;/header&gt;
+    &lt;main class="content"&gt;...&lt;/main&gt;
+    &lt;footer&gt;...&lt;/footer&gt;
+  &lt;/div&gt;
+&lt;/body&gt;</code></pre>
+
+                <h3>7.2 Sidebar Collapsible</h3>
+                <ul>
+                    <li>Width normal: 280px (di handbook ini)</li>
+                    <li>Width collapse: 70px (di aplikasi utama)</li>
+                    <li>State disimpan di <code>localStorage.getItem('sidebarCollapsed')</code></li>
+                    <li>Position: fixed, height: 100vh, overflow-y: auto</li>
+                </ul>
+
+                <h3>7.3 Grid Responsive</h3>
+                <p>Menggunakan CSS Grid dengan <code>auto-fit</code> untuk adaptive layout:</p>
+                <pre><code>.grid-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.25rem;
+}</code></pre>
+
+                <h3>7.4 Mobile Responsive (@media max-width: 768px)</h3>
+                <ul>
+                    <li>Main content padding: 1rem (dari 1.75rem 2rem)</li>
+                    <li>Grid minmax: 150px (dari 250px)</li>
+                    <li>Sidebar: hidden atau transform translateX (untuk drawer effect)</li>
+                    <li>Search box width: 200px (dari 300px)</li>
+                </ul>
+            </section>
+
+            <section id="alur-halaman">
+                <h2>8. Alur Halaman (User Flow)</h2>
+
+                <h3>8.1 Flow Register Petugas</h3>
+                <pre><code>[Buka /auth/register.php]
+→ Isi form (nama, username, password min 6 char)
+→ Submit → [proses_register.php]
+  → Validasi (nama/username/password non-empty, password >= 6)
+  → Check duplicate username
+  → INSERT INTO users (password_hash via password_hash(), role='petugas')
+  → Flash: "Registrasi berhasil, silakan login." (success)
+  → Redirect ke login.php</code></pre>
+
+                <h3>8.2 Flow Login</h3>
+                <pre><code>[Buka /auth/login.php]
+→ Isi username, password
+→ Centang "Ingat saya (30 hari)" (opsional)
+→ Submit → [proses_login.php]
+  → SELECT * FROM users WHERE username
+  → password_verify() cek password
+  → Jika benar:
+    → session_regenerate_id(true)
+    → Set $_SESSION[user_id, nama, role]
+    → Jika "remember" checked: issue remember token
+    → Redirect ke index.php
+  → Jika salah: Flash error → Redirect ke login.php</code></pre>
+
+                <h3>8.3 Flow Tambah Kamar</h3>
+                <pre><code>[Klik "+ Kamar Baru"]
+→ requires auth (redirect jika tidak login)
+→ [kamar/tambah.php]
+  → Form: nomor_kamar, tipe, harga
+  → Submit → [proses_tambah.php]
+    → Validasi: semua field non-empty
+    → INSERT INTO kamar (status auto-default 'KOSONG')
+    → Flash: "Kamar berhasil ditambahkan!" (success)
+    → Redirect ke list.php</code></pre>
+
+                <h3>8.4 Flow Tambah Penghuni (dengan Dropdown Dinamis)</h3>
+                <pre><code>[Klik "+ Penghuni Baru"]
+→ [penghuni/tambah.php]
+  → Load dropdown tipe: SELECT DISTINCT tipe FROM kamar
+  → User pilih tipe → JavaScript fetch:
+    → fetch('get_kamar.php?tipe=Standard')
+    → Return JSON kamar kosong
+    → Populate dropdown kamar_id
+  → Submit → [proses_tambah.php]
+    → BEGIN TRANSACTION
+      → INSERT penghuni
+      → UPDATE kamar SET status='TERISI'
+    → COMMIT
+    → Flash: "Penghuni berhasil ditambahkan!" (success)
+    → Redirect ke list.php</code></pre>
+
+                <h3>8.5 Flow Hapus Data (Admin Only)</h3>
+                <pre><code>[Petugas klik "Hapus"]
+→ [kamar/hapus.php atau penghuni/hapus.php]
+  → require_admin('list.php')
+    → Cek is_admin() (return $_SESSION['role'] === 'admin')
+    → Jika BUKAN admin:
+      → Flash: "Akses ditolak: hanya admin yang boleh menghapus data." (danger)
+      → Redirect ke list.php
+  → DELETE FROM kamar/penghuni WHERE id = :id
+  → Flash: "Data ... berhasil dihapus." (success)
+  → Redirect ke list.php</code></pre>
+
+                <h3>8.6 Flow Logout</h3>
+                <pre><code>[Klik "Logout"]
+→ [auth/logout.php]
+  → remember_forget() (clear cookie + DB token)
+  → session_destroy()
+  → Redirect ke auth/login.php</code></pre>
+            </section>
+
+            <section id="teknologi">
+                <h2>9. Teknologi</h2>
+
+                <h3>9.1 Stack Lengkap</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Layer</th>
+                            <th>Teknologi</th>
+                            <th>Versi/Info</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td rowspan="4"><strong>Front-End</strong></td>
+                            <td>HTML5</td>
+                            <td>Semantic tags (section, header, footer, nav, aside, main)</td>
+                        </tr>
+                        <tr>
+                            <td>CSS3</td>
+                            <td>Custom CSS, CSS Variables, Flexbox, Grid</td>
+                        </tr>
+                        <tr>
+                            <td>JavaScript (Vanilla)</td>
+                            <td>ES6+, Fetch API, DOM Manipulation, LocalStorage</td>
+                        </tr>
+                        <tr>
+                            <td>Font Awesome + Google Fonts</td>
+                            <td>v6.4.0 (CDN), Plus Jakarta Sans (400/500/600/700)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Back-End</strong></td>
+                            <td>PHP</td>
+                            <td>7.4+ (password_hash, SessionHandlerInterface)</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>PDO</td>
+                            <td>PostgreSQL driver (pgsql extension)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Database</strong></td>
+                            <td>PostgreSQL</td>
+                            <td>12+ (SERIAL, ILIKE, DATE, TIMESTAMP)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Auth</strong></td>
+                            <td>PHP Native</td>
+                            <td>password_hash (PASSWORD_DEFAULT = bcrypt)</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>Remember Me Token</td>
+                            <td>Selector:Validator pattern (SHA256 hash)</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>9.2 Alasan Pemilihan Teknologi</h3>
+
+                <h4>PHP (Native)</h4>
+                <p><strong>Alasan:</strong></p>
+                <ul>
+                    <li>Deployment mudah: hampir semua shared hosting support PHP tanpa config</li>
+                    <li>Learning curve rendah: ideal untuk pemula web development</li>
+                    <li>Built-in fungsi keamanan: password_hash(), htmlspecialchars(), prepared statements PDO</li>
+                    <li>Tidak butuh build step (beda dengan Node.js yang butuh npm/bundler)</li>
+                </ul>
+
+                <h4>PostgreSQL</h4>
+                <p><strong>Alasan:</strong></p>
+                <ul>
+                    <li><strong>ACID Compliance:</strong> Transaksi penghuni + update kamar butuh atomicity</li>
+                    <li><strong>Advanced Features:</strong> Support ILIKE (case-insensitive search), SERIAL (auto-increment), constraint FK</li>
+                    <li><strong>Supabase Integration:</strong> Design-ready untuk deploy ke Supabase (config/database.php support DATABASE_URL)</li>
+                    <li><strong>Performance:</strong> Indexing lebih baik dari MySQL untuk query kompleks (JOIN)</li>
+                </ul>
+
+                <h4>Vanilla CSS (No Framework)</h4>
+                <p><strong>Alasan:</strong></p>
+                <ul>
+                    <li><strong>Full Control:</strong> Tidak ada class bawaan framework yang "magic"</li>
+                    <li><strong>Lightweight:</strong> File CSS hanya 1026 baris, tidak ada dead code</li>
+                    <li><strong>Educational:</strong> Pakai framework tanpa paham CSS dasar = bad practice</li>
+                    <li><strong>Custom Design:</strong> Design SIMKOS unik, tidak perlu class utility</li>
+                </ul>
+
+                <h4>Vanilla JavaScript (No jQuery/Framework)</h4>
+                <p><strong>Alasan:</strong></p>
+                <ul>
+                    <li><strong>Modern Browser Support:</strong> Fetch API, querySelector sudah support di semua browser 2020+</li>
+                    <li><strong>Performance:</strong> Vanilla JS lebih cepat dari jQuery (no library overhead)</li>
+                    <li><strong>Bundle Size:</strong> 0 KB dependency (jQuery = 30KB minified)</li>
+                    <li><strong>Learning:</strong> jQuery sudah deprecated di industri, Vanilla JS skill lebih transferable</li>
+                </ul>
+            </section>
+
+            <section id="kesimpulan">
+                <h2>10. Kesimpulan</h2>
+
+                <h3>10.1 Kelebihan Proyek</h3>
+
+                <h4>1. Design Modern & Profesional</h4>
+                <ul>
+                    <li>UI minimalis dengan spacing konsisten</li>
+                    <li>Hover effects smooth (translateY, box-shadow transitions)</li>
+                    <li>Color palette semantic (hijau = kosong, kuning = terisi)</li>
+                    <li>Responsive layout (sidebar collapsible, mobile-friendly)</li>
+                </ul>
+
+                <h4>2. User Experience Baik</h4>
+                <ul>
+                    <li>Dashboard informatif (statistik + data terbaru langsung terlihat)</li>
+                    <li>Dropdown dinamis (pilih tipe → kamar kosong muncul otomatis)</li>
+                    <li>Pagination + search (tidak berat untuk data banyak)</li>
+                    <li>Flash message jelas (sukses hijau, error merah)</li>
+                    <li>"Ingat saya" 30 hari (user tidak perlu login terus-menerus)</li>
+                </ul>
+
+                <h4>3. Keamanan Terjaga</h4>
+                <ul>
+                    <li>Password hashing (bcrypt via password_hash)</li>
+                    <li>Prepared statements (semua query pakai parameter binding, no SQL injection)</li>
+                    <li>Role-based access (admin bisa hapus, petugas tidak)</li>
+                    <li>Remember token pakai selector:validator pattern (secure, detect token theft)</li>
+                    <li>Session data di database (tidak bisa dicuri via file system)</li>
+                </ul>
+
+                <h4>4. Data Consistency</h4>
+                <ul>
+                    <li>Transaction untuk penghuni + kamar (atomicity)</li>
+                    <li>Sinkronisasi status kamar otomatis</li>
+                    <li>Foreign key constraint (prevent orphan data)</li>
+                </ul>
+
+                <h4>5. Maintainability</h4>
+                <ul>
+                    <li>CSS fully documented (1026 baris dengan komentar)</li>
+                    <li>Separation of concerns (config, includes, auth, kamar, penghuni terpisah)</li>
+                    <li>Reusable includes (header, footer, session, auth, role)</li>
+                    <li>CSS Variables (ubah warna cukup edit `:root`)</li>
+                </ul>
+
+                <h3>10.2 Keterbatasan Proyek</h3>
+
+                <h4>Security</h4>
+                <ul>
+                    <li><strong>No CSRF Protection:</strong> Form tidak pakai token CSRF</li>
+                    <li><strong>No Rate Limiting:</strong> Login brute-force attack tidak ada protection</li>
+                </ul>
+
+                <h4>Features</h4>
+                <ul>
+                    <li><strong>No Soft Delete:</strong> Hapus data langsung DELETE permanent</li>
+                    <li><strong>No Audit Log:</strong> Tidak ada riwayat "siapa edit data apa kapan"</li>
+                    <li><strong>No Export Data:</strong> Tidak bisa export tabel ke Excel/PDF</li>
+                </ul>
+
+                <h4>Performance</h4>
+                <ul>
+                    <li><strong>No Caching:</strong> Query statistics jalan tiap page load</li>
+                    <li><strong>No Index:</strong> Kolom search belum ada database index</li>
+                </ul>
+
+                <h4>Code Quality</h4>
+                <ul>
+                    <li><strong>Inline SQL:</strong> Query SQL di file view, seharusnya di Model/Repository</li>
+                    <li><strong>Repeated Code:</strong> Pagination logic copy-paste</li>
+                    <li><strong>Magic Number:</strong> Limit hardcoded, seharusnya config</li>
+                    <li><strong>No Unit Test:</strong> Tidak ada PHPUnit test</li>
+                </ul>
+
+                <h3>10.3 Rekomendasi Pengembangan</h3>
+
+                <h4>Priority 1 (Critical Security)</h4>
+                <ol>
+                    <li>Tambah CSRF token di semua form POST</li>
+                    <li>Tambah rate limiting login (max 5 attempt per 15 menit)</li>
+                </ol>
+
+                <h4>Priority 2 (Essential Features)</h4>
+                <ol>
+                    <li>Implementasi soft delete dengan <code>deleted_at</code></li>
+                    <li>Tambah audit log untuk tracking perubahan data</li>
+                </ol>
+
+                <h4>Priority 3 (UX Improvement)</h4>
+                <ol>
+                    <li>Buat modal custom untuk konfirmasi hapus</li>
+                    <li>Tambah loading state di dropdown dinamis</li>
+                    <li>Sidebar auto-collapse di mobile</li>
+                </ol>
+
+                <h4>Priority 4 (Performance)</h4>
+                <ol>
+                    <li>Tambah Redis caching untuk dashboard statistics</li>
+                    <li>Buat database index untuk kolom search</li>
+                </ol>
+
+                <h4>Priority 5 (Architecture)</h4>
+                <ol>
+                    <li>Refactor ke MVC pattern (Model-View-Controller)</li>
+                    <li>Buat Repository pattern untuk database queries</li>
+                    <li>Implement environment-based config (.env file)</li>
+                </ol>
+
+                <hr style="margin: 2rem 0; border: none; border-top: 1px solid var(--border-color);">
+
+                <p style="text-align: center; color: var(--text-muted); margin-top: 2rem;">
+                    SIMKOS - Sistem Informasi Manajemen Kost<br>
+                    Menggunakan PHP, PostgreSQL, HTML5, CSS3, JavaScript
+                </p>
+            </section>
+
+        </main>
+    </div>
+
+    <script>
+        // Fitur 1: Search/Filter konten
+        document.getElementById('search-box').addEventListener('keyup', function() {
+            const searchTerm = this.value.toLowerCase();
+            const sections = document.querySelectorAll('section');
+
+            sections.forEach(section => {
+                const text = section.innerText.toLowerCase();
+                const headingInSection = section.querySelector('h2, h3, h4');
+
+                if (text.includes(searchTerm)) {
+                    section.style.display = 'block';
+                    if (searchTerm) {
+                        section.style.opacity = '0.9';
+                        section.style.borderLeft = '4px solid var(--primary)';
+                    } else {
+                        section.style.opacity = '1';
+                        section.style.borderLeft = 'none';
+                    }
+                } else {
+                    section.style.display = 'none';
+                }
+            });
+
+            // Hide semua jika tidak ada hasil
+            const visibleSections = Array.from(sections).filter(s => s.style.display !== 'none');
+            if (searchTerm && visibleSections.length === 0) {
+                const content = document.querySelector('.content');
+                if (!document.getElementById('no-results')) {
+                    const noResults = document.createElement('div');
+                    noResults.id = 'no-results';
+                    noResults.style.cssText = 'text-align: center; padding: 3rem; color: var(--text-muted);';
+                    noResults.innerHTML = '<p style="font-size: 1.1rem;"><i class="fas fa-search"></i> Tidak ada hasil untuk "' + this.value + '"</p>';
+                    content.appendChild(noResults);
+                }
+            } else {
+                const noResults = document.getElementById('no-results');
+                if (noResults) noResults.remove();
+            }
+        });
+
+        // Fitur 2: Sidebar navigation active state on click
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+
+                const targetId = this.getAttribute('href').substring(1);
+                const targetSection = document.getElementById(targetId);
+                if (targetSection) {
+                    targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Fitur 3: Auto-highlight menu saat scroll (Intersection Observer)
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        const observerOptions = {
+            root: null,
+            rootMargin: '-20% 0px -70% 0px',
+            threshold: 0
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const targetId = entry.target.getAttribute('id');
+
+                    // Remove active dari semua link
+                    navLinks.forEach(link => link.classList.remove('active'));
+
+                    // Add active ke link yang sesuai
+                    const activeLink = document.querySelector(`.nav-link[href="#${targetId}"]`);
+                    if (activeLink) {
+                        activeLink.classList.add('active');
+                    }
+                }
+            });
+        }, observerOptions);
+
+        // Observe semua section
+        sections.forEach(section => {
+            observer.observe(section);
+        });
+
+        // Fitur 4: Mobile sidebar toggle (opsional)
+        const sidebar = document.getElementById('sidebar');
+
+        // Cek screen size
+        function handleResize() {
+            if (window.innerWidth > 768) {
+                sidebar.classList.remove('mobile-open');
+            }
+        }
+
+        window.addEventListener('resize', handleResize);
+    </script>
+</body>
+</html>

@@ -181,62 +181,69 @@
             margin-top: 0.5rem;
         }
 
-        /* SimKos Featured Section */
-        .simkos-section {
+        /* Featured Section Grid */
+        .featured-section {
             margin-bottom: 3rem;
         }
 
-        .simkos-featured {
+        .featured-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .featured-card {
             background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
             border-radius: 16px;
-            padding: 2rem 2.5rem;
+            padding: 2rem;
             box-shadow: 0 8px 24px rgba(59, 130, 246, 0.15);
             text-decoration: none;
             color: white;
             display: flex;
-            align-items: center;
+            flex-direction: column;
             justify-content: space-between;
-            gap: 1.5rem;
-            flex-wrap: wrap;
+            min-height: 200px;
             transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
 
-        .simkos-featured:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 12px 32px rgba(59, 130, 246, 0.25);
+        .featured-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 16px 40px rgba(59, 130, 246, 0.25);
         }
 
-        .simkos-featured-header {
-            display: flex;
-            align-items: center;
-            gap: 1.25rem;
+        .featured-card-content {
+            position: relative;
+            z-index: 1;
         }
 
-        .simkos-featured-icon {
-            width: 56px;
-            height: 56px;
-            flex-shrink: 0;
+        .featured-card-icon {
+            width: 48px;
+            height: 48px;
             background-color: rgba(255, 255, 255, 0.2);
             border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 1.5rem;
+            margin-bottom: 1rem;
         }
 
-        .simkos-featured h2 {
+        .featured-card h2 {
             font-size: 1.5rem;
             font-weight: 700;
-            margin: 0;
+            margin: 0 0 0.5rem 0;
         }
 
-        .simkos-featured p {
+        .featured-card p {
             font-size: 0.95rem;
             opacity: 0.9;
-            margin: 0.25rem 0 0 0;
+            margin: 0;
+            line-height: 1.5;
         }
 
-        .simkos-featured-cta {
+        .featured-card-cta {
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
@@ -246,13 +253,15 @@
             border-radius: 8px;
             font-weight: 600;
             font-size: 0.9rem;
-            flex-shrink: 0;
             transition: all 0.2s ease;
             border: 1px solid rgba(255, 255, 255, 0.3);
+            margin-top: 1.5rem;
+            width: fit-content;
         }
 
-        .simkos-featured:hover .simkos-featured-cta {
+        .featured-card:hover .featured-card-cta {
             background-color: rgba(255, 255, 255, 0.3);
+            transform: translateX(4px);
         }
 
         /* Footer */
@@ -277,15 +286,20 @@
                 gap: 1rem;
             }
 
-            .simkos-featured {
-                padding: 1.75rem;
+            .featured-grid {
+                grid-template-columns: 1fr;
             }
 
-            .simkos-featured h2 {
+            .featured-card {
+                padding: 1.75rem;
+                min-height: 170px;
+            }
+
+            .featured-card h2 {
                 font-size: 1.25rem;
             }
 
-            .simkos-featured-cta {
+            .featured-card-cta {
                 width: 100%;
                 justify-content: center;
             }
@@ -296,26 +310,39 @@
 
     <!-- Main Content -->
     <main class="container">
-        <!-- SimKos Featured Section -->
-        <div class="simkos-section">
+        <!-- Featured Projects Section -->
+        <div class="featured-section">
             <div class="section-title">
                 <i class="fas fa-star"></i>
                 Proyek Utama
             </div>
-            <a href="/SimKos/index.php" class="simkos-featured">
-                <div class="simkos-featured-header">
-                    <div class="simkos-featured-icon">
-                        <i class="fas fa-building"></i>
-                    </div>
-                    <div>
+            <div class="featured-grid">
+                <a href="SimKos/index.php" class="featured-card">
+                    <div class="featured-card-content">
+                        <div class="featured-card-icon">
+                            <i class="fas fa-building"></i>
+                        </div>
                         <h2>SIMKOS</h2>
-                        <p>Sistem Informasi Manajemen Kos & Penghuni</p>
+                        <p>Sistem Informasi Manajemen Kost & Penghuni</p>
+                        <div class="featured-card-cta">
+                            Akses <i class="fas fa-arrow-right"></i>
+                        </div>
                     </div>
-                </div>
-                <div class="simkos-featured-cta">
-                    Akses Dashboard <i class="fas fa-arrow-right"></i>
-                </div>
-            </a>
+                </a>
+
+                <a href="SimKos/handbook.html" class="featured-card" style="background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%); box-shadow: 0 8px 24px rgba(139, 92, 246, 0.15);">
+                    <div class="featured-card-content">
+                        <div class="featured-card-icon">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <h2>Handbook</h2>
+                        <p>Dokumentasi Teknis & Design System SIMKOS</p>
+                        <div class="featured-card-cta">
+                            Baca Dokumentasi <i class="fas fa-arrow-right"></i>
+                        </div>
+                    </div>
+                </a>
+            </div>
         </div>
 
         <!-- Jobsheet Section -->
