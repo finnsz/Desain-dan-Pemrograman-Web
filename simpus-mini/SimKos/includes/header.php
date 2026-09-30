@@ -81,6 +81,10 @@ $sudahLogin = isset($_SESSION['user_id']);
             </nav>
 
             <div class="sidebar-footer">
+                <a href="<?= $base ?>../index.php" class="nav-link">
+                    <i class="fas fa-arrow-left"></i>
+                    <span class="nav-text">Daftar Jobsheet</span>
+                </a>
                 <a href="<?= $base ?>auth/<?= $sudahLogin ? 'logout.php' : 'login.php' ?>" class="nav-link">
                     <i class="fas fa-<?= $sudahLogin ? 'sign-out-alt' : 'sign-in-alt' ?>"></i>
                     <span class="nav-text"><?= $sudahLogin ? 'Logout' : 'Login' ?></span>
