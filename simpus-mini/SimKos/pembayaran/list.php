@@ -15,6 +15,35 @@ $filter_status = isset($_GET['status']) ? $_GET['status'] : '';
 $filter_bulan = isset($_GET['bulan']) ? (int)$_GET['bulan'] : 0;
 $filter_tahun = isset($_GET['tahun']) ? (int)$_GET['tahun'] : 0;
 
+// Sorting
+$sort_by = isset($_GET['sort']) ? $_GET['sort'] : 'periode_tahun';
+$sort_order = isset($_GET['order']) ? $_GET['order'] : 'DESC';
+
+// Validasi sort_by untuk keamanan
+$allowed_sorts = ['nama_lengkap', 'nomor_kamar', 'periode_bulan', 'nominal', 'denda', 'total_bayar', 'tgl_jatuh_tempo', 'tgl_bayar', 'status'];
+if (!in_array($sort_by, $allowed_sorts)) {
+    $sort_by = 'periode_tahun';
+}
+
+// Build ORDER BY dengan secondary sort untuk consistency
+$order_by = "$sort_by $sort_order";
+// Tambahkan secondary sort berdasarkan primary sort column
+if ($sort_by === 'periode_bulan') {
+    $order_by .= ", periode_tahun $sort_order, tgl_jatuh_tempo $sort_order";
+} elseif ($sort_by === 'status') {
+    $order_by .= ", tgl_jatuh_tempo DESC";
+} elseif ($sort_by === 'nama_lengkap') {
+    $order_by .= ", periode_tahun DESC, periode_bulan DESC";
+} elseif ($sort_by === 'nomor_kamar') {
+    $order_by .= ", periode_tahun DESC, periode_bulan DESC";
+} else {
+    // Default secondary: periode desc
+    $order_by .= ", periode_tahun DESC, periode_bulan DESC";
+}
+
+// Toggle sort order
+$next_order = ($sort_order === 'ASC') ? 'DESC' : 'ASC';
+
 $whereClause = "WHERE 1=1";
 $params = [];
 
@@ -47,7 +76,7 @@ $totalPages = ceil($totalData / $limit);
 // Ambil data
 $query = "SELECT * FROM v_pembayaran_detail
           $whereClause
-          ORDER BY periode_tahun DESC, periode_bulan DESC, tgl_jatuh_tempo DESC
+          ORDER BY $order_by
           LIMIT :limit OFFSET :offset";
 $stmt = $pdo->prepare($query);
 foreach ($params as $key => $val) {
@@ -83,32 +112,32 @@ $bulan_nama = [
 
     <!-- Filter -->
     <form method="GET" style="display: flex; gap: 0.75rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
-        <input type="text" name="q" value="<?= htmlspecialchars($search) ?>" placeholder="Cari nama / kamar..." style="max-width: 200px;">
+        <input type="text" name="q" value="<?= htmlspecialchars($search) ?>" placeholder="Cari nama / kamar..." style="max-width: 250px; padding: 0.75rem;">
 
-        <select name="status" style="max-width: 150px;">
+        <select name="status" style="max-width: 180px; padding: 0.75rem;">
             <option value="">Semua Status</option>
             <option value="BELUM BAYAR" <?= $filter_status === 'BELUM BAYAR' ? 'selected' : '' ?>>Belum Bayar</option>
             <option value="LUNAS" <?= $filter_status === 'LUNAS' ? 'selected' : '' ?>>Lunas</option>
             <option value="TERLAMBAT" <?= $filter_status === 'TERLAMBAT' ? 'selected' : '' ?>>Terlambat</option>
         </select>
 
-        <select name="bulan" style="max-width: 130px;">
+        <select name="bulan" style="max-width: 180px; padding: 0.75rem;">
             <option value="0">Semua Bulan</option>
             <?php foreach ($bulan_nama as $num => $nama): ?>
                 <option value="<?= $num ?>" <?= $filter_bulan === $num ? 'selected' : '' ?>><?= $nama ?></option>
             <?php endforeach; ?>
         </select>
 
-        <select name="tahun" style="max-width: 100px;">
+        <select name="tahun" style="max-width: 150px; padding: 0.75rem;">
             <option value="0">Semua Tahun</option>
             <?php foreach ($tahun_list as $tahun): ?>
                 <option value="<?= $tahun ?>" <?= $filter_tahun === $tahun ? 'selected' : '' ?>><?= $tahun ?></option>
             <?php endforeach; ?>
         </select>
 
-        <button type="submit" class="btn-primary" style="padding: 0.6rem 1.25rem; font-size: 0.875rem;">Filter</button>
+        <button type="submit" class="btn-primary" style="padding: 0.75rem 1.5rem; font-size: 1rem;">Filter</button>
         <?php if ($search || $filter_status || $filter_bulan || $filter_tahun): ?>
-            <a href="list.php" style="padding: 0.6rem 0.75rem; background: var(--danger-bg); color: var(--danger-text); border-radius: 8px; font-size: 0.875rem; font-weight: 500;">Reset</a>
+            <a href="list.php" style="padding: 0.75rem 1rem; background: var(--danger-bg); color: var(--danger-text); border-radius: 8px; font-size: 1rem; font-weight: 500;">Reset</a>
         <?php endif; ?>
     </form>
 
@@ -143,61 +172,80 @@ $bulan_nama = [
     </div>
 
     <div class="table-responsive">
-        <table>
+        <table style="font-size: 0.95rem;">
             <thead>
                 <tr>
-                    <th>Penghuni</th>
-                    <th>Kamar</th>
-                    <th>Periode</th>
-                    <th>Nominal</th>
-                    <th>Denda</th>
-                    <th>Total</th>
-                    <th>Jatuh Tempo</th>
-                    <th>Tgl Bayar</th>
-                    <th>Status</th>
-                    <th>Aksi</th>
+                    <?php
+                    function sortLink($column, $label, $current_sort, $current_order) {
+                        global $search, $filter_status, $filter_bulan, $filter_tahun;
+                        $next_order = ($current_sort === $column && $current_order === 'ASC') ? 'DESC' : 'ASC';
+                        $icon = '';
+                        if ($current_sort === $column) {
+                            $icon = $current_order === 'ASC' ? ' <i class="fas fa-arrow-up" style="margin-left: 0.25rem;"></i>' : ' <i class="fas fa-arrow-down" style="margin-left: 0.25rem;"></i>';
+                        } else {
+                            $icon = ' <i class="fas fa-arrows-alt-v" style="margin-left: 0.25rem; opacity: 0.5;"></i>';
+                        }
+                        return '<a href="?sort=' . $column . '&order=' . $next_order .
+                               '&q=' . urlencode($search) .
+                               '&status=' . urlencode($filter_status) .
+                               '&bulan=' . $filter_bulan .
+                               '&tahun=' . $filter_tahun .
+                               '" style="color: inherit; text-decoration: none; display: flex; align-items: center; gap: 0.25rem;">' . $label . $icon . '</a>';
+                    }
+                    ?>
+                    <th style="min-width: 100px; padding: 1rem 0.75rem;"><?= sortLink('nama_lengkap', 'Penghuni', $sort_by, $sort_order) ?></th>
+                    <th style="min-width: 60px; padding: 1rem 0.75rem;"><?= sortLink('nomor_kamar', 'Kamar', $sort_by, $sort_order) ?></th>
+                    <th style="min-width: 85px; padding: 1rem 0.75rem;"><?= sortLink('periode_bulan', 'Periode', $sort_by, $sort_order) ?></th>
+                    <th style="min-width: 80px; padding: 1rem 0.75rem;"><?= sortLink('nominal', 'Nominal', $sort_by, $sort_order) ?></th>
+                    <th style="min-width: 70px; padding: 1rem 0.75rem;"><?= sortLink('denda', 'Denda', $sort_by, $sort_order) ?></th>
+                    <th style="min-width: 80px; padding: 1rem 0.75rem;"><?= sortLink('total_bayar', 'Total', $sort_by, $sort_order) ?></th>
+                    <th style="min-width: 70px; padding: 1rem 0.75rem;"><?= sortLink('tgl_jatuh_tempo', 'Tempo', $sort_by, $sort_order) ?></th>
+                    <th style="min-width: 70px; padding: 1rem 0.75rem;"><?= sortLink('tgl_bayar', 'Bayar', $sort_by, $sort_order) ?></th>
+                    <th style="min-width: 70px; padding: 1rem 0.75rem;"><?= sortLink('status', 'Status', $sort_by, $sort_order) ?></th>
+                    <th style="min-width: 60px; padding: 1rem 0.75rem;">Aksi</th>
                 </tr>
             </thead>
             <tbody>
                 <?php if (empty($pembayaran_list)): ?>
-                    <tr><td colspan="10" style="text-align: center; color: var(--text-muted);">Belum ada data pembayaran.</td></tr>
+                    <tr><td colspan="10" style="text-align: center; color: var(--text-muted); padding: 1.5rem;">Belum ada data pembayaran.</td></tr>
                 <?php else: ?>
                     <?php foreach ($pembayaran_list as $p): ?>
                         <tr>
-                            <td><strong><?= htmlspecialchars($p['nama_lengkap']) ?></strong></td>
-                            <td><span class="badge badge-warning"><?= htmlspecialchars($p['nomor_kamar']) ?></span></td>
-                            <td><?= $bulan_nama[$p['periode_bulan']] ?> <?= $p['periode_tahun'] ?></td>
-                            <td>Rp <?= number_format($p['nominal'], 0, ',', '.') ?></td>
-                            <td><?= $p['denda'] > 0 ? 'Rp ' . number_format($p['denda'], 0, ',', '.') : '-' ?></td>
-                            <td><strong>Rp <?= number_format($p['total_bayar'], 0, ',', '.') ?></strong></td>
-                            <td><?= date('d/m/Y', strtotime($p['tgl_jatuh_tempo'])) ?></td>
-                            <td><?= $p['tgl_bayar'] ? date('d/m/Y', strtotime($p['tgl_bayar'])) : '-' ?></td>
-                            <td>
+                            <td style="white-space: nowrap; padding: 0.85rem 0.75rem;"><strong><?= htmlspecialchars($p['nama_lengkap']) ?></strong></td>
+                            <td style="padding: 0.85rem 0.75rem;"><span class="badge badge-warning" style="padding: 0.4rem 0.65rem;"><?= htmlspecialchars($p['nomor_kamar']) ?></span></td>
+                            <td style="white-space: nowrap; padding: 0.85rem 0.75rem;"><?= substr($bulan_nama[$p['periode_bulan']], 0, 3) ?> <?= $p['periode_tahun'] ?></td>
+                            <td style="white-space: nowrap; padding: 0.85rem 0.75rem;"><?= number_format($p['nominal'] / 1000, 0) ?>k</td>
+                            <td style="white-space: nowrap; padding: 0.85rem 0.75rem;">
+                                <?php
+                                // Hitung denda otomatis jika terlambat (Rp 50.000/hari, max 500k)
+                                $denda_display = $p['denda'];
+                                if ($p['is_terlambat'] && $p['status'] !== 'LUNAS' && $p['hari_terlambat'] > 0) {
+                                    $denda_display = $p['hari_terlambat'] * 50000;
+                                    if ($denda_display > 500000) $denda_display = 500000;
+                                }
+                                echo $denda_display > 0 ? number_format($denda_display / 1000, 0) . 'k' : '-';
+                                ?>
+                            </td>
+                            <td style="white-space: nowrap; padding: 0.85rem 0.75rem;"><strong><?= number_format(($p['total_bayar'] + ($denda_display - $p['denda'])) / 1000, 0) ?>k</strong></td>
+                            <td style="white-space: nowrap; padding: 0.85rem 0.75rem;"><?= date('d/m/y', strtotime($p['tgl_jatuh_tempo'])) ?></td>
+                            <td style="white-space: nowrap; padding: 0.85rem 0.75rem;"><?= $p['tgl_bayar'] ? date('d/m/y', strtotime($p['tgl_bayar'])) : '-' ?></td>
+                            <td style="padding: 0.85rem 0.75rem;">
                                 <?php
                                 $badge_class = 'badge-success';
                                 $status = $p['status'];
+                                $status_text = 'Lunas';
                                 if ($p['is_terlambat'] && $status !== 'LUNAS') {
                                     $badge_class = 'badge-danger';
-                                    $status = 'TERLAMBAT';
+                                    $status_text = 'Telat';
                                 } elseif ($status === 'BELUM BAYAR') {
                                     $badge_class = 'badge-warning';
+                                    $status_text = 'Belum';
                                 }
                                 ?>
-                                <span class="badge <?= $badge_class ?>"><?= $status ?></span>
+                                <span class="badge <?= $badge_class ?>" style="padding: 0.4rem 0.65rem;"><?= $status_text ?></span>
                             </td>
-                            <td>
-                                <div class="aksi">
-                                    <?php if ($p['status'] === 'LUNAS'): ?>
-                                        <a href="kwitansi.php?id=<?= $p['id'] ?>" class="btn-edit" target="_blank">
-                                            <i class="fas fa-print"></i> Kwitansi
-                                        </a>
-                                    <?php else: ?>
-                                        <a href="edit.php?id=<?= $p['id'] ?>" class="btn-edit">Bayar</a>
-                                    <?php endif; ?>
-                                    <?php if (is_admin()): ?>
-                                        <a href="edit.php?id=<?= $p['id'] ?>" class="btn-edit">Edit</a>
-                                    <?php endif; ?>
-                                </div>
+                            <td style="padding: 0.85rem 0.75rem;">
+                                <a href="edit.php?id=<?= $p['id'] ?>" class="btn-edit" style="padding: 0.5rem 0.75rem; font-size: 0.9rem;">Edit</a>
                             </td>
                         </tr>
                     <?php endforeach; ?>
@@ -209,7 +257,7 @@ $bulan_nama = [
     <?php if ($totalPages > 1): ?>
     <div style="margin-top: 1.25rem; display: flex; gap: 0.5rem;">
         <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-            <a href="?page=<?= $i ?>&q=<?= urlencode($search) ?>&status=<?= urlencode($filter_status) ?>&bulan=<?= $filter_bulan ?>&tahun=<?= $filter_tahun ?>"
+            <a href="?page=<?= $i ?>&q=<?= urlencode($search) ?>&status=<?= urlencode($filter_status) ?>&bulan=<?= $filter_bulan ?>&tahun=<?= $filter_tahun ?>&sort=<?= urlencode($sort_by) ?>&order=<?= urlencode($sort_order) ?>"
                style="padding: 0.5rem 0.75rem; background: <?= $i === $page ? 'var(--primary)' : '#e5e7eb' ?>; color: <?= $i === $page ? 'white' : 'var(--text-primary)' ?>; border-radius: 6px; text-decoration: none; font-size: 0.875rem;">
                 <?= $i ?>
             </a>

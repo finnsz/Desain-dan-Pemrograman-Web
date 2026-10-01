@@ -6,6 +6,7 @@ $title = 'Laporan Keuangan Bulanan';
 require_once __DIR__ . '/../config/database.php';
 include __DIR__ . '/../includes/header.php';
 
+$tipe_laporan = isset($_GET['tipe_laporan']) ? $_GET['tipe_laporan'] : 'bulanan';
 $bulan = isset($_GET['bulan']) ? (int)$_GET['bulan'] : (int)date('m');
 $tahun = isset($_GET['tahun']) ? (int)$_GET['tahun'] : (int)date('Y');
 
@@ -23,37 +24,67 @@ $tahun_list = $pdo->query("
     ORDER BY 1 DESC
 ")->fetchAll(PDO::FETCH_COLUMN);
 
-// Pemasukan: pembayaran yang LUNAS pada bulan tertentu
+// Pemasukan: pembayaran yang LUNAS
+$where_pemasukan = "WHERE status = 'LUNAS'";
+$params_pemasukan = [];
+if ($tipe_laporan === 'bulanan') {
+    $where_pemasukan .= " AND periode_bulan = :bulan AND periode_tahun = :tahun";
+    $params_pemasukan = [':bulan' => $bulan, ':tahun' => $tahun];
+} elseif ($tipe_laporan === 'tahunan') {
+    $where_pemasukan .= " AND periode_tahun = :tahun";
+    $params_pemasukan = [':tahun' => $tahun];
+}
+
 $stmt_pemasukan = $pdo->prepare("
     SELECT
         COALESCE(SUM(total_bayar), 0) as total_lunas,
         COUNT(*) as jumlah_pembayaran
     FROM pembayaran
-    WHERE periode_bulan = :bulan AND periode_tahun = :tahun AND status = 'LUNAS'
+    $where_pemasukan
 ");
-$stmt_pemasukan->execute([':bulan' => $bulan, ':tahun' => $tahun]);
+$stmt_pemasukan->execute($params_pemasukan);
 $pemasukan = $stmt_pemasukan->fetch(PDO::FETCH_ASSOC);
 
 // Pengeluaran per kategori
+$where_pengeluaran = "WHERE 1=1";
+$params_pengeluaran = [];
+if ($tipe_laporan === 'bulanan') {
+    $where_pengeluaran .= " AND EXTRACT(MONTH FROM tanggal) = :bulan AND EXTRACT(YEAR FROM tanggal) = :tahun";
+    $params_pengeluaran = [':bulan' => $bulan, ':tahun' => $tahun];
+} elseif ($tipe_laporan === 'tahunan') {
+    $where_pengeluaran .= " AND EXTRACT(YEAR FROM tanggal) = :tahun";
+    $params_pengeluaran = [':tahun' => $tahun];
+}
+
 $stmt_pengeluaran = $pdo->prepare("
     SELECT kategori, COUNT(*) as jumlah, COALESCE(SUM(nominal), 0) as total
     FROM pengeluaran
-    WHERE EXTRACT(MONTH FROM tanggal) = :bulan AND EXTRACT(YEAR FROM tanggal) = :tahun
+    $where_pengeluaran
     GROUP BY kategori
     ORDER BY total DESC
 ");
-$stmt_pengeluaran->execute([':bulan' => $bulan, ':tahun' => $tahun]);
+$stmt_pengeluaran->execute($params_pengeluaran);
 $pengeluaran_detail = $stmt_pengeluaran->fetchAll(PDO::FETCH_ASSOC);
 
 // Total pengeluaran
 $total_pengeluaran = array_sum(array_column($pengeluaran_detail, 'total'));
 
-// Pembayaran belum lunas di bulan ini
+// Pembayaran belum lunas
+$where_belum = "WHERE status != 'LUNAS'";
+$params_belum = [];
+if ($tipe_laporan === 'bulanan') {
+    $where_belum .= " AND periode_bulan = :bulan AND periode_tahun = :tahun";
+    $params_belum = [':bulan' => $bulan, ':tahun' => $tahun];
+} elseif ($tipe_laporan === 'tahunan') {
+    $where_belum .= " AND periode_tahun = :tahun";
+    $params_belum = [':tahun' => $tahun];
+}
+
 $stmt_belum = $pdo->prepare("
     SELECT COUNT(*) FROM pembayaran
-    WHERE periode_bulan = :bulan AND periode_tahun = :tahun AND status != 'LUNAS'
+    $where_belum
 ");
-$stmt_belum->execute([':bulan' => $bulan, ':tahun' => $tahun]);
+$stmt_belum->execute($params_belum);
 $pembayaran_belum = $stmt_belum->fetchColumn();
 
 // Tunggakan (pembayaran yang jatuh tempo sebelum hari ini dan belum lunas)
@@ -78,13 +109,19 @@ $laba_rugi = $pemasukan['total_lunas'] - $total_pengeluaran;
 
     <!-- Filter Periode -->
     <form method="GET" style="display: flex; gap: 0.75rem; margin-bottom: 1.5rem;">
-        <select name="bulan">
+        <select name="tipe_laporan" id="tipeLaporan" onchange="togglePeriod()">
+            <option value="seumur_hidup" <?= $tipe_laporan === 'seumur_hidup' ? 'selected' : '' ?>>Seumur Hidup</option>
+            <option value="tahunan" <?= $tipe_laporan === 'tahunan' ? 'selected' : '' ?>>Tahunan</option>
+            <option value="bulanan" <?= $tipe_laporan === 'bulanan' ? 'selected' : '' ?>>Bulanan</option>
+        </select>
+
+        <select name="bulan" id="bulanSelect" style="<?= $tipe_laporan !== 'bulanan' ? 'display:none;' : '' ?>">
             <?php foreach ($bulan_nama as $num => $nama): ?>
                 <option value="<?= $num ?>" <?= $num === $bulan ? 'selected' : '' ?>><?= $nama ?></option>
             <?php endforeach; ?>
         </select>
 
-        <select name="tahun">
+        <select name="tahun" id="tahunSelect" style="<?= $tipe_laporan === 'seumur_hidup' ? 'display:none;' : '' ?>">
             <?php foreach ($tahun_list as $t): ?>
                 <option value="<?= $t ?>" <?= $t === $tahun ? 'selected' : '' ?>><?= $t ?></option>
             <?php endforeach; ?>
@@ -93,11 +130,39 @@ $laba_rugi = $pemasukan['total_lunas'] - $total_pengeluaran;
         <button type="submit" class="btn-primary">Filter</button>
     </form>
 
+    <script>
+    function togglePeriod() {
+        const tipe = document.getElementById('tipeLaporan').value;
+        const bulan = document.getElementById('bulanSelect');
+        const tahun = document.getElementById('tahunSelect');
+
+        if (tipe === 'seumur_hidup') {
+            bulan.style.display = 'none';
+            tahun.style.display = 'none';
+        } else if (tipe === 'tahunan') {
+            bulan.style.display = 'none';
+            tahun.style.display = 'block';
+        } else {
+            bulan.style.display = 'block';
+            tahun.style.display = 'block';
+        }
+    }
+    </script>
+
     <!-- Header Laporan -->
     <div style="text-align: center; padding: 1.5rem; border-bottom: 2px solid var(--border-color); margin-bottom: 2rem;">
         <h3 style="margin: 0 0 0.5rem 0;">LAPORAN KEUANGAN</h3>
         <p style="margin: 0; color: var(--text-secondary);">
-            Periode: <?= $bulan_nama[$bulan] ?> <?= $tahun ?>
+            Periode:
+            <?php
+                if ($tipe_laporan === 'bulanan') {
+                    echo $bulan_nama[$bulan] . ' ' . $tahun;
+                } elseif ($tipe_laporan === 'tahunan') {
+                    echo $tahun;
+                } else {
+                    echo 'Seumur Hidup';
+                }
+            ?>
         </p>
     </div>
 
@@ -205,10 +270,10 @@ $laba_rugi = $pemasukan['total_lunas'] - $total_pengeluaran;
 
     <!-- Link ke laporan detail -->
     <div style="margin-top: 2rem; display: flex; gap: 0.75rem;">
-        <a href="../pembayaran/list.php?bulan=<?= $bulan ?>&tahun=<?= $tahun ?>" class="btn-primary" style="font-size: 0.875rem; padding: 0.6rem 1.25rem;">
+        <a href="../pembayaran/list.php?tipe_laporan=<?= $tipe_laporan ?>&bulan=<?= $bulan ?>&tahun=<?= $tahun ?>" class="btn-primary" style="font-size: 0.875rem; padding: 0.6rem 1.25rem;">
             <i class="fas fa-receipt"></i> Lihat Detail Pembayaran
         </a>
-        <a href="../pengeluaran/list.php?bulan=<?= $bulan ?>&tahun=<?= $tahun ?>" class="btn-primary" style="font-size: 0.875rem; padding: 0.6rem 1.25rem;">
+        <a href="../pengeluaran/list.php?tipe_laporan=<?= $tipe_laporan ?>&bulan=<?= $bulan ?>&tahun=<?= $tahun ?>" class="btn-primary" style="font-size: 0.875rem; padding: 0.6rem 1.25rem;">
             <i class="fas fa-shopping-cart"></i> Lihat Detail Pengeluaran
         </a>
     </div>

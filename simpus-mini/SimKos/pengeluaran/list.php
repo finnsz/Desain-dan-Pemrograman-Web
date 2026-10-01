@@ -12,8 +12,9 @@ $limit = 10;
 $offset = ($page - 1) * $limit;
 $search = isset($_GET['q']) ? $_GET['q'] : '';
 $filter_kategori = isset($_GET['kategori']) ? $_GET['kategori'] : '';
-$filter_bulan = isset($_GET['bulan']) ? (int)$_GET['bulan'] : 0;
-$filter_tahun = isset($_GET['tahun']) ? (int)$_GET['tahun'] : 0;
+$tipe_laporan = isset($_GET['tipe_laporan']) ? $_GET['tipe_laporan'] : 'seumur_hidup';
+$filter_bulan = isset($_GET['bulan']) ? (int)$_GET['bulan'] : date('n');
+$filter_tahun = isset($_GET['tahun']) ? (int)$_GET['tahun'] : date('Y');
 
 $whereClause = "WHERE 1=1";
 $params = [];
@@ -28,11 +29,11 @@ if ($filter_kategori) {
     $params[':kategori'] = $filter_kategori;
 }
 
-if ($filter_bulan > 0 && $filter_tahun > 0) {
+if ($tipe_laporan === 'bulanan') {
     $whereClause .= " AND EXTRACT(MONTH FROM tanggal) = :bulan AND EXTRACT(YEAR FROM tanggal) = :tahun";
     $params[':bulan'] = $filter_bulan;
     $params[':tahun'] = $filter_tahun;
-} elseif ($filter_tahun > 0) {
+} elseif ($tipe_laporan === 'tahunan') {
     $whereClause .= " AND EXTRACT(YEAR FROM tanggal) = :tahun";
     $params[':tahun'] = $filter_tahun;
 }
@@ -91,25 +92,48 @@ $bulan_nama = [
             <option value="Lainnya" <?= $filter_kategori === 'Lainnya' ? 'selected' : '' ?>>Lainnya</option>
         </select>
 
-        <select name="bulan" style="max-width: 130px;">
-            <option value="0">Semua Bulan</option>
+        <select name="tipe_laporan" id="tipeLaporan" style="max-width: 150px;" onchange="togglePeriod()">
+            <option value="seumur_hidup" <?= $tipe_laporan === 'seumur_hidup' ? 'selected' : '' ?>>Seumur Hidup</option>
+            <option value="tahunan" <?= $tipe_laporan === 'tahunan' ? 'selected' : '' ?>>Tahunan</option>
+            <option value="bulanan" <?= $tipe_laporan === 'bulanan' ? 'selected' : '' ?>>Bulanan</option>
+        </select>
+
+        <select name="bulan" id="bulanSelect" style="max-width: 130px; <?= $tipe_laporan !== 'bulanan' ? 'display:none;' : '' ?>">
             <?php foreach ($bulan_nama as $num => $nama): ?>
                 <option value="<?= $num ?>" <?= $filter_bulan === $num ? 'selected' : '' ?>><?= $nama ?></option>
             <?php endforeach; ?>
         </select>
 
-        <select name="tahun" style="max-width: 100px;">
-            <option value="0">Semua Tahun</option>
+        <select name="tahun" id="tahunSelect" style="max-width: 100px; <?= $tipe_laporan === 'seumur_hidup' ? 'display:none;' : '' ?>">
             <?php foreach ($tahun_list as $tahun): ?>
                 <option value="<?= $tahun ?>" <?= $filter_tahun === $tahun ? 'selected' : '' ?>><?= $tahun ?></option>
             <?php endforeach; ?>
         </select>
 
         <button type="submit" class="btn-primary" style="padding: 0.6rem 1.25rem; font-size: 0.875rem;">Filter</button>
-        <?php if ($search || $filter_kategori || $filter_bulan || $filter_tahun): ?>
+        <?php if ($search || $filter_kategori): ?>
             <a href="list.php" style="padding: 0.6rem 0.75rem; background: var(--danger-bg); color: var(--danger-text); border-radius: 8px; font-size: 0.875rem; font-weight: 500;">Reset</a>
         <?php endif; ?>
     </form>
+
+    <script>
+    function togglePeriod() {
+        const tipe = document.getElementById('tipeLaporan').value;
+        const bulan = document.getElementById('bulanSelect');
+        const tahun = document.getElementById('tahunSelect');
+
+        if (tipe === 'seumur_hidup') {
+            bulan.style.display = 'none';
+            tahun.style.display = 'none';
+        } else if (tipe === 'tahunan') {
+            bulan.style.display = 'none';
+            tahun.style.display = 'block';
+        } else {
+            bulan.style.display = 'block';
+            tahun.style.display = 'block';
+        }
+    }
+    </script>
 
     <!-- Statistik Total -->
     <div style="background: #fee2e2; padding: 1rem; border-radius: 10px; margin-bottom: 1.5rem; text-align: center;">
@@ -122,7 +146,16 @@ $bulan_nama = [
             Rp <?= number_format($total_pengeluaran, 0, ',', '.') ?>
         </div>
         <div style="font-size: 0.75rem; color: var(--danger-text); margin-top: 0.25rem;">
-            Total Pengeluaran <?= $filter_bulan ? '(' . $bulan_nama[$filter_bulan] . ' ' . $filter_tahun . ')' : ($filter_tahun ? '(' . $filter_tahun . ')' : '') ?>
+            Total Pengeluaran
+            <?php
+                if ($tipe_laporan === 'bulanan') {
+                    echo '(' . $bulan_nama[$filter_bulan] . ' ' . $filter_tahun . ')';
+                } elseif ($tipe_laporan === 'tahunan') {
+                    echo '(' . $filter_tahun . ')';
+                } else {
+                    echo '(Seumur Hidup)';
+                }
+            ?>
         </div>
     </div>
 
@@ -172,7 +205,7 @@ $bulan_nama = [
     <?php if ($totalPages > 1): ?>
     <div style="margin-top: 1.25rem; display: flex; gap: 0.5rem;">
         <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-            <a href="?page=<?= $i ?>&q=<?= urlencode($search) ?>&kategori=<?= urlencode($filter_kategori) ?>&bulan=<?= $filter_bulan ?>&tahun=<?= $filter_tahun ?>"
+            <a href="?page=<?= $i ?>&q=<?= urlencode($search) ?>&kategori=<?= urlencode($filter_kategori) ?>&tipe_laporan=<?= urlencode($tipe_laporan) ?>&bulan=<?= $filter_bulan ?>&tahun=<?= $filter_tahun ?>"
                style="padding: 0.5rem 0.75rem; background: <?= $i === $page ? 'var(--primary)' : '#e5e7eb' ?>; color: <?= $i === $page ? 'white' : 'var(--text-primary)' ?>; border-radius: 6px; text-decoration: none; font-size: 0.875rem;">
                 <?= $i ?>
             </a>

@@ -51,10 +51,13 @@ $bulan_current = (int)date('m');
                 $bulan_default = $bulan_current + 1;
                 if ($bulan_default > 12) $bulan_default = 1;
                 $tahun_default = $bulan_current === 12 ? $tahun_current + 1 : $tahun_current;
-                echo date('Y-m-d', mktime(0, 0, 0, $bulan_default, 5, $tahun_default));
+                // Akhir bulan + 15 hari
+                $akhir_bulan = strtotime("last day of " . date('Y-m-d', mktime(0, 0, 0, $bulan_default, 1, $tahun_default)));
+                $jatuh_tempo = strtotime('+15 days', $akhir_bulan);
+                echo date('Y-m-d', $jatuh_tempo);
             ?>">
             <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem;">
-                Default: tanggal 5 bulan tagihan
+                Default: 15 hari setelah akhir bulan tagihan
             </p>
         </div>
 
@@ -94,8 +97,12 @@ function updateJatuhTempo() {
     const bulan = parseInt(document.getElementById('periode_bulan').value);
     const tahun = parseInt(document.getElementById('periode_tahun').value);
     if (bulan && tahun) {
-        const date = new Date(tahun, bulan, 5);
-        const iso = date.toISOString().split('T')[0];
+        // Akhir bulan = last day of month
+        const akhir_bulan = new Date(tahun, bulan, 0);
+        // Tambah 15 hari
+        const jatuh_tempo = new Date(akhir_bulan);
+        jatuh_tempo.setDate(akhir_bulan.getDate() + 15);
+        const iso = jatuh_tempo.toISOString().split('T')[0];
         document.getElementById('tgl_jatuh_tempo').value = iso;
     }
 }

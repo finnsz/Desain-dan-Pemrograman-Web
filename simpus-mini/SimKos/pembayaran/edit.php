@@ -72,7 +72,7 @@ $bulan_nama = [
 
             <div style="margin-bottom: 1.5rem;">
                 <label for="metode_bayar">Metode Pembayaran</label>
-                <select name="metode_bayar" id="metode_bayar">
+                <select name="metode_bayar" id="metode_bayar" onchange="toggleBuktiTransfer()">
                     <option value="">-- Pilih --</option>
                     <option value="Cash" <?= $p['metode_bayar'] === 'Cash' ? 'selected' : '' ?>>Cash</option>
                     <option value="Transfer" <?= $p['metode_bayar'] === 'Transfer' ? 'selected' : '' ?>>Transfer Bank</option>
@@ -80,7 +80,7 @@ $bulan_nama = [
                 </select>
             </div>
 
-            <div style="margin-bottom: 1.5rem;">
+            <div id="bukti-field" style="margin-bottom: 1.5rem; display: <?= $p['metode_bayar'] !== 'Cash' ? 'block' : 'none' ?>;">
                 <label for="bukti_path">Upload Bukti Transfer</label>
                 <?php if (!empty($p['bukti_path'])): ?>
                     <div style="margin-bottom: 0.75rem;">
@@ -95,7 +95,8 @@ $bulan_nama = [
 
             <div style="margin-bottom: 1.5rem;">
                 <label for="denda">Denda Keterlambatan (Rp)</label>
-                <input type="number" name="denda" id="denda" value="<?= (int)$p['denda'] ?>">
+                <input type="number" name="denda" id="denda" value="<?= (int)$p['denda'] ?>" readonly style="background: #f9fafb;">
+                <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem;">Otomatis: Rp 50.000 per hari keterlambatan</p>
             </div>
         </div>
 
@@ -108,6 +109,11 @@ $bulan_nama = [
 
 <script>
 const status_select = document.getElementById('status');
+const tgl_bayar_input = document.getElementById('tgl_bayar');
+const tgl_jatuh_tempo_input = document.getElementById('tgl_jatuh_tempo');
+const denda_input = document.getElementById('denda');
+const metode_bayar_select = document.getElementById('metode_bayar');
+const bukti_field = document.getElementById('bukti-field');
 
 function toggleBayarFields() {
     const bayar_fields = document.getElementById('bayar-fields');
@@ -115,11 +121,63 @@ function toggleBayarFields() {
         bayar_fields.style.display = 'block';
         document.getElementById('tgl_bayar').required = true;
         document.getElementById('metode_bayar').required = true;
+
+        // Auto-fill tgl_bayar dengan hari ini jika kosong
+        if (!tgl_bayar_input.value) {
+            const today = new Date().toISOString().split('T')[0];
+            tgl_bayar_input.value = today;
+        }
+
+        // Set default metode_bayar ke Cash jika kosong
+        if (!metode_bayar_select.value) {
+            metode_bayar_select.value = 'Cash';
+            toggleBuktiTransfer();
+        }
+
+        calculateDenda();
     } else {
         bayar_fields.style.display = 'none';
         document.getElementById('tgl_bayar').required = false;
         document.getElementById('metode_bayar').required = false;
+        denda_input.value = 0;
     }
+}
+
+function toggleBuktiTransfer() {
+    if (metode_bayar_select.value === 'Cash') {
+        bukti_field.style.display = 'none';
+        document.getElementById('bukti_path').required = false;
+    } else {
+        bukti_field.style.display = 'block';
+    }
+}
+
+function calculateDenda() {
+    const tgl_bayar = tgl_bayar_input.value;
+    const tgl_jatuh_tempo = tgl_jatuh_tempo_input.value;
+
+    if (tgl_bayar && tgl_jatuh_tempo && status_select.value === 'LUNAS') {
+        const bayar = new Date(tgl_bayar);
+        const tempo = new Date(tgl_jatuh_tempo);
+
+        if (bayar > tempo) {
+            const diff_time = bayar - tempo;
+            const diff_days = Math.ceil(diff_time / (1000 * 60 * 60 * 24));
+            let denda = diff_days * 50000;
+            if (denda > 500000) denda = 500000;
+            denda_input.value = denda;
+        } else {
+            denda_input.value = 0;
+        }
+    }
+}
+
+tgl_bayar_input.addEventListener('change', calculateDenda);
+tgl_jatuh_tempo_input.addEventListener('change', calculateDenda);
+
+// Hitung denda on page load jika status already LUNAS
+if (status_select.value === 'LUNAS') {
+    calculateDenda();
 }
 </script>
 

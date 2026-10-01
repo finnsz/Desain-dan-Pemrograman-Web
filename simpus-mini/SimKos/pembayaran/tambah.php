@@ -84,7 +84,7 @@ $tahun_current = date('Y');
 
             <div style="margin-bottom: 1.5rem;">
                 <label for="metode_bayar">Metode Pembayaran</label>
-                <select name="metode_bayar" id="metode_bayar">
+                <select name="metode_bayar" id="metode_bayar" onchange="toggleBuktiTransfer()">
                     <option value="">-- Pilih --</option>
                     <option value="Cash">Cash</option>
                     <option value="Transfer">Transfer Bank</option>
@@ -92,7 +92,7 @@ $tahun_current = date('Y');
                 </select>
             </div>
 
-            <div style="margin-bottom: 1.5rem;">
+            <div id="bukti-field" style="margin-bottom: 1.5rem; display: none;">
                 <label for="bukti_path">Upload Bukti Transfer</label>
                 <input type="file" name="bukti_path" id="bukti_path" accept=".pdf,.jpg,.jpeg,.png" style="max-width: 100%; padding: 0.75rem; border: 2px dashed var(--border-color); border-radius: 8px; cursor: pointer;">
                 <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem;">Format: PDF, JPG, PNG (max 2MB)</p>
@@ -100,7 +100,8 @@ $tahun_current = date('Y');
 
             <div style="margin-bottom: 1.5rem;">
                 <label for="denda">Denda Keterlambatan (Rp)</label>
-                <input type="number" name="denda" id="denda" placeholder="0" value="0">
+                <input type="number" name="denda" id="denda" placeholder="0" value="0" readonly style="background: #f9fafb;">
+                <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem;">Otomatis: Rp 50.000 per hari keterlambatan</p>
             </div>
         </div>
 
@@ -122,6 +123,11 @@ const penghuni_info = document.getElementById('penghuni-info');
 const harga_sewa = document.getElementById('harga-sewa');
 const nominal_input = document.getElementById('nominal');
 const status_select = document.getElementById('status');
+const tgl_bayar_input = document.getElementById('tgl_bayar');
+const tgl_jatuh_tempo_input = document.getElementById('tgl_jatuh_tempo');
+const denda_input = document.getElementById('denda');
+const metode_bayar_select = document.getElementById('metode_bayar');
+const bukti_field = document.getElementById('bukti-field');
 
 const penghuni_data = <?= json_encode(array_column($penghuni, null, 'id')) ?>;
 
@@ -147,14 +153,61 @@ function toggleBayarFields() {
         bayar_fields.style.display = 'block';
         document.getElementById('tgl_bayar').required = true;
         document.getElementById('metode_bayar').required = true;
+
+        // Auto-fill tgl_bayar dengan hari ini jika kosong
+        if (!tgl_bayar_input.value) {
+            const today = new Date().toISOString().split('T')[0];
+            tgl_bayar_input.value = today;
+        }
+
+        // Set default metode_bayar ke Cash jika kosong
+        if (!metode_bayar_select.value) {
+            metode_bayar_select.value = 'Cash';
+            toggleBuktiTransfer();
+        }
+
+        calculateDenda();
     } else {
         bayar_fields.style.display = 'none';
         document.getElementById('tgl_bayar').required = false;
         document.getElementById('metode_bayar').required = false;
+        denda_input.value = 0;
     }
 }
 
-// Set default jatuh tempo ke tanggal 5 bulan depan
+function toggleBuktiTransfer() {
+    if (metode_bayar_select.value === 'Cash') {
+        bukti_field.style.display = 'none';
+        document.getElementById('bukti_path').required = false;
+    } else {
+        bukti_field.style.display = 'block';
+    }
+}
+
+function calculateDenda() {
+    const tgl_bayar = tgl_bayar_input.value;
+    const tgl_jatuh_tempo = tgl_jatuh_tempo_input.value;
+
+    if (tgl_bayar && tgl_jatuh_tempo && status_select.value === 'LUNAS') {
+        const bayar = new Date(tgl_bayar);
+        const tempo = new Date(tgl_jatuh_tempo);
+
+        if (bayar > tempo) {
+            const diff_time = bayar - tempo;
+            const diff_days = Math.ceil(diff_time / (1000 * 60 * 60 * 24));
+            let denda = diff_days * 50000;
+            if (denda > 500000) denda = 500000;
+            denda_input.value = denda;
+        } else {
+            denda_input.value = 0;
+        }
+    }
+}
+
+tgl_bayar_input.addEventListener('change', calculateDenda);
+tgl_jatuh_tempo_input.addEventListener('change', calculateDenda);
+
+// Set default jatuh tempo ke 15 hari setelah akhir bulan
 document.getElementById('periode_bulan').addEventListener('change', updateJatuhTempo);
 document.getElementById('periode_tahun').addEventListener('change', updateJatuhTempo);
 
@@ -162,8 +215,12 @@ function updateJatuhTempo() {
     const bulan = parseInt(document.getElementById('periode_bulan').value);
     const tahun = parseInt(document.getElementById('periode_tahun').value);
     if (bulan && tahun) {
-        const date = new Date(tahun, bulan, 5); // Tanggal 5 bulan berikutnya
-        const iso = date.toISOString().split('T')[0];
+        // Akhir bulan = new Date(tahun, bulan, 0) = hari terakhir bulan tersebut
+        const akhir_bulan = new Date(tahun, bulan, 0);
+        // Tambah 15 hari
+        const jatuh_tempo = new Date(akhir_bulan);
+        jatuh_tempo.setDate(akhir_bulan.getDate() + 15);
+        const iso = jatuh_tempo.toISOString().split('T')[0];
         document.getElementById('tgl_jatuh_tempo').value = iso;
     }
 }
