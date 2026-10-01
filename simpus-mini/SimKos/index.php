@@ -11,19 +11,17 @@ $kamar_terisi   = $pdo->query("SELECT COUNT(*) FROM kamar WHERE status = 'TERISI
 $kamar_kosong   = $pdo->query("SELECT COUNT(*) FROM kamar WHERE status = 'KOSONG'")->fetchColumn();
 $total_penghuni = $pdo->query("SELECT COUNT(*) FROM penghuni")->fetchColumn();
 
-// 2. Keuangan: pemasukan bulan ini (LUNAS berdasarkan tanggal bayar)
-$bulan_ini = (int)date('m');
+// 2. Keuangan: pemasukan tahun ini (LUNAS berdasarkan tanggal bayar)
 $tahun_ini = (int)date('Y');
 
 $stmt = $pdo->prepare("
     SELECT COALESCE(SUM(total_bayar), 0) as total
     FROM pembayaran
-    WHERE EXTRACT(MONTH FROM tgl_bayar) = :bulan
-      AND EXTRACT(YEAR FROM tgl_bayar) = :tahun
+    WHERE EXTRACT(YEAR FROM tgl_bayar) = :tahun
       AND status = 'LUNAS'
 ");
-$stmt->execute([':bulan' => $bulan_ini, ':tahun' => $tahun_ini]);
-$pemasukan_bulan_ini = $stmt->fetchColumn();
+$stmt->execute([':tahun' => $tahun_ini]);
+$pemasukan_tahun_ini = $stmt->fetchColumn();
 
 $stmt_tunggakan = $pdo->prepare("
     SELECT COUNT(*) as jumlah, COALESCE(SUM(total_bayar), 0) as nominal
@@ -96,19 +94,19 @@ $occupancy_rate = $total_kamar > 0 ? round(($kamar_terisi / $total_kamar) * 100,
 
 <!-- Financial Metrics Cards -->
 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
-    <!-- Pemasukan Bulan Ini -->
+    <!-- Pemasukan Tahun Ini -->
     <section class="card-section">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-            <h3 style="margin: 0; font-size: 1rem;">Pemasukan Bulan Ini</h3>
+            <h3 style="margin: 0; font-size: 1rem;">Pemasukan Tahun Ini</h3>
             <div class="stat-icon stat-icon-blue" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 8px;">
                 <i class="fas fa-arrow-up" style="font-size: 1rem;"></i>
             </div>
         </div>
         <div style="font-size: 1.75rem; font-weight: 700; color: #047857; margin-bottom: 0.5rem;">
-            Rp <?= number_format($pemasukan_bulan_ini, 0, ',', '.') ?>
+            Rp <?= number_format($pemasukan_tahun_ini, 0, ',', '.') ?>
         </div>
         <div style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem;">
-            Pembayaran lunas bulan ini
+            Pembayaran lunas tahun ini
         </div>
         <a href="pembayaran/list.php" style="font-size: 0.875rem; color: var(--primary); font-weight: 600;">
             Lihat Detail →
