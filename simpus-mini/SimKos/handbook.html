@@ -146,6 +146,28 @@
             color: var(--text-primary);
         }
 
+        .back-button {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.7rem 1rem;
+            background-color: #f3f4f6;
+            color: var(--text-primary);
+            text-decoration: none;
+            border-radius: 10px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+        }
+
+        .back-button:hover {
+            background-color: var(--primary-light);
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+
         #search-box {
             width: 100%;
             padding: 0.7rem 1rem;
@@ -356,6 +378,13 @@
         </div>
 
         <nav class="sidebar-nav">
+            <div class="nav-section">
+                <a href="../index.php" class="back-button">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Kembali</span>
+                </a>
+            </div>
+
             <div class="nav-section">
                 <div class="nav-section-title">Dokumentasi</div>
                 <a href="#pendahuluan" class="nav-link active">
