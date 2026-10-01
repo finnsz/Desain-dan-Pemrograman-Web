@@ -99,11 +99,6 @@ $bulan_nama = [
             </div>
         </div>
 
-        <div style="margin-bottom: 1.5rem;">
-            <label for="keterangan">Keterangan</label>
-            <textarea name="keterangan" id="keterangan" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; font-family: inherit; resize: vertical; height: 100px;"><?= htmlspecialchars($p['keterangan'] ?? '') ?></textarea>
-        </div>
-
         <div style="display: flex; gap: 0.75rem;">
             <button type="submit" class="btn-primary">Simpan Perubahan</button>
             <a href="list.php" style="padding: 0.75rem 1.75rem; background: #e5e7eb; color: var(--text-primary); border-radius: 10px; text-decoration: none; font-weight: 600;">Batal</a>
