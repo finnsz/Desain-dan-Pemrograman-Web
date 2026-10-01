@@ -1,418 +1,479 @@
 /* ==========================================================================
    SIMKOS - Hotelify-Inspired Design
-   Daftar isi:
-     1. Variabel & Reset
-     2. Layout (sidebar, topbar, konten)
-     3. Komponen (alert, kartu, tabel, badge)
-     4. Form & Tombol
-     5. Halaman khusus (beranda, pencarian, aksi tabel)
+
+   Daftar Isi (Table of Contents):
+     1. Variabel & Reset (Colors, Typography, Reset)
+     2. Layout Utama (Sidebar, Topbar, Main Content)
+     3. Komponen (Alert, Cards, Tables, Badges)
+     4. Form & Tombol (Input, Button)
+     5. Halaman Khusus (Welcome Banner, Search, Table Actions)
      6. Footer
    ========================================================================== */
+
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 
-/* ===== 1. Variabel & Reset ===== */
+/* ========================================================================
+   BAGIAN 1: VARIABEL & RESET
+   Tempat untuk semua warna, ukuran, dan styling dasar.
+   ======================================================================== */
+
 :root {
-    --bg-app: #f8f9fb;
-    --bg-card: #ffffff;
-    --bg-sidebar: #ffffff;
-    --border-color: #e5e7eb;
-    --primary: #3b82f6;
-    --primary-hover: #2563eb;
-    --primary-light: #dbeafe;
-    --accent-yellow: #D8EB13;
-    --text-primary: #111827;
-    --text-secondary: #6b7280;
-    --text-muted: #9ca3af;
-    --sidebar-text: #6b7280;
-    --sidebar-icon: #9ca3af;
-    --sidebar-active: #3b82f6;
-    --success-bg: #d1fae5;
-    --success-text: #047857;
-    --warning-bg: #fef3c7;
-    --warning-text: #b45309;
-    --danger-bg: #fee2e2;
-    --danger-text: #dc2626;
-    --sidebar-width: 240px;
+  /* Warna Latar (Background) */
+  --bg-app: #f8f9fb;        /* Warna latar halaman utama */
+  --bg-card: #ffffff;       /* Warna latar kartu/card */
+  --bg-sidebar: #ffffff;    /* Warna latar sidebar */
+
+  /* Warna Border */
+  --border-color: #e5e7eb;  /* Garis pemisah */
+
+  /* Warna Utama (Primary) */
+  --primary: #3b82f6;       /* Warna biru utama (tombol, link) */
+  --primary-hover: #2563eb; /* Warna saat tombol dihover */
+  --primary-light: #dbeafe; /* Versi terang untuk background */
+
+  /* Warna Aksen */
+  --accent-yellow: #D8EB13; /* Warna kuning untuk highlight */
+
+  /* Warna Teks (Text Colors) */
+  --text-primary: #111827;    /* Teks utama, gelap */
+  --text-secondary: #6b7280;  /* Teks sekunder, lebih terang */
+  --text-muted: #9ca3af;      /* Teks redup untuk info sekunder */
+
+  /* Warna Sidebar */
+  --sidebar-text: #6b7280;    /* Teks di sidebar */
+  --sidebar-icon: #9ca3af;    /* Icon di sidebar */
+  --sidebar-active: #3b82f6;  /* Warna item sidebar yang aktif */
+
+  /* Status Colors */
+  --success-bg: #d1fae5;   /* Latar hijau untuk status sukses */
+  --success-text: #047857; /* Teks hijau untuk status sukses */
+  --warning-bg: #fef3c7;   /* Latar kuning untuk warning */
+  --warning-text: #b45309; /* Teks kuning untuk warning */
+  --danger-bg: #fee2e2;    /* Latar merah untuk error */
+  --danger-text: #dc2626;  /* Teks merah untuk error */
+
+  /* Ukuran */
+  --sidebar-width: 240px;  /* Lebar sidebar normal */
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
+/* Reset: menghapus default styling dari browser */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
+/* Styling dasar untuk body */
 body {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    background-color: var(--bg-app);
-    color: var(--text-primary);
-    display: flex;
-    min-height: 100vh;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background-color: var(--bg-app);
+  color: var(--text-primary);
+  display: flex;
+  min-height: 100vh;
 }
 
-a { color: var(--primary); text-decoration: none; }
-a:hover { color: var(--primary-hover); }
+/* Link styling */
+a {
+  color: var(--primary);
+  text-decoration: none;
+}
 
-/* ===== 2. Layout ===== */
+a:hover {
+  color: var(--primary-hover);
+}
+
+/* ========================================================================
+   BAGIAN 2: LAYOUT UTAMA
+   Struktur halaman: sidebar, topbar, dan area konten.
+   ======================================================================== */
+
+/* Container utama aplikasi */
 .app-container {
-    display: flex;
-    width: 100%;
+  display: flex;
+  width: 100%;
 }
 
-/* --- Sidebar --- */
+/* --- SIDEBAR --- */
+
+/* Styling utama sidebar */
 aside.app-sidebar {
-    width: var(--sidebar-width);
-    background-color: var(--bg-sidebar);
-    color: var(--sidebar-text);
-    display: flex;
-    flex-direction: column;
-    padding: 1.25rem 0;
-    position: fixed;
-    height: 100vh;
-    z-index: 100;
-    border-right: 1px solid var(--border-color);
-    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  width: var(--sidebar-width);
+  background-color: var(--bg-sidebar);
+  color: var(--sidebar-text);
+  display: flex;
+  flex-direction: column;
+  padding: 1.25rem 0;
+  position: fixed;        /* Tetap di posisi saat scroll */
+  height: 100vh;
+  z-index: 100;
+  border-right: 1px solid var(--border-color);
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* Animasi saat resize */
 }
 
+/* Sidebar yang sudah dikecilkan (collapsed) */
 aside.app-sidebar.collapsed {
-    width: 70px;
+  width: 70px;
 }
 
+/* Menu dropdown di sidebar yang dikecilkan */
 aside.app-sidebar.collapsed .nav-accordion {
-    pointer-events: none;
+  pointer-events: none; /* Nonaktifkan interaksi */
 }
 
 aside.app-sidebar.collapsed .nav-accordion summary {
-    pointer-events: auto;
-    cursor: pointer;
+  pointer-events: auto; /* Tombol tetap bisa diklik */
+  cursor: pointer;
 }
 
 aside.app-sidebar.collapsed .nav-accordion[open] {
-    pointer-events: none;
+  pointer-events: none;
 }
 
+/* Tanda panah di menu yang dikecilkan */
 aside.app-sidebar.collapsed .nav-accordion summary::after {
-    opacity: 0;
+  opacity: 0;
 }
 
+/* Sembunyikan submenu saat sidebar dikecilkan */
 aside.app-sidebar.collapsed .nav-accordion > ul {
-    display: none !important;
+  display: none !important;
 }
 
 aside.app-sidebar.collapsed .nav-accordion[open] > ul {
-    display: none !important;
+  display: none !important;
 }
 
-/* Collapsed menu popup */
+/* Popup menu yang muncul saat sidebar dikecilkan */
 .sidebar-popup-menu {
-    position: fixed;
-    left: 70px;
-    background: var(--bg-sidebar);
-    border: 1px solid var(--border-color);
-    border-radius: 0;
-    padding: 0;
-    box-shadow: 4px 4px 16px rgba(0, 0, 0, 0.15);
-    z-index: 9999;
-    min-width: 200px;
-    display: none;
-    pointer-events: auto !important;
+  position: fixed;
+  left: 70px;
+  background: var(--bg-sidebar);
+  border: 1px solid var(--border-color);
+  border-radius: 0;
+  padding: 0;
+  box-shadow: 4px 4px 16px rgba(0, 0, 0, 0.15);
+  z-index: 9999;
+  min-width: 200px;
+  display: none;
+  pointer-events: auto !important;
 }
 
+/* Tampilkan popup menu */
 .sidebar-popup-menu.show {
-    display: block;
-    pointer-events: auto !important;
+  display: block;
+  pointer-events: auto !important;
 }
 
-.sidebar-popup-menu.show {
-    display: block;
-}
-
+/* List di dalam popup menu */
 .sidebar-popup-menu ul {
-    list-style: none;
-    padding: 0.5rem 0;
-    margin: 0;
+  list-style: none;
+  padding: 0.5rem 0;
+  margin: 0;
 }
 
 .sidebar-popup-menu li {
-    list-style: none;
-    padding: 0;
+  list-style: none;
+  padding: 0;
 }
 
+/* Link di dalam popup menu */
 .sidebar-popup-menu li a {
-    display: flex;
-    align-items: center;
-    gap: 0.65rem;
-    color: var(--sidebar-text);
-    padding: 0.7rem 1rem !important;
-    font-size: 0.875rem;
-    text-decoration: none;
-    transition: all 0.2s ease;
-    white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  color: var(--sidebar-text);
+  padding: 0.7rem 1rem !important;
+  font-size: 0.875rem;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  white-space: nowrap;
 }
 
 .sidebar-popup-menu li a:hover {
-    background-color: #f3f4f6;
-    color: var(--text-primary);
+  background-color: #f3f4f6;
+  color: var(--text-primary);
 }
 
+/* Icon di dalam popup menu */
 .sidebar-popup-menu li a i {
-    width: 20px;
-    text-align: center;
-    color: var(--sidebar-icon);
+  width: 20px;
+  text-align: center;
+  color: var(--sidebar-icon);
 }
 
+/* Teks yang selalu terlihat di popup */
 .sidebar-popup-menu li a .nav-text {
-    opacity: 1 !important;
-    width: auto !important;
-    overflow: visible !important;
+  opacity: 1 !important;
+  width: auto !important;
+  overflow: visible !important;
 }
 
+/* Header sidebar (logo + toggle button) */
 .sidebar-header {
-    padding: 0.75rem;
-    margin-bottom: 1.5rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    transition: gap 0.3s ease, padding 0.3s ease;
+  padding: 0.75rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: gap 0.3s ease, padding 0.3s ease;
 }
 
+/* Header sidebar saat dikecilkan */
 aside.app-sidebar.collapsed .sidebar-header {
-    flex-direction: column;
-    gap: 0.5rem;
-    justify-content: center;
-    align-items: center;
-    padding: 0;
+  flex-direction: column;
+  gap: 0.5rem;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
 }
 
+/* Logo/Brand di sidebar */
 aside.app-sidebar .brand {
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--primary);
-    display: flex;
-    align-items: center;
-    gap: 0.65rem;
-    padding: 0;
-    margin: 0;
-    transition: gap 0.3s ease;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0;
+  margin: 0;
+  transition: gap 0.3s ease;
 }
 
+/* Icon logo */
 aside.app-sidebar .brand i {
-    font-size: 1.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 28px;
-    transition: all 0.3s ease;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  transition: all 0.3s ease;
 }
 
+/* Brand saat sidebar dikecilkan */
 aside.app-sidebar.collapsed .brand {
-    gap: 0;
+  gap: 0;
 }
 
+/* Sembunyikan teks brand saat sidebar dikecilkan */
 aside.app-sidebar.collapsed .brand .brand-text {
-    display: none;
+  display: none;
 }
 
-/* Toggle button smooth transition */
+/* Tombol toggle (untuk buka/tutup sidebar) */
 .sidebar-toggle {
-    padding: 0.5rem;
-    background: none;
-    border: none;
-    color: var(--text-muted);
-    cursor: pointer;
-    border-radius: 6px;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  padding: 0.5rem;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .sidebar-toggle:hover {
-    background-color: #f3f4f6;
-    color: var(--accent-yellow);
+  background-color: #f3f4f6;
+  color: var(--accent-yellow);
 }
 
+/* Styling menu accordion di sidebar */
 aside.app-sidebar nav .nav-accordion summary.nav-group-title::after {
-    content: '❯';
-    font-size: 0.65rem;
-    color: var(--accent-yellow);
-    transition: transform 0.2s ease;
+  content: '❯';
+  font-size: 0.65rem;
+  color: var(--accent-yellow);
+  transition: transform 0.2s ease;
 }
 
+/* Putar panah saat menu dibuka */
 aside.app-sidebar nav .nav-accordion[open] summary.nav-group-title::after {
-    transform: rotate(90deg);
+  transform: rotate(90deg);
 }
 
+/* Toggle button saat sidebar dikecilkan */
 aside.app-sidebar.collapsed .sidebar-toggle {
-    padding: 0.25rem;
+  padding: 0.25rem;
 }
 
 aside.app-sidebar.collapsed .sidebar-toggle i {
-    font-size: 0.7rem;
+  font-size: 0.7rem;
 }
 
-/* Smooth animation for brand layout */
+/* Animasi teks brand */
 .brand-text {
-    opacity: 1;
-    transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.2s, width 0.3s ease;
+  opacity: 1;
+  transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.2s, width 0.3s ease;
 }
 
+/* Sembunyikan teks brand dengan animasi */
 aside.app-sidebar.collapsed .brand-text,
 html.sidebar-is-collapsed .brand-text {
-    opacity: 0;
-    width: 0;
-    overflow: hidden;
-    transition: opacity 0.2s ease, width 0.3s ease;
+  opacity: 0;
+  width: 0;
+  overflow: hidden;
+  transition: opacity 0.2s ease, width 0.3s ease;
 }
 
+/* Area navigasi di sidebar */
 aside.app-sidebar nav {
-    flex: 1;
-    overflow-y: auto;
+  flex: 1;
+  overflow-y: auto; /* Scrollable jika ada banyak menu */
 }
 
+/* List menu di sidebar */
 aside.app-sidebar nav ul {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 0.15rem;
-    padding: 0 0.75rem;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 0 0.75rem;
 }
 
+/* Link menu di sidebar */
 aside.app-sidebar nav a,
 aside.app-sidebar .nav-link {
-    color: var(--sidebar-text);
-    padding: 0.7rem 0.85rem;
-    border-radius: 10px;
-    font-weight: 500;
-    font-size: 0.875rem;
-    display: flex;
-    align-items: center;
-    gap: 0.65rem;
-    transition: all 0.2s ease;
-    text-decoration: none;
+  color: var(--sidebar-text);
+  padding: 0.7rem 0.85rem;
+  border-radius: 10px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  transition: all 0.2s ease;
+  text-decoration: none;
 }
 
+/* Link saat dihover */
 aside.app-sidebar nav a:hover,
 aside.app-sidebar .nav-link:hover {
-    background-color: #f3f4f6;
-    color: var(--text-primary);
+  background-color: #f3f4f6;
+  color: var(--text-primary);
 }
 
+/* Link yang aktif (halaman sekarang) */
 aside.app-sidebar nav a.active,
 aside.app-sidebar .nav-link.active {
-    background-color: var(--primary-light);
-    color: var(--sidebar-active);
+  background-color: var(--primary-light);
+  color: var(--sidebar-active);
 }
 
+/* Icon di dalam link menu */
 aside.app-sidebar nav a i,
 aside.app-sidebar .nav-link i {
-    color: var(--sidebar-icon);
-    width: 20px;
-    text-align: center;
-    font-size: 1rem;
+  color: var(--sidebar-icon);
+  width: 20px;
+  text-align: center;
+  font-size: 1rem;
 }
 
+/* Ubah warna icon saat hover atau aktif */
 aside.app-sidebar nav a:hover i,
 aside.app-sidebar nav a.active i,
 aside.app-sidebar .nav-link:hover i,
 aside.app-sidebar .nav-link.active i {
-    color: var(--primary);
+  color: var(--primary);
 }
 
-/* --- Sidebar: accordion --- */
+/* --- SIDEBAR ACCORDION (Submenu) --- */
+
+/* Spacing menu accordion */
 aside.app-sidebar nav .nav-accordion {
-    margin-top: 0.5rem;
+  margin-top: 0.5rem;
 }
 
+/* Judul group menu accordion */
 aside.app-sidebar nav .nav-accordion summary.nav-group-title {
-    font-size: 0.7rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    color: var(--text-muted);
-    padding: 0.7rem 0.85rem;
-    text-transform: uppercase;
-    cursor: pointer;
-    list-style: none;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-radius: 10px;
-    transition: background-color 0.2s, color 0.2s;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  padding: 0.7rem 0.85rem;
+  text-transform: uppercase;
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 10px;
+  transition: background-color 0.2s, color 0.2s;
 }
 
+/* Container untuk teks dan icon di judul accordion */
 aside.app-sidebar nav .nav-accordion summary.nav-group-title div {
-    display: flex;
-    align-items: center;
-    gap: 0.65rem;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
 }
 
+/* Judul accordion saat dihover */
 aside.app-sidebar nav .nav-accordion summary.nav-group-title:hover {
-    color: var(--text-secondary);
-    background-color: #f9fafb;
+  color: var(--text-secondary);
+  background-color: #f9fafb;
 }
 
+/* Icon di dalam judul accordion */
 aside.app-sidebar nav .nav-accordion summary.nav-group-title i {
-    color: var(--sidebar-icon);
-    font-size: 0.85rem;
-    width: 20px;
-    text-align: center;
+  color: var(--sidebar-icon);
+  font-size: 0.85rem;
+  width: 20px;
+  text-align: center;
 }
 
+/* Panah di judul accordion */
 aside.app-sidebar nav .nav-accordion summary.nav-group-title::after {
-    content: '❯';
-    font-size: 0.65rem;
-    color: var(--text-muted);
-    transition: transform 0.2s ease;
+  content: '❯';
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  transition: transform 0.2s ease;
 }
 
+/* Putar panah saat accordion dibuka */
 aside.app-sidebar nav .nav-accordion[open] summary.nav-group-title::after {
-    transform: rotate(90deg);
+  transform: rotate(90deg);
 }
 
+/* List submenu di dalam accordion */
 aside.app-sidebar nav .nav-accordion ul {
-    padding-left: 0;
-    margin-top: 0.25rem;
+  padding-left: 0;
+  margin-top: 0.25rem;
 }
 
+/* Link submenu (indentasi lebih dalam) */
 aside.app-sidebar nav .nav-accordion ul li a {
-    padding-left: 2.7rem;
-    font-size: 0.85rem;
+  padding-left: 2.7rem;
+  font-size: 0.85rem;
 }
 
-/* --- Sidebar Footer --- */
+/* --- SIDEBAR FOOTER --- */
+
+/* Area footer di sidebar */
 .sidebar-footer {
-    padding: 0.75rem;
-    border-top: 1px solid var(--border-color);
-    margin-top: auto;
+  padding: 0.75rem;
+  border-top: 1px solid var(--border-color);
+  margin-top: auto; /* Dorong ke bawah */
 }
 
 .sidebar-footer .nav-link {
-    font-size: 0.85rem;
+  font-size: 0.85rem;
 }
 
-/* --- Area utama --- */
-.app-main {
-    margin-left: var(--sidebar-width);
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
+/* --- TEXT VISIBILITY SAAT SIDEBAR COLLAPSED --- */
 
-.app-main.sidebar-collapsed,
-html.sidebar-is-collapsed .app-main {
-    margin-left: 70px;
-}
-
-html.sidebar-is-collapsed aside.app-sidebar {
-    width: 70px;
-}
-
+/* Teks normal (terlihat) */
 aside.app-sidebar .nav-text,
 aside.app-sidebar .brand-text,
 aside.app-sidebar nav a .nav-text,
 aside.app-sidebar .nav-accordion .nav-text {
-    opacity: 1;
-    width: auto;
-    white-space: nowrap;
-    transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.1s, width 0.4s ease 0.1s;
+  opacity: 1;
+  width: auto;
+  white-space: nowrap;
+  transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.1s, width 0.4s ease 0.1s;
 }
 
+/* Teks tersembunyi saat sidebar collapsed */
 html.sidebar-is-collapsed aside.app-sidebar .nav-text,
 html.sidebar-is-collapsed aside.app-sidebar .brand-text,
 html.sidebar-is-collapsed aside.app-sidebar nav a .nav-text,
@@ -421,475 +482,612 @@ aside.app-sidebar.collapsed .nav-text,
 aside.app-sidebar.collapsed .brand-text,
 aside.app-sidebar.collapsed nav a .nav-text,
 aside.app-sidebar.collapsed .nav-accordion .nav-text {
-    opacity: 0;
-    width: 0;
-    overflow: hidden;
-    transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1), width 0.3s ease;
+  opacity: 0;
+  width: 0;
+  overflow: hidden;
+  transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1), width 0.3s ease;
 }
 
+/* --- MAIN AREA --- */
+
+/* Area konten utama */
+.app-main {
+  margin-left: var(--sidebar-width);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Sesuaikan margin saat sidebar collapsed */
+.app-main.sidebar-collapsed,
+html.sidebar-is-collapsed .app-main {
+  margin-left: 70px;
+}
+
+/* Sesuaikan lebar sidebar saat collapsed */
+html.sidebar-is-collapsed aside.app-sidebar {
+  width: 70px;
+}
+
+/* --- TOPBAR --- */
+
+/* Header atas (topbar) */
 header.topbar {
-    background-color: var(--bg-card);
-    border-bottom: 1px solid var(--border-color);
-    padding: 1rem 2rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: relative;
-    z-index: 90;
+  background-color: var(--bg-card);
+  border-bottom: 1px solid var(--border-color);
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  z-index: 90;
 }
 
+/* Judul halaman di topbar */
 header.topbar .page-title {
-    font-size: 1.35rem;
-    font-weight: 700;
-    color: var(--text-primary);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--text-primary);
 }
 
+/* Info user di topbar (kanan) */
 header.topbar .user-info {
-    font-size: 0.875rem;
-    color: var(--text-secondary);
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
+/* Link di user info */
 header.topbar .user-info a {
-    color: var(--primary);
-    font-weight: 600;
+  color: var(--primary);
+  font-weight: 600;
 }
 
 header.topbar .user-info a:hover {
-    color: var(--primary-hover);
+  color: var(--primary-hover);
 }
 
+/* --- MAIN CONTENT AREA --- */
+
+/* Area konten utama */
 main.content {
-    padding: 1.75rem 2rem;
-    max-width: 1400px;
+  padding: 1.75rem 2rem;
+  max-width: 1400px;
 }
 
-/* ===== 3. Komponen ===== */
+/* ========================================================================
+   BAGIAN 3: KOMPONEN
+   Styling untuk berbagai elemen seperti alert, card, tabel, badge.
+   ======================================================================== */
 
-/* --- Alert / flash message --- */
+/* --- ALERT / FLASH MESSAGE --- */
+
+/* Styling alert */
 .alert {
-    padding: 0.85rem 1.25rem;
-    border-radius: 10px;
-    margin-bottom: 1.5rem;
-    font-size: 0.9rem;
-    font-weight: 500;
+  padding: 0.85rem 1.25rem;
+  border-radius: 10px;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+  font-weight: 500;
 }
-.alert-success { background-color: var(--success-bg); color: var(--success-text); }
-.alert-danger  { background-color: var(--danger-bg);  color: var(--danger-text); }
 
-/* --- Kartu statistik --- */
+/* Alert untuk status sukses */
+.alert-success {
+  background-color: var(--success-bg);
+  color: var(--success-text);
+}
+
+/* Alert untuk status error */
+.alert-danger {
+  background-color: var(--danger-bg);
+  color: var(--danger-text);
+}
+
+/* --- GRID STATISTIK --- */
+
+/* Container grid untuk stat cards */
 .grid-stats {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1.25rem;
-    margin-bottom: 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 2rem;
 }
 
+/* Kartu statistik */
 .stat-card {
-    background-color: var(--bg-card);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    padding: 1.5rem 1.25rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
-    transition: all 0.3s ease;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 1.5rem 1.25rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  transition: all 0.3s ease;
 }
 
+/* Efek hover pada stat card */
 .stat-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  transform: translateY(-4px); /* Naik sedikit */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
 }
 
+/* Header dalam stat card (judul + icon) */
 .stat-card .stat-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
 }
 
+/* Judul dalam stat card */
 .stat-card h3 {
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: var(--text-secondary);
-    margin: 0;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin: 0;
 }
 
+/* Icon dalam stat card */
 .stat-card .stat-icon {
-    width: 42px;
-    height: 42px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.2rem;
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
 }
 
+/* Nilai angka dalam stat card */
 .stat-card .value {
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--text-primary);
-    line-height: 1.2;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.2;
 }
 
-/* Icon colors */
+/* Warna icon - Biru */
 .stat-icon-blue {
-    background-color: #dbeafe;
-    color: #3b82f6;
+  background-color: #dbeafe;
+  color: #3b82f6;
 }
 
+/* Warna icon - Orange */
 .stat-icon-orange {
-    background-color: #fef3c7;
-    color: #f59e0b;
+  background-color: #fef3c7;
+  color: #f59e0b;
 }
 
+/* Warna icon - Hijau */
 .stat-icon-green {
-    background-color: #d1fae5;
-    color: #10b981;
+  background-color: #d1fae5;
+  color: #10b981;
 }
 
+/* Warna icon - Ungu */
 .stat-icon-purple {
-    background-color: #ddd6fe;
-    color: #8b5cf6;
+  background-color: #ddd6fe;
+  color: #8b5cf6;
 }
 
-/* --- Section / kartu --- */
+/* --- CARD / SECTION --- */
+
+/* Kartu/section konten */
 section.card-section {
-    background-color: var(--bg-card);
-    border-radius: 16px;
-    border: 1px solid var(--border-color);
-    padding: 1.75rem;
-    margin-bottom: 1.5rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  background-color: var(--bg-card);
+  border-radius: 16px;
+  border: 1px solid var(--border-color);
+  padding: 1.75rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
+/* Judul dalam card */
 section.card-section h2 {
-    font-size: 1.15rem;
-    font-weight: 700;
-    margin-bottom: 1.5rem;
-    color: var(--text-primary);
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: var(--text-primary);
 }
 
-/* --- Tabel --- */
+/* --- TABEL --- */
+
+/* Container tabel dengan scroll horizontal */
 .table-responsive {
-    overflow-x: auto;
-    border-radius: 12px;
-    border: 1px solid var(--border-color);
+  overflow-x: auto; /* Scroll horizontal jika ada tabel panjang */
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
 }
 
+/* Styling tabel */
 table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.875rem;
+  width: 100%;
+  border-collapse: collapse; /* Hilangkan space antar border */
+  font-size: 0.875rem;
 }
 
+/* Header tabel (th) */
 th {
-    background-color: #f9fafb;
-    color: var(--text-secondary);
-    font-weight: 600;
-    text-transform: uppercase;
-    font-size: 0.75rem;
-    letter-spacing: 0.05em;
-    padding: 0.875rem 1.25rem;
-    text-align: left;
+  background-color: #f9fafb;
+  color: var(--text-secondary);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  padding: 0.875rem 1.25rem;
+  text-align: left;
 }
 
+/* Cell tabel (td) */
 td {
-    padding: 1rem 1.25rem;
-    border-bottom: 1px solid var(--border-color);
-    color: var(--text-primary);
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-primary);
 }
 
-tbody tr:last-child td { border-bottom: none; }
-tbody tr:hover { background-color: #f9fafb; }
+/* Hilangkan border bawah untuk row terakhir */
+tbody tr:last-child td {
+  border-bottom: none;
+}
 
-/* --- Badge status --- */
+/* Efek hover pada row tabel */
+tbody tr:hover {
+  background-color: #f9fafb;
+}
+
+/* --- BADGE / STATUS --- */
+
+/* Styling badge */
 .badge {
-    padding: 0.35rem 0.75rem;
-    border-radius: 6px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    display: inline-block;
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: inline-block;
 }
+
+/* Badge untuk status sukses */
 .badge-success {
-    background-color: #d1fae5;
-    color: #047857;
+  background-color: #d1fae5;
+  color: #047857;
 }
+
+/* Badge untuk status warning */
 .badge-warning {
-    background-color: #fef3c7;
-    color: #b45309;
+  background-color: #fef3c7;
+  color: #b45309;
 }
+
+/* Badge untuk status error */
 .badge-danger {
-    background-color: #fee2e2;
-    color: #dc2626;
+  background-color: #fee2e2;
+  color: #dc2626;
 }
 
-/* ===== 4. Form & Tombol ===== */
-form p { margin-bottom: 1.5rem; }
+/* ========================================================================
+   BAGIAN 4: FORM & TOMBOL
+   Styling untuk input field dan button.
+   ======================================================================== */
 
+/* Spacing paragraph dalam form */
+form p {
+  margin-bottom: 1.5rem;
+}
+
+/* Styling label */
 form label {
-    display: block;
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: var(--text-secondary);
-    margin-bottom: 0.5rem;
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
 }
 
+/* Styling input field dan select */
 form input[type="text"],
 form input[type="email"],
 form input[type="password"],
 form input[type="number"],
 form input[type="date"],
 form select {
-    width: 100%;
-    max-width: 500px;
-    padding: 0.75rem 1rem;
-    border: 1px solid var(--border-color);
-    border-radius: 10px;
-    font-size: 0.95rem;
-    outline: none;
-    background-color: #ffffff;
-    color: var(--text-primary);
-    caret-color: var(--text-primary);
-    transition: all 0.2s ease;
-    -webkit-text-fill-color: var(--text-primary) !important;
+  width: 100%;
+  max-width: 500px;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  font-size: 0.95rem;
+  outline: none;
+  background-color: #ffffff;
+  color: var(--text-primary);
+  caret-color: var(--text-primary); /* Warna kursor input */
+  transition: all 0.2s ease;
+  -webkit-text-fill-color: var(--text-primary) !important;
 }
 
+/* Option dalam select */
 form select option {
-    background-color: #ffffff;
-    color: var(--text-primary);
-    padding: 0.5rem;
+  background-color: #ffffff;
+  color: var(--text-primary);
+  padding: 0.5rem;
 }
 
+/* Efek focus pada input (border + shadow biru) */
 form input:focus,
 form select:focus {
-    border-color: var(--primary);
-    box-shadow: 0 0 0 4px var(--primary-light);
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px var(--primary-light);
 }
 
+/* Placeholder text */
 form input::placeholder {
-    color: var(--text-muted);
-    -webkit-text-fill-color: var(--text-muted);
-    opacity: 1;
+  color: var(--text-muted);
+  -webkit-text-fill-color: var(--text-muted);
+  opacity: 1;
 }
 
-/* autofill browser */
+/* Styling autofill browser (Chrome) */
 form input:-webkit-autofill,
 form input:-webkit-autofill:hover,
 form input:-webkit-autofill:focus {
-    -webkit-text-fill-color: var(--text-primary) !important;
-    -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
-    box-shadow: 0 0 0 1000px #ffffff inset !important;
-    transition: background-color 9999s ease-in-out 0s;
+  -webkit-text-fill-color: var(--text-primary) !important;
+  -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
+  box-shadow: 0 0 0 1000px #ffffff inset !important;
+  transition: background-color 9999s ease-in-out 0s;
 }
 
-/* checkbox "Ingat Saya" */
-form .remember-me { margin-bottom: 0; }
+/* --- CHECKBOX --- */
+
+/* Remember me checkbox container */
+form .remember-me {
+  margin-bottom: 0;
+}
+
+/* Label untuk checkbox */
 form .remember-me label {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-weight: 500;
-    cursor: pointer;
-}
-form .remember-me input[type="checkbox"] {
-    width: 18px;
-    height: 18px;
-    accent-color: var(--primary);
-    cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+  cursor: pointer;
 }
 
-/* --- Tombol utama & sekunder --- */
+/* Checkbox input */
+form .remember-me input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--primary); /* Warna checkbox saat dicentang */
+  cursor: pointer;
+}
+
+/* --- TOMBOL UTAMA & SEKUNDER --- */
+
+/* Button submit dan btn-primary */
 button[type="submit"],
 .btn-primary {
-    background-color: var(--primary);
-    color: #ffffff;
-    border: none;
-    padding: 0.75rem 1.75rem;
-    border-radius: 10px;
-    font-size: 0.9rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
+  background-color: var(--primary);
+  color: #ffffff;
+  border: none;
+  padding: 0.75rem 1.75rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
+/* Efek hover button submit & btn-primary */
 button[type="submit"]:hover,
 .btn-primary:hover {
-    background-color: var(--primary-hover);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 16px rgba(37, 99, 235, 0.3);
+  background-color: var(--primary-hover);
+  transform: translateY(-2px); /* Naik sedikit */
+  box-shadow: 0 8px 16px rgba(37, 99, 235, 0.3);
 }
 
+/* Button sebagai link */
 .btn-primary,
 .btn-secondary {
-    display: inline-block;
-    text-decoration: none;
+  display: inline-block;
+  text-decoration: none;
 }
 
+/* Button sekunder */
 .btn-secondary {
-    background-color: #e5e7eb;
-    color: var(--text-primary);
-    border: none;
-    border-radius: 10px;
-    padding: 0.75rem 1.75rem;
-    font-weight: 600;
-    font-size: 0.9rem;
-    transition: all 0.2s ease;
+  background-color: #e5e7eb;
+  color: var(--text-primary);
+  border: none;
+  border-radius: 10px;
+  padding: 0.75rem 1.75rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
 }
 
+/* Efek hover button sekunder */
 .btn-secondary:hover {
-    background-color: #d1d5db;
-    transform: translateY(-2px);
+  background-color: #d1d5db;
+  transform: translateY(-2px);
 }
 
-/* ===== 5. Halaman khusus ===== */
+/* ========================================================================
+   BAGIAN 5: HALAMAN KHUSUS
+   Styling untuk banner welcome, search, dan action buttons di tabel.
+   ======================================================================== */
 
-/* --- Banner selamat datang (beranda) --- */
+/* --- BANNER WELCOME (BERANDA) --- */
+
+/* Banner selamat datang */
 section.welcome-banner {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 2rem;
-    position: relative;
-    background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
-    color: #ffffff;
-    padding: 2rem !important;
-    border-radius: 12px;
-    border: none !important;
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 2rem;
+  position: relative;
+  background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%); /* Gradient biru */
+  color: #ffffff;
+  padding: 2rem !important;
+  border-radius: 12px;
+  border: none !important;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
 }
 
+/* Judul di banner welcome */
 section.welcome-banner h2 {
-    color: #ffffff;
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin-bottom: 0.35rem;
+  color: #ffffff;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.35rem;
 }
 
+/* Paragraf di banner welcome */
 section.welcome-banner p {
-    color: rgba(255, 255, 255, 0.95);
-    font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 0.9rem;
 }
 
+/* --- QUICK ACTIONS --- */
+
+/* Container untuk tombol cepat */
 .quick-actions {
-    display: flex;
-    gap: 0.75rem;
-    align-items: center;
-    margin-top: 0;
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  margin-top: 0;
 }
 
+/* Button primary dalam quick actions */
 .quick-actions .btn-primary {
-    background-color: rgba(255, 255, 255, 0.2);
-    color: #ffffff;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    padding: 0.5rem 1rem;
-    font-size: 0.8rem;
-    border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 0.5rem 1rem;
+  font-size: 0.8rem;
+  border-radius: 8px;
 }
 
 .quick-actions .btn-primary:hover {
-    background-color: rgba(255, 255, 255, 0.3);
-    box-shadow: none;
-    transform: none;
+  background-color: rgba(255, 255, 255, 0.3);
+  box-shadow: none;
+  transform: none;
 }
 
+/* Button sekunder dalam quick actions */
 .quick-actions .btn-secondary {
-    background-color: rgba(255, 255, 255, 0.15);
-    color: #ffffff;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    padding: 0.5rem 1rem;
-    font-size: 0.8rem;
-    border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 0.5rem 1rem;
+  font-size: 0.8rem;
+  border-radius: 8px;
 }
 
 .quick-actions .btn-secondary:hover {
-    background-color: rgba(255, 255, 255, 0.25);
-    transform: none;
+  background-color: rgba(255, 255, 255, 0.25);
+  transform: none;
 }
 
-/* --- Kotak pencarian --- */
+/* --- SEARCH BOX --- */
+
+/* Input search box */
 .search-box input,
 #search-input {
-    width: 100% !important;
-    max-width: 350px !important;
-    padding: 0.75rem 1.15rem !important;
-    background-color: #ffffff !important;
-    color: var(--text-primary) !important;
-    border: 1px solid var(--border-color) !important;
-    border-radius: 10px !important;
-    font-size: 0.9rem !important;
-    outline: none !important;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04) !important;
-    transition: all 0.2s ease !important;
+  width: 100% !important;
+  max-width: 350px !important;
+  padding: 0.75rem 1.15rem !important;
+  background-color: #ffffff !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 10px !important;
+  font-size: 0.9rem !important;
+  outline: none !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04) !important;
+  transition: all 0.2s ease !important;
 }
 
+/* Focus state search input */
 .search-box input:focus,
 #search-input:focus {
-    border-color: var(--primary) !important;
-    box-shadow: 0 0 0 4px var(--primary-light) !important;
+  border-color: var(--primary) !important;
+  box-shadow: 0 0 0 4px var(--primary-light) !important;
 }
 
+/* Placeholder search input */
 .search-box input::placeholder,
 #search-input::placeholder {
-    color: var(--text-muted) !important;
-    opacity: 1 !important;
+  color: var(--text-muted) !important;
+  opacity: 1 !important;
 }
 
-/* --- Tombol aksi di tabel (Edit & Hapus) --- */
+/* --- TOMBOL AKSI DI TABEL (Edit & Hapus) --- */
+
+/* Container aksi tombol */
 .aksi {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
 }
-.aksi form { margin: 0; display: inline-flex; }
 
+/* Form dalam aksi */
+.aksi form {
+  margin: 0;
+  display: inline-flex;
+}
+
+/* Button edit dan hapus */
 .aksi a.btn-edit,
 .aksi form button.btn-hapus[type="submit"] {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.5rem 1rem;
-    font-family: inherit;
-    font-size: 0.8rem;
-    font-weight: 600;
-    line-height: 1.2;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.2s;
-    border: 1px solid transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: 1.2;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid transparent;
 }
 
+/* Button edit - Biru */
 .aksi a.btn-edit {
-    background-color: #dbeafe;
-    color: var(--primary);
-    border: 1px solid #bfdbfe;
+  background-color: #dbeafe;
+  color: var(--primary);
+  border: 1px solid #bfdbfe;
 }
+
 .aksi a.btn-edit:hover {
-    background-color: #bfdbfe;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(37, 99, 235, 0.2);
+  background-color: #bfdbfe;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(37, 99, 235, 0.2);
 }
 
+/* Button hapus - Merah */
 .aksi form button.btn-hapus[type="submit"] {
-    background-color: #fee2e2;
-    color: #dc2626;
-    border: 1px solid #fecaca;
-}
-.aksi form button.btn-hapus[type="submit"]:hover {
-    background-color: #fecaca;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(220, 38, 38, 0.2);
+  background-color: #fee2e2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
 }
 
-/* ===== 6. Footer ===== */
+.aksi form button.btn-hapus[type="submit"]:hover {
+  background-color: #fecaca;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(220, 38, 38, 0.2);
+}
+
+/* ========================================================================
+   BAGIAN 6: FOOTER
+   ======================================================================== */
+
 footer {
-    padding: 1rem 2rem;
-    text-align: center;
-    color: var(--text-muted);
-    font-size: 0.75rem;
-    margin-top: auto;
-    border-top: 1px solid var(--border-color);
-    background-color: var(--bg-card);
+  padding: 1rem 2rem;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  margin-top: auto;
+  border-top: 1px solid var(--border-color);
+  background-color: var(--bg-card);
 }
