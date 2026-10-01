@@ -76,6 +76,24 @@ $sudahLogin = isset($_SESSION['user_id']);
                             </ul>
                         </details>
                     </li>
+
+                    <!-- Grup Keuangan -->
+                    <li>
+                        <details class="nav-accordion">
+                            <summary class="nav-group-title" onclick="return false;">
+                                <div>
+                                    <i class="fas fa-money-bill-wave"></i>
+                                    <span class="nav-text">KEUANGAN</span>
+                                </div>
+                            </summary>
+                            <ul>
+                                <li><a href="<?= $base ?>pembayaran/list.php"><i class="fas fa-receipt"></i><span class="nav-text">Pembayaran Sewa</span></a></li>
+                                <li><a href="<?= $base ?>pembayaran/generate.php"><i class="fas fa-magic"></i><span class="nav-text">Generate Tagihan</span></a></li>
+                                <li><a href="<?= $base ?>pengeluaran/list.php"><i class="fas fa-shopping-cart"></i><span class="nav-text">Pengeluaran</span></a></li>
+                                <li><a href="<?= $base ?>laporan/bulanan.php"><i class="fas fa-chart-line"></i><span class="nav-text">Laporan Bulanan</span></a></li>
+                            </ul>
+                        </details>
+                    </li>
                     <?php endif; ?>
                 </ul>
             </nav>
@@ -154,6 +172,50 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    // Auto-expand accordion berdasarkan halaman saat ini
+    function detectAndExpandAccordion() {
+        const currentUrl = window.location.pathname;
+        const accordions = document.querySelectorAll('.nav-accordion');
+
+        accordions.forEach(accordion => {
+            const links = accordion.querySelectorAll('a');
+            let shouldOpen = false;
+
+            links.forEach(link => {
+                const href = link.getAttribute('href');
+                // Cek apakah link cocok dengan halaman saat ini
+                if (href && currentUrl.includes(href.replace(/^\.\.\//g, '').replace(/^\.\//g, ''))) {
+                    shouldOpen = true;
+                }
+            });
+
+            if (shouldOpen) {
+                accordion.setAttribute('open', '');
+                localStorage.setItem('accordionOpen_' + accordion.className, 'true');
+            } else {
+                accordion.removeAttribute('open');
+                localStorage.removeItem('accordionOpen_' + accordion.className);
+            }
+        });
+    }
+
+    // Restore accordion state dari localStorage
+    function restoreAccordionState() {
+        const accordions = document.querySelectorAll('.nav-accordion');
+        accordions.forEach(accordion => {
+            const key = 'accordionOpen_' + accordion.className;
+            if (localStorage.getItem(key) === 'true') {
+                accordion.setAttribute('open', '');
+            } else {
+                accordion.removeAttribute('open');
+            }
+        });
+    }
+
+    // Jalankan deteksi accordion
+    restoreAccordionState();
+    detectAndExpandAccordion();
+
     // Handle accordion clicks
     sidebar.addEventListener('click', function(e) {
         const summary = e.target.closest('.nav-accordion summary');
@@ -189,8 +251,10 @@ document.addEventListener('DOMContentLoaded', function() {
             // Expanded state - toggle details normally
             if (accordion.hasAttribute('open')) {
                 accordion.removeAttribute('open');
+                localStorage.removeItem('accordionOpen_' + accordion.className);
             } else {
                 accordion.setAttribute('open', '');
+                localStorage.setItem('accordionOpen_' + accordion.className, 'true');
             }
         }
     });
