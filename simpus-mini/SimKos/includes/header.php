@@ -1,5 +1,7 @@
 <?php
 require_once __DIR__ . '/session.php';
+require_once __DIR__ . '/helpers.php';
+require_once __DIR__ . '/csrf.php';
 $base = $base ?? './';
 $sudahLogin = isset($_SESSION['user_id']);
 ?>
@@ -117,7 +119,7 @@ $sudahLogin = isset($_SESSION['user_id']);
                 <div class="user-info">
                     <?php if ($sudahLogin): ?>
                         <i class="fas fa-user-circle" style="font-size: 1.1rem;"></i>
-                        <span><?= htmlspecialchars($_SESSION['nama']) ?></span>
+                        <span><?php echo e($_SESSION['nama']); ?></span>
                     <?php endif; ?>
                 </div>
             </header>
@@ -125,7 +127,7 @@ $sudahLogin = isset($_SESSION['user_id']);
             <main class="content">
                 <?php if (isset($_SESSION['flash_message'])): ?>
                     <div class="alert alert-<?= $_SESSION['flash_type'] ?? 'success' ?>">
-                        <?= htmlspecialchars($_SESSION['flash_message']); ?>
+                        <?php echo e($_SESSION['flash_message']); ?>
                     </div>
                     <?php
                         unset($_SESSION['flash_message']);

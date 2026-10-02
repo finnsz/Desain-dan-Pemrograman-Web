@@ -73,8 +73,26 @@ $stmtTotal->execute($params);
 $totalData = $stmtTotal->fetchColumn();
 $totalPages = ceil($totalData / $limit);
 
-// Ambil data
-$query = "SELECT * FROM v_pembayaran_detail
+// Ambil data dengan explicit JOIN pattern (tidak pakai view)
+// JOIN menggabungkan 3 tabel: pembayaran (pb), penghuni (p), kamar (k)
+// - pb.penghuni_id dirujuk ke p.id (many-to-one)
+// - p.kamar_id dirujuk ke k.id (many-to-one)
+$query = "SELECT pb.id, pb.penghuni_id, p.nama_lengkap, p.no_hp,
+                 k.nomor_kamar, k.tipe, k.harga as harga_sewa,
+                 pb.periode_bulan, pb.periode_tahun, pb.nominal, pb.denda, pb.total_bayar,
+                 pb.tgl_jatuh_tempo, pb.tgl_bayar, pb.status, pb.metode_bayar,
+                 CASE
+                   WHEN pb.tgl_bayar IS NULL AND CURRENT_DATE > pb.tgl_jatuh_tempo THEN true
+                   ELSE false
+                 END as is_terlambat,
+                 CASE
+                   WHEN pb.tgl_bayar IS NULL AND CURRENT_DATE > pb.tgl_jatuh_tempo
+                   THEN CURRENT_DATE - pb.tgl_jatuh_tempo
+                   ELSE 0
+                 END as hari_terlambat
+          FROM pembayaran pb
+          JOIN penghuni p ON pb.penghuni_id = p.id
+          LEFT JOIN kamar k ON p.kamar_id = k.id
           $whereClause
           ORDER BY $order_by
           LIMIT :limit OFFSET :offset";

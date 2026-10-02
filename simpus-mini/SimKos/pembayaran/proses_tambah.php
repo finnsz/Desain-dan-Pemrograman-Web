@@ -34,18 +34,11 @@ if (!empty($errors)) {
     exit;
 }
 
-// Cek duplikat periode
-$check = $pdo->prepare("SELECT id FROM pembayaran WHERE penghuni_id = :penghuni_id AND periode_bulan = :bulan AND periode_tahun = :tahun");
-$check->execute([':penghuni_id' => $penghuni_id, ':bulan' => $periode_bulan, ':tahun' => $periode_tahun]);
-if ($check->rowCount() > 0) {
-    $_SESSION['flash_message'] = 'Tagihan untuk periode ini sudah ada. Gunakan Edit jika ingin mengubah.';
-    $_SESSION['flash_type'] = 'danger';
-    header('Location: tambah.php');
-    exit;
-}
-
-// Handle upload bukti (optional)
+// Handle upload bukti (optional) - validasi dulu sebelum transaction
 $bukti_path = null;
+$file_to_move = null;
+$file_destination = null;
+
 if (isset($_FILES['bukti_path']) && $_FILES['bukti_path']['error'] === UPLOAD_ERR_OK) {
     $upload_dir = __DIR__ . '/../assets/bukti/';
     if (!is_dir($upload_dir)) mkdir($upload_dir, 0755, true);
@@ -70,16 +63,29 @@ if (isset($_FILES['bukti_path']) && $_FILES['bukti_path']['error'] === UPLOAD_ER
     }
 
     $file_new_name = 'bukti_' . $penghuni_id . '_' . time() . '.' . $file_ext;
-    $file_path = $upload_dir . $file_new_name;
-
-    if (move_uploaded_file($file_tmp, $file_path)) {
-        $bukti_path = 'assets/bukti/' . $file_new_name;
-    }
+    $file_destination = $upload_dir . $file_new_name;
+    $file_to_move = $file_tmp;
+    $bukti_path = 'assets/bukti/' . $file_new_name;
 }
 
-// Insert pembayaran
+// Insert pembayaran dengan transaction
 try {
     $pdo->beginTransaction();
+
+    // Cek duplikat periode dengan FOR UPDATE - mencegah race condition
+    // Skenario: 2 petugas generate tagihan periode sama secara bersamaan
+    $check = $pdo->prepare("SELECT id FROM pembayaran WHERE penghuni_id = :penghuni_id AND periode_bulan = :bulan AND periode_tahun = :tahun FOR UPDATE");
+    $check->execute([':penghuni_id' => $penghuni_id, ':bulan' => $periode_bulan, ':tahun' => $periode_tahun]);
+    if ($check->rowCount() > 0) {
+        throw new Exception('Tagihan untuk periode ini sudah ada. Gunakan Edit jika ingin mengubah.');
+    }
+
+    // Move file setelah validasi duplikat lolos
+    if ($file_to_move && $file_destination) {
+        if (!move_uploaded_file($file_to_move, $file_destination)) {
+            throw new Exception('Gagal menyimpan file bukti.');
+        }
+    }
 
     $stmt = $pdo->prepare("
         INSERT INTO pembayaran
@@ -108,6 +114,12 @@ try {
     $_SESSION['flash_type'] = 'success';
 } catch (Exception $e) {
     $pdo->rollBack();
+
+    // Hapus file jika sudah di-upload tapi transaction gagal
+    if ($file_destination && file_exists($file_destination)) {
+        unlink($file_destination);
+    }
+
     $_SESSION['flash_message'] = 'Error: ' . $e->getMessage();
     $_SESSION['flash_type'] = 'danger';
 }

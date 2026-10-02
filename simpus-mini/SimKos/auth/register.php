@@ -15,6 +15,7 @@ include __DIR__ . '/../includes/header.php';
     <h2>Registrasi Petugas</h2>
 
     <form method="POST" action="proses_register.php" id="form-register">
+        <?php echo csrf_field(); ?>
         <p>
             <label for="nama">Nama</label>
             <input type="text" id="nama" name="nama" required>

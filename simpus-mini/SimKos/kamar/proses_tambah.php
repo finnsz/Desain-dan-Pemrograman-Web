@@ -1,7 +1,10 @@
 <?php
 require __DIR__ . '/../includes/auth.php';
+require __DIR__ . '/../includes/csrf.php';
 // kamar/proses_tambah.php
 require_once __DIR__ . '/../config/database.php';
+
+csrf_verify();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nomor_kamar = trim($_POST['nomor_kamar'] ?? '');

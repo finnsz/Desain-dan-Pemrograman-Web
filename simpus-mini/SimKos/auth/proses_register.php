@@ -1,7 +1,10 @@
 <?php
 // auth/proses_register.php
 require_once __DIR__ . '/../includes/session.php';
+require_once __DIR__ . '/../includes/csrf.php';
 require_once __DIR__ . '/../config/database.php';
+
+csrf_verify();
 
 $nama     = trim($_POST['nama'] ?? '');
 $username = trim($_POST['username'] ?? '');

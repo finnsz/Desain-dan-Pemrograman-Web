@@ -13,6 +13,7 @@ $tipe_list = $pdo->query("SELECT DISTINCT tipe FROM kamar ORDER BY tipe ASC")->f
 <section class="card-section">
     <h2>Tambah Penghuni Baru</h2>
     <form action="proses_tambah.php" method="POST" id="form-tambah">
+        <?php echo csrf_field(); ?>
         <p>
             <label for="nama_lengkap">Nama Lengkap</label>
             <input type="text" id="nama_lengkap" name="nama_lengkap" placeholder="Masukkan nama lengkap" required>
@@ -26,7 +27,7 @@ $tipe_list = $pdo->query("SELECT DISTINCT tipe FROM kamar ORDER BY tipe ASC")->f
             <select id="tipe" name="tipe" required>
                 <option value="">-- Pilih Tipe Kamar --</option>
                 <?php foreach ($tipe_list as $t): ?>
-                    <option value="<?= htmlspecialchars($t) ?>"><?= htmlspecialchars($t) ?></option>
+                    <option value="<?php echo e($t); ?>"><?php echo e($t); ?></option>
                 <?php endforeach; ?>
             </select>
         </p>

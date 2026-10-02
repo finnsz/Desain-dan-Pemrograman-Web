@@ -47,10 +47,12 @@ try {
     $skipped_count = 0;
 
     foreach ($penghuni_list as $p) {
-        // Cek apakah tagihan sudah ada
+        // Cek apakah tagihan sudah ada dengan FOR UPDATE - mencegah race condition
+        // Skenario: 2 generate job berjalan paralel untuk periode sama
         $check = $pdo->prepare("
             SELECT id FROM pembayaran
             WHERE penghuni_id = :penghuni_id AND periode_bulan = :bulan AND periode_tahun = :tahun
+            FOR UPDATE
         ");
         $check->execute([
             ':penghuni_id' => $p['id'],

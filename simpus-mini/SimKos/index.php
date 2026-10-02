@@ -65,7 +65,7 @@ $occupancy_rate = $total_kamar > 0 ? round(($kamar_terisi / $total_kamar) * 100,
 <!-- Welcome Banner dengan Occupancy Badge -->
 <section class="card-section welcome-banner">
     <div>
-        <h2>Selamat Datang, <?= isset($_SESSION['nama']) ? htmlspecialchars($_SESSION['nama']) : 'Admin' ?></h2>
+        <h2>Selamat Datang, <?= isset($_SESSION['nama']) ? e($_SESSION['nama']) : 'Admin' ?></h2>
         <p>Sistem Pengelolaan Data Kamar & Penghuni Kost Berbasis Web & PostgreSQL.</p>
     </div>
     <div class="quick-actions">
@@ -204,15 +204,15 @@ $occupancy_rate = $total_kamar > 0 ? round(($kamar_terisi / $total_kamar) * 100,
                 <?php else: ?>
                     <?php foreach ($penghuni_terbaru as $p): ?>
                         <tr>
-                            <td><strong><?= htmlspecialchars($p['nama_lengkap']) ?></strong></td>
+                            <td><strong><?php echo e($p['nama_lengkap']); ?></strong></td>
                             <td>
                                 <?php if (!empty($p['nomor_kamar'])): ?>
-                                    <span class="badge badge-warning"><?= htmlspecialchars($p['nomor_kamar']) ?></span>
+                                    <span class="badge badge-warning"><?php echo e($p['nomor_kamar']); ?></span>
                                 <?php else: ?>
                                     <span style="color: var(--text-muted);">-</span>
                                 <?php endif; ?>
                             </td>
-                            <td><?= htmlspecialchars($p['no_hp']) ?></td>
+                            <td><?php echo e($p['no_hp']); ?></td>
                             <td><?= date('d M Y', strtotime($p['tgl_masuk'])) ?></td>
                         </tr>
                     <?php endforeach; ?>

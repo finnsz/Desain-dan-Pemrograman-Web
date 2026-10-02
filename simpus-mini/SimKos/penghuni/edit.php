@@ -28,22 +28,23 @@ include __DIR__ . '/../includes/header.php';
 <section class="card-section">
     <h2>Edit Penghuni</h2>
     <form action="proses_edit.php" method="POST" id="form-edit">
-        <input type="hidden" name="id" value="<?= $penghuni['id'] ?>">
+        <input type="hidden" name="id" value="<?php echo (int) $penghuni['id']; ?>">
+        <?php echo csrf_field(); ?>
         <p>
             <label for="nama_lengkap">Nama Lengkap</label>
-            <input type="text" id="nama_lengkap" name="nama_lengkap" value="<?= htmlspecialchars($penghuni['nama_lengkap']) ?>" required>
+            <input type="text" id="nama_lengkap" name="nama_lengkap" value="<?php echo e($penghuni['nama_lengkap']); ?>" required>
         </p>
         <p>
             <label for="no_hp">No. Handphone / WhatsApp</label>
-            <input type="text" id="no_hp" name="no_hp" value="<?= htmlspecialchars($penghuni['no_hp']) ?>" required>
+            <input type="text" id="no_hp" name="no_hp" value="<?php echo e($penghuni['no_hp']); ?>" required>
         </p>
         <p>
             <label for="tipe">Tipe Kamar</label>
             <select id="tipe" name="tipe" required>
                 <option value="">-- Pilih Tipe Kamar --</option>
                 <?php foreach ($tipe_list as $t): ?>
-                    <option value="<?= htmlspecialchars($t) ?>" <?= ($penghuni['tipe'] ?? '') === $t ? 'selected' : '' ?>>
-                        <?= htmlspecialchars($t) ?>
+                    <option value="<?php echo e($t); ?>" <?= ($penghuni['tipe'] ?? '') === $t ? 'selected' : '' ?>>
+                        <?php echo e($t); ?>
                     </option>
                 <?php endforeach; ?>
             </select>
@@ -54,7 +55,7 @@ include __DIR__ . '/../includes/header.php';
                 <option value="">-- Pilih Kamar --</option>
                 <?php foreach ($kamarList as $k): ?>
                     <option value="<?= $k['id'] ?>" <?= $penghuni['kamar_id'] == $k['id'] ? 'selected' : '' ?>>
-                        <?= htmlspecialchars($k['nomor_kamar']) ?> - Rp <?= number_format($k['harga'], 0, ',', '.') ?>
+                        <?php echo e($k['nomor_kamar']); ?> - Rp <?= number_format($k['harga'], 0, ',', '.') ?>
                     </option>
                 <?php endforeach; ?>
             </select>

@@ -16,14 +16,15 @@ include __DIR__ . '/../includes/header.php';
 <section class="card-section">
     <h2>Edit Kamar</h2>
     <form action="proses_edit.php" method="POST" id="form-edit">
-        <input type="hidden" name="id" value="<?= $kamar['id'] ?>">
+        <input type="hidden" name="id" value="<?php echo (int) $kamar['id']; ?>">
+        <?php echo csrf_field(); ?>
         <p>
             <label for="nomor_kamar">Nomor Kamar</label>
-            <input type="text" id="nomor_kamar" name="nomor_kamar" value="<?= htmlspecialchars($kamar['nomor_kamar']) ?>" required>
+            <input type="text" id="nomor_kamar" name="nomor_kamar" value="<?php echo e($kamar['nomor_kamar']); ?>" required>
         </p>
         <p>
             <label for="tipe">Tipe Kamar</label>
-            <input type="text" id="tipe" name="tipe" value="<?= htmlspecialchars($kamar['tipe']) ?>" required>
+            <input type="text" id="tipe" name="tipe" value="<?php echo e($kamar['tipe']); ?>" required>
         </p>
         <p>
             <label for="harga">Harga Per Bulan (Rp)</label>

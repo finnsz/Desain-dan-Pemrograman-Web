@@ -75,7 +75,7 @@ $kamar_list = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <h2>Daftar Kamar Kost</h2>
         <div style="display: flex; gap: 0.75rem; align-items: center;">
             <form method="GET" class="search-box">
-                <input type="text" name="q" id="search-input" value="<?= htmlspecialchars($search) ?>" placeholder="Cari nomor / tipe kamar...">
+                <input type="text" name="q" id="search-input" value="<?php echo e($search); ?>" placeholder="Cari nomor / tipe kamar...">
             </form>
             <?php if ($search): ?>
                 <a href="list.php" style="padding: 0.5rem 0.75rem; background: var(--danger-bg); color: var(--danger-text); border-radius: 8px; font-size: 0.875rem; font-weight: 500;">Reset Filter</a>
@@ -100,12 +100,12 @@ $kamar_list = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <?php else: ?>
                     <?php foreach ($kamar_list as $kamar): ?>
                         <tr>
-                            <td><strong><?= htmlspecialchars($kamar['nomor_kamar']) ?></strong></td>
-                            <td><?= htmlspecialchars($kamar['tipe']) ?></td>
+                            <td><strong><?php echo e($kamar['nomor_kamar']); ?></strong></td>
+                            <td><?php echo e($kamar['tipe']); ?></td>
                             <td>Rp <?= number_format($kamar['harga'], 0, ',', '.') ?></td>
                             <td>
                                 <span class="badge <?= $kamar['status'] === 'TERISI' ? 'badge-warning' : 'badge-success' ?>">
-                                    <?= htmlspecialchars($kamar['status']) ?>
+                                    <?php echo e($kamar['status']); ?>
                                 </span>
                             </td>
                             <td>
@@ -116,6 +116,7 @@ $kamar_list = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                     <?php if (is_admin()): ?>
                                         <form action="hapus.php" method="POST" class="form-hapus" onsubmit="return confirm('Yakin hapus data ini?');">
                                             <input type="hidden" name="id" value="<?= $kamar['id'] ?>">
+                                            <?php echo csrf_field(); ?>
                                             <button type="submit" class="btn-hapus">Hapus</button>
                                         </form>
                                     <?php endif; ?>

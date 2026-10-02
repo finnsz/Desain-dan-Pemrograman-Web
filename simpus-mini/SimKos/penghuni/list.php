@@ -79,7 +79,7 @@ $penghuni_list = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <h2>Daftar Penghuni Kost</h2>
         <div style="display: flex; gap: 0.75rem; align-items: center;">
             <form method="GET" class="search-box">
-                <input type="text" name="q" id="search-input" value="<?= htmlspecialchars($search) ?>" placeholder="Cari nama atau kamar...">
+                <input type="text" name="q" id="search-input" value="<?php echo e($search); ?>" placeholder="Cari nama atau kamar...">
             </form>
             <?php if ($search): ?>
                 <a href="list.php" style="padding: 0.5rem 0.75rem; background: var(--danger-bg); color: var(--danger-text); border-radius: 8px; font-size: 0.875rem; font-weight: 500;">Reset Filter</a>
@@ -106,16 +106,16 @@ $penghuni_list = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <?php else: ?>
                     <?php foreach ($penghuni_list as $penghuni): ?>
                         <tr>
-                            <td><strong><?= htmlspecialchars($penghuni['nama_lengkap']) ?></strong></td>
-                            <td><?= htmlspecialchars($penghuni['no_hp']) ?></td>
+                            <td><strong><?php echo e($penghuni['nama_lengkap']); ?></strong></td>
+                            <td><?php echo e($penghuni['no_hp']); ?></td>
                             <td>
                                 <?php if (!empty($penghuni['nomor_kamar'])): ?>
-                                    <span class="badge badge-warning"><?= htmlspecialchars($penghuni['nomor_kamar']) ?></span>
+                                    <span class="badge badge-warning"><?php echo e($penghuni['nomor_kamar']); ?></span>
                                 <?php else: ?>
                                     <span style="color: var(--text-muted);">-</span>
                                 <?php endif; ?>
                             </td>
-                            <td><?= htmlspecialchars($penghuni['tipe'] ?? '-') ?></td>
+                            <td><?php echo e($penghuni['tipe'] ?? '-'); ?></td>
                             <td>Rp <?= number_format($penghuni['harga'] ?? 0, 0, ',', '.') ?></td>
                             <td><?= !empty($penghuni['tgl_masuk']) ? date('d M Y', strtotime($penghuni['tgl_masuk'])) : '-' ?></td>
                             <td>
@@ -126,6 +126,7 @@ $penghuni_list = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                     <?php if (is_admin()): ?>
                                         <form action="hapus.php" method="POST" class="form-hapus" onsubmit="return confirm('Yakin hapus data ini?');">
                                             <input type="hidden" name="id" value="<?= $penghuni['id'] ?>">
+                                            <?php echo csrf_field(); ?>
                                             <button type="submit" class="btn-hapus">Hapus</button>
                                         </form>
                                     <?php endif; ?>

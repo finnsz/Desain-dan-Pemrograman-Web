@@ -9,6 +9,7 @@ include __DIR__ . '/../includes/header.php';
 <section>
     <h2>Tambah Kamar</h2>
     <form action="proses_tambah.php" method="POST" id="form-tambah">
+        <?php echo csrf_field(); ?>
         <p>
             <label for="nomor_kamar">Nomor Kamar</label><br>
             <input type="text" id="nomor_kamar" name="nomor_kamar" placeholder="Contoh: K03" required>
