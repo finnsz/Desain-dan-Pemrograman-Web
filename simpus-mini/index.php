@@ -406,10 +406,10 @@
                 <div class="arrow-link">Buka <i class="fas fa-arrow-right"></i></div>
             </a>
 
-            <div class="jobsheet-card coming-soon">
+            <a href="/Jobsheet12/index.php" class="jobsheet-card">
                 <h2>Jobsheet 12</h2>
-                <span class="badge-soon">Coming Soon</span>
-            </div>
+                <div class="arrow-link">Buka <i class="fas fa-arrow-right"></i></div>
+            </a>
 
             <div class="jobsheet-card coming-soon">
                 <h2>Jobsheet 13</h2>
