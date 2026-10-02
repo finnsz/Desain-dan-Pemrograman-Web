@@ -11,16 +11,37 @@ $kamar_terisi   = $pdo->query("SELECT COUNT(*) FROM kamar WHERE status = 'TERISI
 $kamar_kosong   = $pdo->query("SELECT COUNT(*) FROM kamar WHERE status = 'KOSONG'")->fetchColumn();
 $total_penghuni = $pdo->query("SELECT COUNT(*) FROM penghuni")->fetchColumn();
 
-// 2. Keuangan: pemasukan tahun ini (LUNAS berdasarkan tanggal bayar)
+// 2. Keuangan: pemasukan
 $tahun_ini = (int)date('Y');
+$filter_pemasukan = isset($_GET['pemasukan_tahun']) ? $_GET['pemasukan_tahun'] : 'seumur_hidup';
 
-$stmt = $pdo->prepare("
-    SELECT COALESCE(SUM(total_bayar), 0) as total
+// Ambil tahun yang tersedia
+$tahun_list = $pdo->query("
+    SELECT DISTINCT EXTRACT(YEAR FROM tgl_bayar)::int as tahun
     FROM pembayaran
-    WHERE EXTRACT(YEAR FROM tgl_bayar) = :tahun
-      AND status = 'LUNAS'
-");
-$stmt->execute([':tahun' => $tahun_ini]);
+    WHERE status = 'LUNAS' AND tgl_bayar IS NOT NULL
+    ORDER BY tahun DESC
+")->fetchAll(PDO::FETCH_COLUMN);
+
+if ($filter_pemasukan === 'seumur_hidup') {
+    $stmt = $pdo->prepare("
+        SELECT COALESCE(SUM(total_bayar), 0) as total
+        FROM pembayaran
+        WHERE status = 'LUNAS'
+    ");
+    $stmt->execute();
+    $label_pemasukan = 'Seumur Hidup';
+} else {
+    $tahun_filter = ($filter_pemasukan === 'tahun_ini') ? $tahun_ini : (int)$filter_pemasukan;
+    $stmt = $pdo->prepare("
+        SELECT COALESCE(SUM(total_bayar), 0) as total
+        FROM pembayaran
+        WHERE EXTRACT(YEAR FROM tgl_bayar) = :tahun
+          AND status = 'LUNAS'
+    ");
+    $stmt->execute([':tahun' => $tahun_filter]);
+    $label_pemasukan = 'Tahun ' . $tahun_filter;
+}
 $pemasukan_tahun_ini = $stmt->fetchColumn();
 
 $stmt_tunggakan = $pdo->prepare("
@@ -94,10 +115,10 @@ $occupancy_rate = $total_kamar > 0 ? round(($kamar_terisi / $total_kamar) * 100,
 
 <!-- Financial Metrics Cards -->
 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
-    <!-- Pemasukan Tahun Ini -->
-    <section class="card-section">
+    <!-- Pemasukan -->
+    <section class="card-section" id="pemasukan-card" style="cursor: pointer; transition: all 0.3s ease;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-            <h3 style="margin: 0; font-size: 1rem;">Pemasukan Tahun Ini</h3>
+            <h3 style="margin: 0; font-size: 1rem;">Pemasukan <?= $label_pemasukan ?></h3>
             <div class="stat-icon stat-icon-blue" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 8px;">
                 <i class="fas fa-arrow-up" style="font-size: 1rem;"></i>
             </div>
@@ -106,12 +127,39 @@ $occupancy_rate = $total_kamar > 0 ? round(($kamar_terisi / $total_kamar) * 100,
             Rp <?= number_format($pemasukan_tahun_ini, 0, ',', '.') ?>
         </div>
         <div style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem;">
-            Pembayaran lunas tahun ini
+            Pembayaran lunas <?= strtolower($label_pemasukan) ?>
         </div>
         <a href="pembayaran/list.php" style="font-size: 0.875rem; color: var(--primary); font-weight: 600;">
             Lihat Detail →
         </a>
+        <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 1rem; font-style: italic;">
+            Klik card untuk mengubah periode
+        </div>
     </section>
+
+    <script>
+    document.getElementById('pemasukan-card').addEventListener('click', function() {
+        const currentFilter = '<?= $filter_pemasukan ?>';
+        const tahunList = <?= json_encode($tahun_list) ?>;
+        const options = ['tahun_ini', 'seumur_hidup', ...tahunList];
+
+        const currentIndex = options.indexOf(currentFilter);
+        const nextIndex = (currentIndex + 1) % options.length;
+        const nextFilter = options[nextIndex];
+
+        window.location.href = '?pemasukan_tahun=' + nextFilter;
+    });
+
+    document.getElementById('pemasukan-card').addEventListener('mouseenter', function() {
+        this.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
+        this.style.transform = 'translateY(-2px)';
+    });
+
+    document.getElementById('pemasukan-card').addEventListener('mouseleave', function() {
+        this.style.boxShadow = '';
+        this.style.transform = '';
+    });
+    </script>
 
     <!-- Tunggakan -->
     <section class="card-section">

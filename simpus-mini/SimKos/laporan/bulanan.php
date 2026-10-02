@@ -1,12 +1,12 @@
 <?php
 require __DIR__ . '/../includes/auth.php';
 $base = '../';
-$title = 'Laporan Keuangan Bulanan';
+$title = 'Laporan Keuangan';
 
 require_once __DIR__ . '/../config/database.php';
 include __DIR__ . '/../includes/header.php';
 
-$tipe_laporan = isset($_GET['tipe_laporan']) ? $_GET['tipe_laporan'] : 'bulanan';
+$tipe_laporan = isset($_GET['tipe_laporan']) ? $_GET['tipe_laporan'] : 'seumur_hidup';
 $bulan = isset($_GET['bulan']) ? (int)$_GET['bulan'] : (int)date('m');
 $tahun = isset($_GET['tahun']) ? (int)$_GET['tahun'] : (int)date('Y');
 
@@ -101,7 +101,7 @@ $laba_rugi = $pemasukan['total_lunas'] - $total_pengeluaran;
 
 <section class="card-section">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-        <h2>Laporan Keuangan Bulanan</h2>
+        <h2>Laporan Keuangan</h2>
         <button onclick="window.print()" class="btn-primary" style="font-size: 0.875rem; padding: 0.6rem 1.25rem;">
             <i class="fas fa-print"></i> Print / PDF
         </button>
