@@ -48,6 +48,8 @@
             border-right: 1px solid var(--border-color);
             padding: 1.5rem 0;
             z-index: 100;
+            top: 0;
+            left: 0;
         }
 
         .sidebar-header {
@@ -340,10 +342,58 @@
             color: var(--text-primary);
         }
 
+        .sidebar-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: none;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            color: var(--text-primary);
+            padding: 0.5rem 0.7rem;
+            transition: all 0.2s ease;
+            margin-right: 1rem;
+        }
+
+        .sidebar-toggle:hover {
+            background-color: var(--primary-light);
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        header.topbar {
+            display: flex;
+            align-items: center;
+        }
+
+        /* Desktop collapse */
+        body.sidebar-collapsed aside.app-sidebar {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+
+        body.sidebar-collapsed .app-main {
+            margin-left: 0;
+        }
+
+        aside.app-sidebar {
+            transition: transform 0.3s ease;
+        }
+
+        .app-main {
+            transition: margin-left 0.3s ease;
+        }
+
         @media (max-width: 768px) {
             aside.app-sidebar {
+                position: fixed;
+                left: 0;
+                top: 0;
                 transform: translateX(-100%);
                 transition: transform 0.3s ease;
+                z-index: 999;
             }
 
             aside.app-sidebar.mobile-open {
@@ -360,6 +410,12 @@
 
             main.content {
                 padding: 1rem;
+            }
+
+            header.topbar {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
             }
         }
     </style>
@@ -433,6 +489,9 @@
 
     <div class="app-main">
         <header class="topbar">
+            <button class="sidebar-toggle" id="sidebar-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
             <div class="page-title">Dokumentasi Teknis SIMKOS</div>
         </header>
 
@@ -454,7 +513,9 @@
 
                 <h4>Dashboard</h4>
                 <ul>
-                    <li>Kartu statistik: total kamar, kamar terisi, kamar kosong, total penghuni</li>
+                    <li>Kartu statistik: total kamar, kamar terisi, kamar kosong, total penghuni (semua icon biru)</li>
+                    <li>Welcome banner dengan occupancy rate badge (real-time)</li>
+                    <li>Financial cards: Pemasukan dengan period selector (seumur_hidup/tahun/bulanan) dan Tunggakan terbaru</li>
                     <li>Tabel penghuni terbaru (5 data terakhir)</li>
                     <li>Quick action buttons untuk tambah kamar/penghuni</li>
                 </ul>
@@ -484,6 +545,33 @@
                     <li>Role-based access: petugas bisa tambah/edit, admin bisa tambah/edit/hapus</li>
                     <li>Logout dengan session destroy</li>
                 </ul>
+
+                <h4>Manajemen Pembayaran (Jobsheet 12)</h4>
+                <ul>
+                    <li>Daftar pembayaran dengan pagination, search, sorting, filter status/periode</li>
+                    <li>Generate tagihan otomatis per penghuni per bulan</li>
+                    <li>Tambah/edit pembayaran manual dengan tracking denda keterlambatan</li>
+                    <li>Kwitansi pembayaran yang dapat diunduh/dicetak</li>
+                    <li>Tracking status: BELUM BAYAR, LUNAS, TERLAMBAT</li>
+                </ul>
+
+                <h4>Manajemen Pengeluaran (Jobsheet 12)</h4>
+                <ul>
+                    <li>Daftar pengeluaran operasional (listrik, air, internet, perbaikan, gaji, dll)</li>
+                    <li>Kategorisasi pengeluaran otomatis</li>
+                    <li>Tambah/edit/hapus pengeluaran dengan tracking user</li>
+                    <li>Filter pengeluaran berdasarkan kategori, tanggal, periode</li>
+                </ul>
+
+                <h4>Laporan Keuangan (Jobsheet 12)</h4>
+                <ul>
+                    <li>Laporan keuangan dengan view periode: seumur_hidup, tahunan, bulanan</li>
+                    <li>Total pemasukan (pembayaran LUNAS) per periode</li>
+                    <li>Total pengeluaran breakdown per kategori</li>
+                    <li>Perhitungan laba/rugi otomatis</li>
+                    <li>Tracking pembayaran belum lunas dan tunggakan</li>
+                    <li>Export laporan via print/PDF</li>
+                </ul>
             </section>
 
             <section id="struktur-folder">
@@ -491,7 +579,7 @@
 
                 <pre><code>SimKos/
 │
-├── index.php                  # Dashboard utama (statistik + penghuni terbaru)
+├── index.php                  # Dashboard utama (statistik + penghuni terbaru + keuangan)
 │
 ├── assets/
 │   ├── css/
@@ -534,11 +622,32 @@
 │   ├── hapus.php             # Hapus penghuni (require admin)
 │   └── get_kamar.php         # API JSON: ambil kamar kosong berdasarkan tipe
 │
+├── pembayaran/               # Modul Pembayaran (Jobsheet 12)
+│   ├── list.php              # Daftar pembayaran (pagination + search + sort + filter)
+│   ├── tambah.php            # Form tambah pembayaran manual
+│   ├── proses_tambah.php     # Proses insert pembayaran
+│   ├── edit.php              # Form edit pembayaran (ubah status/metode/denda)
+│   ├── proses_edit.php       # Proses update pembayaran
+│   ├── generate.php          # Form generate tagihan per penghuni
+│   ├── proses_generate.php   # Proses bulk insert tagihan
+│   └── kwitansi.php          # Generate kwitansi pembayaran (print/PDF)
+│
+├── pengeluaran/              # Modul Pengeluaran (Jobsheet 12)
+│   ├── list.php              # Daftar pengeluaran (pagination + search + filter)
+│   ├── tambah.php            # Form tambah pengeluaran
+│   ├── proses_tambah.php     # Proses insert pengeluaran
+│   ├── edit.php              # Form edit pengeluaran
+│   ├── proses_edit.php       # Proses update pengeluaran
+│   └── hapus.php             # Hapus pengeluaran (require admin)
+│
+├── laporan/                  # Modul Laporan (Jobsheet 12)
+│   └── bulanan.php           # Laporan keuangan (seumur_hidup/tahunan/bulanan)
+│
 └── database/
-    ├── schema.sql            # Skema database lengkap (5 tabel + constraint)
-    └── seed_data.sql         # Data dummy (20 kamar + 10 penghuni)</code></pre>
+    └── database.sql          # Skema database + seed (7 tabel: kamar, penghuni, users,
+                              # sessions, remember_tokens, pembayaran, pengeluaran)</code></pre>
 
-                <p><strong>Catatan:</strong> <span class="highlight">schema.sql</span> di root folder sudah <strong>outdated</strong> (tidak punya tabel users/sessions/remember_tokens). Pakai <span class="highlight">database/schema.sql</span> sebagai skema resmi.</p>
+                <p><strong>Catatan:</strong> <span class="highlight">database/database.sql</span> berisi skema lengkap 7 tabel termasuk view <code>v_pembayaran_detail</code> untuk tracking tunggakan.</p>
             </section>
 
             <section id="desain-visual">
@@ -971,7 +1080,17 @@
                         <tr>
                             <td><strong>Database</strong></td>
                             <td>PostgreSQL</td>
-                            <td>12+ (SERIAL, ILIKE, DATE, TIMESTAMP)</td>
+                            <td>12+ (SERIAL, ILIKE, DATE, TIMESTAMP, GENERATED ALWAYS AS)</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>Views</td>
+                            <td>v_pembayaran_detail (tracking tunggakan real-time)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Session</strong></td>
+                            <td>Custom DB Handler</td>
+                            <td>SessionHandlerInterface (serverless-friendly)</td>
                         </tr>
                         <tr>
                             <td><strong>Auth</strong></td>
@@ -1001,9 +1120,10 @@
                 <p><strong>Alasan:</strong></p>
                 <ul>
                     <li><strong>ACID Compliance:</strong> Transaksi penghuni + update kamar butuh atomicity</li>
-                    <li><strong>Advanced Features:</strong> Support ILIKE (case-insensitive search), SERIAL (auto-increment), constraint FK</li>
+                    <li><strong>Advanced Features:</strong> Support ILIKE (case-insensitive search), SERIAL (auto-increment), constraint FK, GENERATED ALWAYS AS (computed columns untuk total_bayar)</li>
+                    <li><strong>Views & Indexes:</strong> View v_pembayaran_detail untuk tracking tunggakan real-time, indexes untuk performa query pembayaran</li>
                     <li><strong>Supabase Integration:</strong> Design-ready untuk deploy ke Supabase (config/database.php support DATABASE_URL)</li>
-                    <li><strong>Performance:</strong> Indexing lebih baik dari MySQL untuk query kompleks (JOIN)</li>
+                    <li><strong>Performance:</strong> Indexing lebih baik dari MySQL untuk query kompleks (JOIN penghuni + kamar + pembayaran)</li>
                 </ul>
 
                 <h4>Vanilla CSS (No Framework)</h4>
@@ -1040,14 +1160,26 @@
 
                 <h4>2. User Experience Baik</h4>
                 <ul>
-                    <li>Dashboard informatif (statistik + data terbaru langsung terlihat)</li>
+                    <li>Dashboard informatif (statistik + occupancy badge + financial cards real-time)</li>
+                    <li>Pemasukan card dengan period selector (seumur_hidup/tahunan/bulanan)</li>
+                    <li>Tunggakan tracking dengan link cepat ke pembayaran terlambat</li>
                     <li>Dropdown dinamis (pilih tipe → kamar kosong muncul otomatis)</li>
-                    <li>Pagination + search (tidak berat untuk data banyak)</li>
+                    <li>Pagination + search + sorting + filtering (tidak berat untuk data banyak)</li>
                     <li>Flash message jelas (sukses hijau, error merah)</li>
                     <li>"Ingat saya" 30 hari (user tidak perlu login terus-menerus)</li>
                 </ul>
 
-                <h4>3. Keamanan Terjaga</h4>
+                <h4>3. Financial Management Lengkap (Jobsheet 12)</h4>
+                <ul>
+                    <li>Pembayaran: generate tagihan otomatis, tracking status, denda keterlambatan</li>
+                    <li>Pengeluaran: kategorisasi operasional (listrik, air, internet, perbaikan, gaji, dll)</li>
+                    <li>Laporan: laba/rugi breakdown per periode dengan detail pengeluaran per kategori</li>
+                    <li>Kwitansi: generate dan print pembayaran per penghuni</li>
+                    <li>Database view (v_pembayaran_detail) untuk tracking tunggakan real-time</li>
+                    <li>GENERATED column (total_bayar = nominal + denda) untuk consistency</li>
+                </ul>
+
+                <h4>4. Keamanan Terjaga</h4>
                 <ul>
                     <li>Password hashing (bcrypt via password_hash)</li>
                     <li>Prepared statements (semua query pakai parameter binding, no SQL injection)</li>
@@ -1056,19 +1188,23 @@
                     <li>Session data di database (tidak bisa dicuri via file system)</li>
                 </ul>
 
-                <h4>4. Data Consistency</h4>
+                <h4>5. Data Consistency</h4>
                 <ul>
-                    <li>Transaction untuk penghuni + kamar (atomicity)</li>
-                    <li>Sinkronisasi status kamar otomatis</li>
-                    <li>Foreign key constraint (prevent orphan data)</li>
+                    <li>Transaction untuk penghuni + kamar (atomicity, rollback on error)</li>
+                    <li>Sinkronisasi status kamar otomatis (tambah penghuni → TERISI, edit/hapus → KOSONG)</li>
+                    <li>Foreign key constraint (prevent orphan data di pembayaran/pengeluaran)</li>
+                    <li>Unique constraint pembayaran (penghuni_id, periode_bulan, periode_tahun) untuk prevent duplikasi tagihan</li>
+                    <li>GENERATED ALWAYS AS column (total_bayar = nominal + denda) untuk computed values yang selalu akurat</li>
                 </ul>
 
-                <h4>5. Maintainability</h4>
+                <h4>6. Maintainability</h4>
                 <ul>
-                    <li>CSS fully documented (1026 baris dengan komentar)</li>
-                    <li>Separation of concerns (config, includes, auth, kamar, penghuni terpisah)</li>
-                    <li>Reusable includes (header, footer, session, auth, role)</li>
+                    <li>CSS fully documented (1026 baris dengan komentar Bahasa Indonesia)</li>
+                    <li>Separation of concerns (config, includes, auth, kamar, penghuni, pembayaran, pengeluaran, laporan terpisah)</li>
+                    <li>Reusable includes (header, footer, session, auth, role, remember)</li>
                     <li>CSS Variables (ubah warna cukup edit `:root`)</li>
+                    <li>Database schema + seed dalam satu file (database/database.sql)</li>
+                    <li>HANDBOOK.md lengkap (880 baris dokumentasi teknis)</li>
                 </ul>
 
                 <h3>10.2 Keterbatasan Proyek</h3>
@@ -1082,14 +1218,16 @@
                 <h4>Features</h4>
                 <ul>
                     <li><strong>No Soft Delete:</strong> Hapus data langsung DELETE permanent</li>
-                    <li><strong>No Audit Log:</strong> Tidak ada riwayat "siapa edit data apa kapan"</li>
-                    <li><strong>No Export Data:</strong> Tidak bisa export tabel ke Excel/PDF</li>
+                    <li><strong>No Audit Log:</strong> Tidak ada riwayat "siapa edit data apa kapan" (pengeluaran punya created_by tapi tidak track update)</li>
+                    <li><strong>Limited Export:</strong> Laporan hanya support print/PDF via browser, tidak ada export Excel</li>
+                    <li><strong>No Email Notification:</strong> Tidak ada notifikasi email untuk tunggakan atau reminder pembayaran</li>
                 </ul>
 
                 <h4>Performance</h4>
                 <ul>
-                    <li><strong>No Caching:</strong> Query statistics jalan tiap page load</li>
-                    <li><strong>No Index:</strong> Kolom search belum ada database index</li>
+                    <li><strong>No Caching:</strong> Query statistics di dashboard jalan tiap page load (tidak pakai Redis/Memcached)</li>
+                    <li><strong>Partial Indexing:</strong> Pembayaran sudah ada index (periode, status, penghuni_id) tapi kamar/penghuni search columns belum</li>
+                    <li><strong>N+1 Potential:</strong> Beberapa query bisa dioptimasi dengan eager loading</li>
                 </ul>
 
                 <h4>Code Quality</h4>
@@ -1136,9 +1274,13 @@
 
                 <hr style="margin: 2rem 0; border: none; border-top: 1px solid var(--border-color);">
 
-                <p style="text-align: center; color: var(--text-muted); margin-top: 2rem;">
-                    SIMKOS - Sistem Informasi Manajemen Kost<br>
-                    Menggunakan PHP, PostgreSQL, HTML5, CSS3, JavaScript
+                <p style="text-align: center; color: var(--text-muted); margin-top: 2rem; font-size: 0.9rem;">
+                    <strong>SIMKOS v2.0</strong> - Sistem Informasi Manajemen Kost<br>
+                    Jobsheet 12 Update: Pembayaran, Pengeluaran, Laporan Keuangan<br>
+                    <br>
+                    Teknologi: PHP 7.4+, PostgreSQL 12+, HTML5, CSS3, Vanilla JavaScript<br>
+                    <br>
+                    Dibuat: Oktober 2026 | Author: Geraldi Rama Nugraha (TI 2D - 254107020100)
                 </p>
             </section>
 
@@ -1233,17 +1375,39 @@
             observer.observe(section);
         });
 
-        // Fitur 4: Mobile sidebar toggle (opsional)
+        // Fitur 4: Sidebar toggle (Desktop & Mobile)
         const sidebar = document.getElementById('sidebar');
+        const toggleBtn = document.getElementById('sidebar-toggle');
 
-        // Cek screen size
-        function handleResize() {
+        // Restore state desktop dari localStorage
+        if (localStorage.getItem('handbookSidebarCollapsed') === 'true' && window.innerWidth > 768) {
+            document.body.classList.add('sidebar-collapsed');
+        }
+
+        toggleBtn.addEventListener('click', function() {
+            if (window.innerWidth <= 768) {
+                sidebar.classList.toggle('mobile-open');
+            } else {
+                document.body.classList.toggle('sidebar-collapsed');
+                localStorage.setItem('handbookSidebarCollapsed', document.body.classList.contains('sidebar-collapsed'));
+            }
+        });
+
+        // Tutup sidebar saat klik nav-link di mobile
+        document.querySelectorAll('.nav-link, .back-button').forEach(link => {
+            link.addEventListener('click', function() {
+                if (window.innerWidth <= 768) {
+                    sidebar.classList.remove('mobile-open');
+                }
+            });
+        });
+
+        // Reset state mobile saat resize
+        window.addEventListener('resize', function() {
             if (window.innerWidth > 768) {
                 sidebar.classList.remove('mobile-open');
             }
-        }
-
-        window.addEventListener('resize', handleResize);
+        });
     </script>
 </body>
 </html>

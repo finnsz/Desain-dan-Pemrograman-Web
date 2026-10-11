@@ -1,4 +1,4 @@
-// ===== 1. Hamburger menu =====
+// ===== Hamburger menu (JS-driven, menggantikan checkbox hack) =====
 function initNavToggle() {
     const toggleBtn = document.getElementById("nav-toggle-btn");
     const nav = document.querySelector("header nav");
@@ -9,7 +9,7 @@ function initNavToggle() {
     });
 }
 
-// ===== 2. Konfirmasi hapus =====
+// ===== Konfirmasi hapus (front-end only, belum ke server) =====
 // Memakai event delegation di document karena baris tabel sekarang
 // dirender dinamis via fetch (lihat buku.js/anggota.js) sehingga
 // tombol .btn-hapus belum tentu ada saat DOMContentLoaded.
@@ -27,11 +27,10 @@ function initHapusConfirm() {
     });
 }
 
-// ===== 3. Filter/pencarian tabel real-time =====
+// ===== Filter/pencarian tabel real-time =====
 function initTableFilter() {
     const input = document.getElementById("search-input");
-    // Fleksibel: mencari table langsung baik dengan atau tanpa .table-responsive
-    const table = document.querySelector(".table-responsive table") || document.querySelector("table");
+    const table = document.querySelector(".table-responsive table");
     if (!input || !table) return;
 
     input.addEventListener("keyup", function () {
@@ -44,21 +43,21 @@ function initTableFilter() {
     });
 }
 
-// ===== 4. Validasi form =====
-function tampilkanError(input, pesan) {
-    hapusError(input);
-    const span = document.createElement("span");
-    span.className = "error";
-    span.textContent = pesan;
-    input.insertAdjacentElement("afterend", span);
-}
-
-function hapusError(input) {
-    const next = input.nextElementSibling;
-    if (next && next.classList.contains("error")) {
-        next.remove();
+    // ===== Validasi form (client-side) =====
+    function tampilkanError(input, pesan) {
+        hapusError(input);
+        const span = document.createElement("span");
+        span.className = "error";
+        span.textContent = pesan;
+        input.insertAdjacentElement("afterend", span);
     }
-}
+
+    function hapusError(input) {
+        const next = input.nextElementSibling;
+        if (next && next.classList.contains("error")) {
+            next.remove();
+        }
+    }
 
 function initValidasiForm() {
     const form = document.getElementById("form-tambah");
@@ -67,32 +66,42 @@ function initValidasiForm() {
     form.addEventListener("submit", function (e) {
         let valid = true;
 
-        // Validasi Nama atau Judul
-        const fieldUtama = form.querySelector("[name='nama'], [name='judul']");
-        if (fieldUtama && fieldUtama.value.trim() === "") {
-            tampilkanError(fieldUtama, "Field ini wajib diisi.");
+        const judul = form.querySelector("[name='judul'], [name='nama']");
+        if (judul && judul.value.trim() === "") {
+            tampilkanError(judul, "Field ini wajib diisi.");
             valid = false;
-        } else if (fieldUtama) {
-            hapusError(fieldUtama);
+        } else if (judul) {
+            hapusError(judul);
         }
 
-        // Validasi No Anggota (jika di halaman anggota)
-        const noAnggota = form.querySelector("[name='no_anggota']");
-        if (noAnggota && noAnggota.value.trim() === "") {
-            tampilkanError(noAnggota, "No. Anggota wajib diisi.");
+        const pengarang = form.querySelector("[name='pengarang']");
+        if (pengarang && pengarang.value.trim() === "") {
+            tampilkanError(pengarang, "Pengarang wajib diisi.");
             valid = false;
-        } else if (noAnggota) {
-            hapusError(noAnggota);
+        } else if (pengarang) {
+            hapusError(pengarang);
         }
 
-        // Validasi ISBN (hanya angka dan tanda hubung jika diisi)
-        const isbn = form.querySelector("[name='isbn']");
-        const regexIsbn = /^[0-9-]+$/;
-        if (isbn && isbn.value.trim() !== "" && !regexIsbn.test(isbn.value.trim())) {
-            tampilkanError(isbn, "ISBN hanya boleh berisi angka dan tanda hubung (-).");
-            valid = false;
-        } else if (isbn) {
-            hapusError(isbn);
+        const tahun = form.querySelector("[name='tahun']");
+        if (tahun) {
+            const nilai = parseInt(tahun.value, 10);
+            if (isNaN(nilai) || nilai < 1900 || nilai > 2026) {
+                tampilkanError(tahun, "Tahun harus di antara 1900-2026.");
+                valid = false;
+            } else {
+                hapusError(tahun);
+            }
+        }
+
+        const stok = form.querySelector("[name='stok']");
+        if (stok) {
+            const nilai = parseInt(stok.value, 10);
+            if (isNaN(nilai) || nilai < 0) {
+                tampilkanError(stok, "Stok tidak boleh negatif.");
+                valid = false;
+            } else {
+                hapusError(stok);
+            }
         }
 
         if (!valid) {

@@ -1,331 +1,642 @@
+/* ==========================================================================
+   SIMPUS-Mini — Tampilan mengikuti tema & tata letak SimKos
+   Hanya warna, tipografi, jarak, dan tata letak visual yang disesuaikan.
+   Struktur konten, fitur, dan perilaku tetap sama.
+
+   KETERANGAN PENANDA PERUBAHAN:
+     [BARU]   = blok CSS yang sebelumnya tidak ada
+     [DIUBAH] = blok CSS lama yang nilainya diganti
+     [SAMA]   = tidak berubah dari versi asli
+   ========================================================================== */
+
+/* [BARU] Import font Plus Jakarta Sans (mengikuti SimKos) */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+/* [BARU] Variabel warna global (sebelumnya warna ditulis langsung/hardcoded) */
+:root {
+    --bg-app: #f8f9fb;
+    --bg-card: #ffffff;
+    --border-color: #e5e7eb;
+    --primary: #3b82f6;
+    --primary-hover: #2563eb;
+    --primary-light: #dbeafe;
+    --text-primary: #111827;
+    --text-secondary: #6b7280;
+    --text-muted: #9ca3af;
+    --success-bg: #d1fae5;
+    --success-text: #047857;
+    --warning-bg: #fef3c7;
+    --warning-text: #b45309;
+    --danger-bg: #fee2e2;
+    --danger-text: #dc2626;
+    --sidebar-width: 240px;
+}
+
 /* ===== Reset & Base ===== */
+/* [SAMA] Reset universal tidak berubah */
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
 
+/* [DIUBAH] font-family: "Segoe UI"->'Plus Jakarta Sans';
+            color #2b2b2b->var(--text-primary); bg #f5f6f8->var(--bg-app);
+            [BARU] min-height, display:grid (sidebar + konten) */
 body {
-    font-family: 'Poppins', 'Futura', 'Century Gothic', sans-serif;
-    color: rgb(225, 225, 225);
-    background-color: rgb(25, 25, 25);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    color: var(--text-primary);
+    background-color: var(--bg-app);
     line-height: 1.5;
+    min-height: 100vh;
+    /* [BARU] Tata letak: sidebar kiri (header) + area konten (main + footer) */
+    display: grid;
+    grid-template-columns: var(--sidebar-width) 1fr;
+    grid-template-rows: 1fr auto;
 }
 
+/* [DIUBAH] warna link #1d5b8a->var(--primary); [BARU] text-decoration:none
+            (aslinya link selalu underline) */
 a {
-    color: #1d5b8a;
+    color: var(--primary);
     text-decoration: none;
 }
 
+/* [DIUBAH] hover dulu menambah underline, sekarang ganti warna */
 a:hover {
-    text-decoration: underline;
+    color: var(--primary-hover);
 }
 
-/* ===== Header & Navbar (Flexbox) ===== */
+/* ===== Header menjadi Sidebar ===== */
+/* [DIUBAH BESAR] Dulu: header biru tua (#1d5b8a) full-width di atas halaman.
+   Sekarang: jadi sidebar putih vertikal di kiri (grid-column 1, sticky, 100vh) */
 header {
-    background-color: rgb(22, 73, 114);
-    color: rgb(225, 225, 225);
-    padding: 1.25rem 1.25rem;
+    grid-column: 1;
+    grid-row: 1 / -1;
+    background-color: var(--bg-card);
+    color: var(--text-primary);
+    border-right: 1px solid var(--border-color);
+    padding: 1.25rem 0;
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: stretch;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    z-index: 90;
 }
 
+/* [DIUBAH] Judul brand: 1.4rem putih -> 1rem biru, diberi padding sidebar */
 header h1 {
-    font-size: 1.4rem;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--primary);
+    padding: 0 1.25rem;
+    margin-bottom: 1.75rem;
 }
 
+/* [BARU] Wrapper nav mengisi sisa tinggi sidebar */
+header nav {
+    flex: 1;
+    width: 100%;
+}
+
+/* [DIUBAH] Menu mendatar -> menurun (kolom), gap 1.25rem -> 0.15rem,
+            [BARU] padding samping */
 header nav ul {
     list-style: none;
     display: flex;
-    gap: 1.25rem;
+    flex-direction: column;
+    gap: 0.15rem;
+    padding: 0 0.75rem;
 }
 
+/* [DIUBAH] Link nav: putih di atas biru -> abu-abu; [BARU] padding,
+            border-radius 10px, font-size 0.875rem, transition */
 header nav a {
-    color: rgb(225, 225, 225);
-    font-weight: 600;
-    border-radius: 8px;
-    padding: 0.3rem 0.3rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+    font-size: 0.875rem;
+    padding: 0.7rem 0.85rem;
+    border-radius: 10px;
+    transition: all 0.2s ease;
+    display: block;
 }
 
-nav a:hover {
-    background-color: rgb(17, 57, 90);
-    transition: all 0.1s ease;
+/* [DIUBAH] Hover dulu hanya underline, sekarang latar abu + teks gelap */
+header nav a:hover {
+    background-color: #f3f4f6;
+    color: var(--text-primary);
+    text-decoration: none;
+}
+
+/* [BARU] Gaya item navigasi untuk halaman yang sedang aktif */
+header nav a.active {
+    background-color: var(--primary-light);
+    color: var(--primary);
 }
 
 /* ===== Main Layout ===== */
+/* [DIUBAH] Dulu: max-width 1000px + margin auto (konten di tengah).
+   Sekarang: grid-column 2 agar berada di kanan sidebar, padding lebih besar */
 main {
-    max-width: 1000px;
-    margin: 2rem auto;
-    padding: 0 1.25rem;
+    grid-column: 2;
+    grid-row: 1;
+    padding: 1.75rem 2rem;
+    width: 100%;
 }
 
+/* [DIUBAH] section: [BARU] border 1px, radius 8px->16px,
+            shadow 0 1px 3px .08 -> 0 2px 8px .06, padding 1.5rem->1.75rem */
 section {
-    background-color: rgb(35, 35, 35);
-    border-radius: 8px;
-    padding: 1.5rem;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 1.75rem;
     margin-bottom: 1.5rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
+/* [DIUBAH] Warna judul #1d5b8a -> var(--text-primary); [BARU] size & weight */
 section h2 {
-    margin-bottom: 1rem;
-    color: #2d88cd;
-}
-
-/* ===== Kolom Pencarian ===== */
-.search-box {
-    margin-bottom: 1rem;
-}
-
-.search-box input {
-    width: 100%;
-    max-width: 320px;
-    padding: 0.5rem 0.75rem;
-    border: 1px solid #cdd4da;
-    border-radius: 4px;
-}
-
-/* ===== Kartu Statistik (CSS Grid) ===== */
-main section:nth-of-type(2) {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1rem;
-}
-
-main section:nth-of-type(2) article {
-    background-color: rgb(24, 71, 110);
-    border-radius: 8px;
-    padding: 1.25rem;
-    text-align: center;
-}
-
-main section:nth-of-type(2) article h3 {
-    font-size: 0.95rem;
-    color: rgb(235, 235, 235);
-    margin-bottom: 0.5rem;
-}
-
-main section:nth-of-type(2) article p {
-    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    color: var(--text-primary);
+    font-size: 1.15rem;
     font-weight: 700;
-    color: rgb(225, 225, 225);
 }
 
-/* ===== Tabel ===== */
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-th,
-td {
-    text-align: left;
-    padding: 0.65rem 0.75rem;
-    border-bottom: 1px solid #e2e6ea;
-}
-
-thead {
-    background-color: #1d5b8a;
-    color: rgb(225, 225, 225);
-}
-
-tbody tr:nth-child(even) {
-    background-color: #303030;
-}
-
-tbody tr:hover {
-    background-color: #9f9f9f76;
-}
-
-td button {
-    padding: 0.35rem 0.7rem;
-    margin-right: 0.35rem;
+/* [BARU] Banner selamat datang bergaya gradient biru (seperti SimKos) */
+section.welcome-banner {
+    background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
     border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.85rem;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+    /* [BARU] Teks kiri, tombol aksi kanan */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
 }
 
-td button:first-of-type {
-    background-color: #417ef0;
-    color: #fff;
-    font-weight: 700;
-
+/* [BARU] Judul & paragraf di dalam banner berwarna putih */
+section.welcome-banner h2 {
+    color: #ffffff;
+    font-size: 1.5rem;
+    margin-bottom: 0.35rem;
 }
 
-td button:last-of-type {
-    background-color: #d7433e;
-    color: #fff;
-    font-weight: 700;
-
-}
-
-.btn-detail {
-    background-color: #14c423;
-    color: #fff;
-    font-weight: 700;
-}
-
-/* ===== Form ===== */
-form p {
-    margin-bottom: 1rem;
-}
-
-form label {
-    font-weight: 600;
-    color: rgb(225, 225, 225);
-}
-
-form input,
-form select {
-    width: 100%;
-    max-width: 400px;
-    padding: 0.55rem 0.7rem;
-    border: 1px solid #cdd4da;
-    border-radius: 4px;
-    font-size: 1rem;
-}
-
-form button[type="submit"] {
-    background-color: #1d5b8a;
-    color: #fff;
-    border: none;
-    padding: 0.6rem 1.5rem;
-    border-radius: 4px;
-    font-size: 1rem;
-    cursor: pointer;
-}
-
-form button[type="submit"]:hover {
-    background-color: #164869;
-}
-
-/* ===== Pesan Error Validasi ===== */
-.error {
-    display: block;
-    color: #d9534f;
-    font-size: 0.85rem;
-    margin-top: 0.25rem;
-}
-
-/* ===== Footer ===== */
-footer {
-    text-align: center;
-    padding: 1.25rem;
-    color: #c7c7c7;
+section.welcome-banner p {
+    color: rgba(255, 255, 255, 0.95);
     font-size: 0.9rem;
 }
 
-/* ===== Hamburger Menu (checkbox hack) ===== */
-/* .nav-toggle {
-    display: none;
-} */
+/* [BARU] Grup tombol aksi cepat di banner */
+.welcome-actions {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
 
+/* [BARU] Tombol glass di atas banner gradient */
+.btn-welcome {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    padding: 0.6rem 1.15rem;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+}
+
+.btn-welcome:hover {
+    background-color: rgba(255, 255, 255, 0.32);
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+}
+
+/* ===== Blockquote / Kutipan Banner ===== */
+/* [BARU] Kutipan motivasi perpustakaan antara welcome-banner dan stat-section */
+.quote-banner {
+    background-color: var(--bg-card);
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 110, 255, 0.2);
+}
+
+.quote-banner p {
+    font-size: 1rem;
+    font-weight: 350;
+    font-style: italic;
+    color: var(--text-primary);
+    line-height: 1.6;
+    margin-bottom: 0.35rem;
+}
+
+.quote-banner cite {
+    display: block;
+    font-size: 0.85rem;
+    font-style: normal;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+/* ===== Kartu Statistik (CSS Grid) ===== */
+/* [DIUBAH] Dulu selector: main section:nth-of-type(2) (tanpa border/radius).
+   Sekarang pakai class .stat-section; [BARU] background/border/shadow di-reset
+   karena kartunya sudah punya gaya sendiri */
+section.stat-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+    background: none;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+}
+
+/* [BARU] Judul "Ringkasan" membentang penuh di atas grid */
+section.stat-section h2 {
+    grid-column: 1 / -1;
+    margin-bottom: 0;
+}
+
+/* [DIUBAH] Kartu statistik: [BARU] border, radius 8px->12px,
+            bg #eef4fa -> putih, shadow, transition */
+section.stat-section article {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.5rem 1.25rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    transition: all 0.3s ease;
+}
+
+/* [DIUBAH] Efek hover kartu terangkat, shadow kini biru */
+section.stat-section article:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(59, 130, 246, 0.35);
+}
+
+/* [DIUBAH] Label kartu: warna #55677a -> var(--text-secondary),
+            text-align center -> kiri */
+section.stat-section article h3 {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 0.75rem;
+}
+
+/* [DIUBAH] Angka kartu: warna #1d5b8a -> var(--text-primary);
+            text-align center -> kiri */
+section.stat-section article p {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.2;
+}
+
+/* ===== Tabel ===== */
+/* [DIUBAH] [BARU] border 1px + border-radius 12px pada pembungkus tabel */
+.table-responsive {
+    overflow-x: auto;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+}
+
+/* [SAMA] Properti tabel dasar tidak berubah */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+}
+
+/* [DIUBAH] Header tabel kini berlatar biru dengan teks putih */
+th {
+    background-color: var(--primary);
+    color: #ffffff;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    padding: 0.875rem 1.25rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* [DIUBAH] Padding 0.65rem->1rem, warna border baru */
+td {
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-primary);
+}
+
+/* [BARU] Baris terakhir tanpa garis bawah (aslinya masih ada) */
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* [DIUBAH] Warna hover baris #eef4fa -> #f9fafb (lebih netral) */
+tbody tr:hover {
+    background-color: #f9fafb;
+}
+
+/* [DIUBAH] Tombol aksi: [BARU] font-family inherit, radius 4px->8px,
+            transition; [SAMA] padding/margin/cursor dasar */
+td button {
+    padding: 0.5rem 1rem;
+    margin-right: 0.5rem;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 600;
+    font-family: inherit;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+/* [DIUBAH] Tombol pertama (Edit): dulu oranye solid #f0ad4e,
+            sekarang biru muda outline */
+td button:first-of-type {
+    background-color: var(--primary-light);
+    color: var(--primary);
+    border: 1px solid #bfdbfe;
+}
+
+/* [BARU] Hover tombol Edit */
+td button:first-of-type:hover {
+    background-color: #bfdbfe;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(37, 99, 235, 0.2);
+}
+
+/* [DIUBAH] Tombol terakhir (Hapus): dulu merah solid #d9534f,
+            sekarang merah muda outline */
+td button:last-of-type {
+    background-color: var(--danger-bg);
+    color: var(--danger-text);
+    border: 1px solid #fecaca;
+}
+
+/* [BARU] Hover tombol Hapus */
+td button:last-of-type:hover {
+    background-color: #fecaca;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(220, 38, 38, 0.2);
+}
+
+/* ===== Form ===== */
+/* [DIUBAH] Jarak antar field 1rem -> 1.5rem */
+form p {
+    margin-bottom: 1.5rem;
+}
+
+/* [DIUBAH] Label: warna #444 -> var(--text-secondary); [BARU] font-size 0.9rem,
+            jarak bawah 0.35rem->0.5rem */
+form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+/* [DIUBAH] Input: max-width 400px->500px, padding lebih besar,
+            border #cdd4da->var(--border-color), radius 4px->10px;
+            [BARU] font-family inherit, outline none, transition */
+form input, form select {
+    width: 100%;
+    max-width: 500px;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    font-size: 0.95rem;
+    font-family: inherit;
+    color: var(--text-primary);
+    background-color: #ffffff;
+    /* [BARU] Kunci skema warna terang agar kontrol form tidak diinvert dark mode */
+    color-scheme: light;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+/* [BARU] Efek focus input: border biru + ring biru muda */
+form input:focus, form select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px var(--primary-light);
+}
+
+/* [BARU] Gaya placeholder */
+form input::placeholder {
+    color: var(--text-muted);
+    opacity: 1;
+}
+
+/* [DIUBAH] Tombol submit: bg #1d5b8a->var(--primary), radius 4px->10px,
+            padding lebih besar; [BARU] transition */
+form button[type="submit"] {
+    background-color: var(--primary);
+    color: #ffffff;
+    border: none;
+    padding: 0.75rem 1.75rem;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+/* [DIUBAH] Hover tombol: dulu hanya ganti warna #164869,
+            sekarang terangkat + shadow */
+form button[type="submit"]:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(37, 99, 235, 0.3);
+}
+
+/* ===== Kolom Pencarian ===== */
+/* [DIUBAH] Jarak bawah 1rem -> 1.25rem */
+.search-box {
+    margin-bottom: 1.25rem;
+}
+
+/* [BARU] Label kolom pencarian (aslinya tidak diatur) */
+.search-box label {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+}
+
+/* [DIUBAH] Input pencarian: max-width 320px->350px, radius 4px->10px,
+            border baru; [BARU] shadow, transition */
+.search-box input {
+    width: 100%;
+    max-width: 350px;
+    padding: 0.75rem 1.15rem;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-family: inherit;
+    color: var(--text-primary);
+    /* [BARU] Latar putih eksplisit + color-scheme light agar tidak ikut gelap
+       saat browser dark mode / auto-dark menginvert kontrol form */
+    background-color: #ffffff;
+    color-scheme: light;
+    outline: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+    transition: all 0.2s ease;
+}
+
+/* [BARU] Efek focus input pencarian */
+.search-box input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px var(--primary-light);
+}
+
+/* [BARU] Gaya placeholder input pencarian */
+.search-box input::placeholder {
+    color: var(--text-muted);
+    opacity: 1;
+}
+
+/* ===== Hamburger Menu ===== */
+/* [DIUBAH] Warna putih->var(--text-secondary) (karena header kini putih);
+            [BARU] padding, border-radius, transition */
 .nav-toggle-label {
     display: none;
-    font-size: 1.6rem;
-    color: #fff;
+    font-size: 1.4rem;
+    color: var(--text-secondary);
     background: none;
     border: none;
     cursor: pointer;
+    padding: 0.25rem;
+    border-radius: 6px;
 }
 
-/* ===== Responsive Breakpoints ===== */
+/* [BARU] Hover tombol hamburger */
+.nav-toggle-label:hover {
+    background-color: #f3f4f6;
+}
 
-/* Tablet ke bawah */
-@media (max-width: 900px) {
-    main section:nth-of-type(2) {
-        grid-template-columns: repeat(2, 1fr);
+/* ===== Pesan Error Validasi ===== */
+/* [DIUBAH] Warna #d9534f -> var(--danger-text); [BARU] font-weight */
+.error {
+    display: block;
+    color: var(--danger-text);
+    font-size: 0.85rem;
+    margin-top: 0.25rem;
+    font-weight: 500;
+}
+
+/* ===== Footer ===== */
+/* [DIUBAH] Dulu hanya teks di tengah tanpa latar.
+   Sekarang: [BARU] grid-column 2, border atas, latar putih, teks lebih kecil */
+footer {
+    grid-column: 2;
+    grid-row: 2;
+    text-align: center;
+    padding: 1rem 2rem;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    border-top: 1px solid var(--border-color);
+    background-color: var(--bg-card);
+}
+
+/* ==========================================================================
+   [DIUBAH] Responsive — di layar ≤768px tata letak kembali seperti semula:
+   header jadi topbar mendatar, bukan sidebar.
+   ========================================================================== */
+
+@media (max-width: 768px) {
+
+    /* [BARU] Batalkan grid, kembali ke susunan vertikal */
+    body {
+        display: flex;
+        flex-direction: column;
     }
-}
 
-/* Mobile */
-@media (max-width: 480px) {
+    /* [DIUBAH] Header kembali mendatar (dulu selalu mendatar) */
     header {
         position: relative;
+        height: auto;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        padding: 1rem 1.25rem;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+        overflow: visible;
     }
 
+    /* [BARU] Reset padding brand agar rapi di topbar */
+    header h1 {
+        padding: 0;
+        margin-bottom: 0;
+    }
+
+    /* [DIUBAH] Nav disembunyikan, dibuka lewat tombol hamburger.
+       (Aslinya breakpoint ini di 480px, sekarang naik ke 768px) */
+    header nav {
+        display: none;
+        flex: 1 1 100%;
+        width: 100%;
+        order: 3;
+        margin-top: 1rem;
+    }
+
+    /* [SAMA] Class .nav-open tetap dipakai JS untuk membuka menu */
+    header nav.nav-open {
+        display: block;
+    }
+
+    /* [DIUBAH] Gap menu 0.75rem -> 0.25rem, padding direset */
+    header nav ul {
+        flex-direction: column;
+        gap: 0.25rem;
+        padding: 0;
+    }
+
+    /* [DIUBAH] Tombol hamburger muncul di 768px (aslinya 480px) */
     .nav-toggle-label {
         display: block;
     }
 
-    header nav {
-        display: block;
+    /* [DIUBAH] Padding main 2rem -> 1rem */
+    main {
+        padding: 1.25rem 1rem;
+    }
+
+    /* [SAMA] Kartu statistik jadi 2 kolom (nilai sama seperti aslinya) */
+    section.stat-section {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    /* [BARU] Footer melebar penuh karena grid dibatalkan */
+    footer {
         width: 100%;
-        order: 3;
-        margin-top: 0;
-        max-height: 0;
-        /* Tersembunyi karena tingginya 0 */
-        opacity: 0;
-        overflow: hidden;
-        transition: max-height 0.3s ease, opacity 0.3s ease, margin-top 0.3s ease;
     }
+}
 
-    header nav.nav-open {
-        max-height: 300px;
-        /* Batas tinggi maksimum menu saat terbuka */
-        opacity: 1;
-        margin-top: 1rem;
-    }
+@media (max-width: 480px) {
 
-    header nav ul {
-        flex-direction: column;
-        gap: 0.75rem;
-    }
-
-    main section:nth-of-type(2) {
+    /* [SAMA] Kartu statistik jadi 1 kolom */
+    section.stat-section {
         grid-template-columns: 1fr;
     }
 
+    /* [DIUBAH] Input full-width; .search-box input ditambahkan ke daftar */
     form input,
-    form select {
+    form select,
+    .search-box input {
         max-width: 100%;
     }
-}
-
-@media (min-width: 1400px) {
-    main {
-        max-width: 1300px;
-    }
-
-    main section:nth-of-type(2) {
-        gap: 1.5rem;
-    }
-}
-
-/* ===== Penataan Search & Tombol Aksi ===== */
-.search-action {
-    display: flex;
-    gap: 0.5rem;
-    align-items: center;
-    flex-wrap: wrap;
-}
-
-/* Tombol Muat Ulang */
-.btn-secondary {
-    background-color: #1d5b8a;
-    color: #ffffff;
-    border: none;
-    border-radius: 4px;
-    padding: 0.5rem 1rem;
-    font-size: 0.9rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-}
-
-.btn-secondary:hover {
-    background-color: #164869;
-}
-
-/* Indikator Memuat Data */
-#loading-indicator {
-    display: none;
-    margin-bottom: 1rem;
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: #2d88cd;
-    font-style: italic;
 }

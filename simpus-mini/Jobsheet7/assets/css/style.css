@@ -1,19 +1,24 @@
-/* ===== Reset & Base ===== */
+/* ============================================
+   RESET & BASE STYLES
+   ============================================ */
+
+/* Reset margin, padding, box-sizing untuk semua elemen */
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
 
+/* Base body styling */
 body {
-    font-family: 'Poppins', 'Futura', 'Century Gothic', sans-serif;
-    color: rgb(225, 225, 225);
-    background-color: rgb(25, 25, 25);
+    font-family: "Plus Jakarta Sans", "Segoe UI", Arial, sans-serif;
+    color: #2b2b2b;
+    background-color: #f5f6f8;
     line-height: 1.5;
 }
 
+/* Link styling */
 a {
-    color: #1d5b8a;
     text-decoration: none;
 }
 
@@ -21,48 +26,102 @@ a:hover {
     text-decoration: underline;
 }
 
-/* ===== Header & Navbar (Flexbox) ===== */
-header {
-    background-color: rgb(22, 73, 114);
-    color: rgb(225, 225, 225);
-    padding: 1.25rem 1.25rem;
+
+/* ============================================
+   SIDEBAR NAVIGATION
+   ============================================ */
+
+/* Sidebar container - fixed di kiri */
+#sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 240px;
+    height: 100vh;
+    background-color: #fff;
+    color: #2b2b2b;
+    overflow-y: auto;
+    z-index: 1000;
+    transition: transform 0.3s ease;
+    border-right: 1px solid #e8eaed;
+}
+
+/* Header sidebar dengan logo/judul */
+.sidebar-header {
+    padding: 1.25rem 1rem;
+    background-color: #fff;
+    border-bottom: 1px solid #eef0f3;
+}
+
+.sidebar-header h1 {
+    font-size: 1.15rem;
+    color: #4f93f7;
+    letter-spacing: 0.5px;
+    font-weight: 700;
+}
+
+/* Navigation menu list */
+#sidebar nav ul {
+    list-style: none;
+    padding: 0.75rem 0.5rem;
+}
+
+/* Menu item link */
+#sidebar nav li a {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-}
-
-header h1 {
-    font-size: 1.4rem;
-}
-
-header nav ul {
-    list-style: none;
-    display: flex;
-    gap: 1.25rem;
-}
-
-header nav a {
-    color: rgb(225, 225, 225);
-    font-weight: 600;
+    gap: 0.6rem;
+    padding: 0.7rem 0.85rem;
+    color: #6b7280;
+    font-weight: 500;
+    font-size: 0.95rem;
     border-radius: 8px;
-    padding: 0.3rem 0.3rem;
+    transition: background-color 0.2s, color 0.2s;
 }
 
-nav a:hover {
-    background-color: rgb(17, 57, 90);
-    transition: all 0.1s ease;
+#sidebar nav li a:hover {
+    background-color: #f3f5f8;
+    color: #1a2332;
+    text-decoration: none;
 }
 
-/* ===== Main Layout ===== */
+/* Overlay untuk mobile ketika sidebar terbuka */
+#sidebar-overlay {
+    display: none;
+}
+
+/* Hamburger button untuk mobile */
+.nav-toggle-label {
+    display: none;
+    position: fixed;
+    top: 0.75rem;
+    left: 0.75rem;
+    z-index: 1100;
+    font-size: 1.5rem;
+    color: #1a2332;
+    background: #fff;
+    border: 1px solid #e2e6ea;
+    border-radius: 6px;
+    padding: 0.25rem 0.5rem;
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+
+/* ============================================
+   MAIN LAYOUT
+   ============================================ */
+
+/* Main content area - offset kiri sesuai lebar sidebar */
 main {
+    margin-left: 240px;
     max-width: 1000px;
-    margin: 2rem auto;
-    padding: 0 1.25rem;
+    padding: 2rem 1.5rem;
 }
 
+/* Section card wrapper */
 section {
-    background-color: rgb(35, 35, 35);
+    background-color: #fff;
     border-radius: 8px;
     padding: 1.5rem;
     margin-bottom: 1.5rem;
@@ -71,113 +130,346 @@ section {
 
 section h2 {
     margin-bottom: 1rem;
-    color: #2d88cd;
+    color: #4f93f7;
 }
 
-/* ===== Kolom Pencarian ===== */
-.search-box {
-    margin-bottom: 1rem;
+
+/* ============================================
+   HERO / GREETING BANNER
+   ============================================ */
+
+/* Hero banner dengan gradient background */
+.hero {
+    background: linear-gradient(100deg, #4f93f7 0%, #3b7fe0 100%);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 1.5rem 1.75rem;
 }
 
-.search-box input {
-    width: 100%;
-    max-width: 320px;
-    padding: 0.5rem 0.75rem;
-    border: 1px solid #cdd4da;
-    border-radius: 4px;
+/* Hero text area */
+.hero .hero-text h2 {
+    color: #fff;
+    font-size: 1.5rem;
+    margin-bottom: 0.35rem;
 }
 
-/* ===== Kartu Statistik (CSS Grid) ===== */
+.hero .hero-text p {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.95rem;
+}
+
+/* Hero action buttons area */
+.hero-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+}
+
+/* Badge untuk menampilkan total data */
+.hero-badge {
+    background-color: #d9f21e;
+    color: #1a2332;
+    font-weight: 700;
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    white-space: nowrap;
+}
+
+/* Button di hero section */
+.hero-btn {
+    background-color: rgba(255, 255, 255, 0.18);
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 0.5rem 1.1rem;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    white-space: nowrap;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+.hero-btn:hover {
+    background-color: rgba(255, 255, 255, 0.32);
+    border-color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+}
+
+
+/* ============================================
+   STATISTICS CARDS (Grid Layout)
+   ============================================ */
+
+/* Section statistik menggunakan CSS Grid untuk 3 kolom */
 main section:nth-of-type(2) {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 1rem;
 }
 
-main section:nth-of-type(2) article {
-    background-color: rgb(24, 71, 110);
-    border-radius: 8px;
-    padding: 1.25rem;
-    text-align: center;
+/* Judul statistik span seluruh kolom */
+main section:nth-of-type(2) h2 {
+    grid-column: 1 / -1;
+    margin-bottom: 0;
 }
 
+/* Card statistik individual */
+main section:nth-of-type(2) article {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 1.25rem;
+    border: 1px solid #e2e6ea;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+main section:nth-of-type(2) article:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Label statistik (uppercase, small) */
 main section:nth-of-type(2) article h3 {
-    font-size: 0.95rem;
-    color: rgb(235, 235, 235);
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #7a8794;
     margin-bottom: 0.5rem;
 }
 
+/* Angka statistik (besar, bold) */
 main section:nth-of-type(2) article p {
-    font-size: 1.8rem;
+    font-size: 2rem;
     font-weight: 700;
-    color: rgb(225, 225, 225);
+    color: #1a2332;
+    line-height: 1;
 }
 
-/* ===== Tabel ===== */
+
+/* ============================================
+   TABLE STYLES
+   ============================================ */
+
+/* Base table styling */
 table {
     width: 100%;
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0;
+    border: 1px solid #e2e6ea;
+    border-radius: 10px;
+    overflow: hidden;
 }
 
-th,
-td {
-    text-align: left;
+th, td {
     padding: 0.65rem 0.75rem;
-    border-bottom: 1px solid #e2e6ea;
+    text-align: left;
+    border-bottom: 1px solid #e8eaed;
 }
 
+/* Table header */
+th {
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Table head dengan gradient */
 thead {
-    background-color: #1d5b8a;
-    color: rgb(225, 225, 225);
+    background: linear-gradient(135deg, #4f93f7 0%, #3b7fe0 100%);
+    color: #fff;
+}
+
+/* Table body rows */
+tbody tr {
+    transition: background-color 0.15s ease;
 }
 
 tbody tr:nth-child(even) {
-    background-color: #303030;
+    background-color: #f7f9fb;
 }
 
 tbody tr:hover {
-    background-color: #9f9f9f76;
+    background-color: #e7f0fd;
 }
 
-td button {
-    padding: 0.35rem 0.7rem;
-    margin-right: 0.35rem;
+/* Table wrapper untuk scroll horizontal */
+.table-responsive {
+    overflow-x: auto;
+}
+
+/* Member page specific table styling */
+.member-page .table-responsive {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.member-page thead th:first-child {
+    border-top-left-radius: 10px;
+}
+
+.member-page thead th:last-child {
+    border-top-right-radius: 10px;
+}
+
+.member-page tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.member-page tbody td {
+    color: #7a8794;
+}
+
+/* Icon untuk button edit & hapus di member table */
+.member-page .btn-edit::before {
+    content: "✏";
+}
+
+.member-page .btn-hapus::before {
+    content: "🗑";
+}
+
+
+/* ============================================
+   CARD GRID (Daftar Buku)
+   ============================================ */
+
+/* Grid layout untuk card buku - 3 kolom */
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
+/* Individual card item */
+.card-item {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 1.25rem;
+    border: 1px solid #e2e6ea;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.card-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Card title (judul buku) */
+.card-item h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #1a2332;
+    margin-bottom: 0.15rem;
+}
+
+/* Card metadata (pengarang, tahun) */
+.card-meta {
+    font-size: 0.85rem;
+    color: #7a8794;
+}
+
+/* Card stok info */
+.card-stok {
+    font-size: 0.9rem;
+    color: #2b2b2b;
+    margin-top: auto;
+    padding-top: 0.4rem;
+}
+
+/* Card actions container */
+.card-actions {
+    display: flex;
+    gap: 0.35rem;
+    margin-top: 0.5rem;
+}
+
+/* Empty state message */
+.empty-state {
+    color: #7a8794;
+    font-size: 0.95rem;
+}
+
+
+/* ============================================
+   BUTTONS
+   ============================================ */
+
+/* Table & card action buttons - base styling */
+td button,
+.card-actions button {
+    padding: 0.4rem 0.75rem;
+    margin-right: 0.3rem;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
     cursor: pointer;
     font-size: 0.85rem;
+    font-weight: 600;
+    transition: opacity 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
 }
 
-td button:first-of-type {
-    background-color: #417ef0;
+td button:hover,
+.card-actions button:hover {
+    opacity: 0.9;
+}
+
+/* Edit button - blue */
+td button:first-of-type,
+.btn-edit {
+    background-color: #4f93f7;
     color: #fff;
-    font-weight: 700;
-
+    display: inline-block;
+    padding: 0.35rem 0.7rem;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    text-decoration: none;
 }
 
-td button:last-of-type {
-    background-color: #d7433e;
+.btn-edit:hover {
+    background-color: #3b7fe0;
+    text-decoration: none;
+}
+
+/* Delete button - red */
+td button:last-of-type,
+.card-actions button,
+.btn-hapus {
+    background-color: #d9534f;
     color: #fff;
-    font-weight: 700;
-
 }
 
-.btn-detail {
-    background-color: #14c423;
-    color: #fff;
-    font-weight: 700;
-}
 
-/* ===== Form ===== */
+/* ============================================
+   FORMS - BASE STYLES
+   ============================================ */
+
+/* Form field container */
 form p {
     margin-bottom: 1rem;
 }
 
+/* Form label - base */
 form label {
+    display: block;
+    margin-bottom: 0.35rem;
     font-weight: 600;
-    color: rgb(225, 225, 225);
+    color: #444;
 }
 
+/* Form input & select - base (untuk form sederhana) */
 form input,
 form select {
     width: 100%;
@@ -186,10 +478,13 @@ form select {
     border: 1px solid #cdd4da;
     border-radius: 4px;
     font-size: 1rem;
+    color: #2b2b2b;
+    background-color: #fff;
 }
 
+/* Submit button */
 form button[type="submit"] {
-    background-color: #1d5b8a;
+    background-color: #4f93f7;
     color: #fff;
     border: none;
     padding: 0.6rem 1.5rem;
@@ -199,10 +494,228 @@ form button[type="submit"] {
 }
 
 form button[type="submit"]:hover {
-    background-color: #164869;
+    background-color: #3b7fe0;
 }
 
-/* ===== Pesan Error Validasi ===== */
+
+/* ============================================
+   FORM CARD (Tambah Buku/Anggota) - ENHANCED STYLES
+   ============================================ */
+
+/* Form card container - no padding karena ada sections internal */
+.form-card {
+    padding: 0;
+    overflow: hidden;
+}
+
+/* Form header dengan gradient */
+.form-head {
+    background: linear-gradient(100deg, #4f93f7 0%, #3b7fe0 100%);
+    color: #fff;
+    padding: 1.25rem 1.5rem;
+}
+
+.form-head h2 {
+    color: #fff;
+    font-size: 1.25rem;
+    margin: 0 0 0.15rem;
+}
+
+.form-head p {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.85rem;
+    margin: 0;
+}
+
+/* Form body content */
+.form-body {
+    padding: 1.5rem;
+}
+
+/* Form grid layout - 2 kolom */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+.form-grid p {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Full width field dalam grid */
+.form-grid .full {
+    grid-column: 1 / -1;
+}
+
+/* Form label override untuk form-card (uppercase, smaller) */
+.form-body form label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #7a8794;
+}
+
+/* Required field indicator */
+.form-body form label .req {
+    color: #d9534f;
+}
+
+/* Form input & select override untuk form-card (full width dengan enhanced styling) */
+.form-body form input,
+.form-body form select {
+    max-width: 100%;
+    padding: 0.65rem 0.8rem;
+    border: 1px solid #cdd4da;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    background-color: #fbfcfd;
+    color: #2b2b2b;
+}
+
+.form-body form input:focus,
+.form-body form select:focus {
+    outline: none;
+    border-color: #4f93f7;
+    box-shadow: 0 0 0 3px rgba(79, 147, 247, 0.15);
+    background-color: #fff;
+}
+
+.form-body form input::placeholder {
+    color: #a6b0bb;
+}
+
+/* Form actions container (submit, cancel) */
+.form-actions {
+    display: flex;
+    gap: 0.6rem;
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid #e8eaed;
+    align-items: center;
+}
+
+/* Simpan button */
+.btn-simpan {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background-color: #4f93f7;
+    color: #fff;
+    border: none;
+    padding: 0.65rem 1.5rem;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.btn-simpan:hover {
+    background-color: #3b7fe0;
+}
+
+.btn-simpan:active {
+    transform: scale(0.98);
+}
+
+/* Batal button */
+.btn-batal {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background-color: #f3f5f8;
+    color: #6b7280;
+    border: 1px solid #e2e6ea;
+    padding: 0.65rem 1.5rem;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.btn-batal:hover {
+    background-color: #e7ebee;
+    color: #1a2332;
+    text-decoration: none;
+}
+
+/* Form note text (required fields notice) */
+.form-note {
+    margin: 0;
+    font-size: 0.8rem;
+    color: #a6b0bb;
+    margin-left: auto;
+}
+
+
+/* ============================================
+   SEARCH BOX
+   ============================================ */
+
+.search-box {
+    margin-bottom: 1rem;
+}
+
+.search-box label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #7a8794;
+    margin-bottom: 0.5rem;
+}
+
+.search-box input {
+    width: 100%;
+    max-width: 320px;
+    padding: 0.65rem 0.8rem;
+    border: 1px solid #cdd4da;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    background-color: #fbfcfd;
+    color: #2b2b2b;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.search-box input:focus {
+    outline: none;
+    border-color: #4f93f7;
+    box-shadow: 0 0 0 3px rgba(79, 147, 247, 0.15);
+    background-color: #fff;
+}
+
+
+/* ============================================
+   FLASH MESSAGES & ERRORS
+   ============================================ */
+
+/* Flash message container */
+.flash {
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+    font-weight: 500;
+}
+
+/* Success message - green */
+.flash-success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+/* Error message - red */
+.flash-error {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+/* Validation error text */
 .error {
     display: block;
     color: #d9534f;
@@ -210,122 +723,103 @@ form button[type="submit"]:hover {
     margin-top: 0.25rem;
 }
 
-/* ===== Footer ===== */
+
+/* ============================================
+   FOOTER
+   ============================================ */
+
 footer {
     text-align: center;
     padding: 1.25rem;
-    color: #c7c7c7;
+    color: #7a8794;
     font-size: 0.9rem;
 }
 
-/* ===== Hamburger Menu (checkbox hack) ===== */
-/* .nav-toggle {
-    display: none;
-} */
 
-.nav-toggle-label {
-    display: none;
-    font-size: 1.6rem;
-    color: #fff;
-    background: none;
-    border: none;
-    cursor: pointer;
-}
+/* ============================================
+   RESPONSIVE BREAKPOINTS
+   ============================================ */
 
-/* ===== Responsive Breakpoints ===== */
-
-/* Tablet ke bawah */
-@media (max-width: 900px) {
+/* Tablet dan bawah (768px) */
+@media (max-width: 768px) {
+    /* Statistik cards jadi 2 kolom */
     main section:nth-of-type(2) {
         grid-template-columns: repeat(2, 1fr);
     }
-}
 
-/* Mobile */
-@media (max-width: 480px) {
-    header {
-        position: relative;
+    /* Card buku jadi 2 kolom */
+    .card-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
 
+    /* Tampilkan hamburger menu */
     .nav-toggle-label {
         display: block;
     }
 
-    header nav {
+    /* Sidebar default tersembunyi */
+    #sidebar {
+        transform: translateX(-100%);
+    }
+
+    /* Sidebar open state */
+    #sidebar.sidebar-open {
+        transform: translateX(0);
+    }
+
+    /* Overlay ketika sidebar terbuka */
+    #sidebar-overlay.overlay-open {
         display: block;
-        width: 100%;
-        order: 3;
-        margin-top: 0;
-        max-height: 0;
-        /* Tersembunyi karena tingginya 0 */
-        opacity: 0;
-        overflow: hidden;
-        transition: max-height 0.3s ease, opacity 0.3s ease, margin-top 0.3s ease;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.4);
+        z-index: 999;
     }
 
-    header nav.nav-open {
-        max-height: 300px;
-        /* Batas tinggi maksimum menu saat terbuka */
-        opacity: 1;
-        margin-top: 1rem;
+    /* Main content full width dengan offset top untuk hamburger */
+    main {
+        margin-left: 0;
+        padding-top: 3.5rem;
     }
+}
 
-    header nav ul {
-        flex-direction: column;
-        gap: 0.75rem;
-    }
-
+/* Mobile (480px) */
+@media (max-width: 480px) {
+    /* Statistik cards jadi 1 kolom */
     main section:nth-of-type(2) {
         grid-template-columns: 1fr;
     }
 
+    /* Card buku jadi 1 kolom */
+    .card-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* Form input full width */
     form input,
     form select {
         max-width: 100%;
     }
-}
 
-@media (min-width: 1400px) {
-    main {
-        max-width: 1300px;
+    /* Form grid jadi 1 kolom */
+    .form-grid {
+        grid-template-columns: 1fr;
     }
 
-    main section:nth-of-type(2) {
-        gap: 1.5rem;
+    /* Form actions stack vertical */
+    .form-actions {
+        flex-direction: column-reverse;
+        align-items: stretch;
     }
-}
 
-/* ===== Penataan Search & Tombol Aksi ===== */
-.search-action {
-    display: flex;
-    gap: 0.5rem;
-    align-items: center;
-    flex-wrap: wrap;
-}
+    .form-actions .btn-simpan,
+    .form-actions .btn-batal {
+        justify-content: center;
+    }
 
-/* Tombol Muat Ulang */
-.btn-secondary {
-    background-color: #1d5b8a;
-    color: #ffffff;
-    border: none;
-    border-radius: 4px;
-    padding: 0.5rem 1rem;
-    font-size: 0.9rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-}
-
-.btn-secondary:hover {
-    background-color: #164869;
-}
-
-/* Indikator Memuat Data */
-#loading-indicator {
-    display: none;
-    margin-bottom: 1rem;
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: #2d88cd;
-    font-style: italic;
+    /* Form note center aligned */
+    .form-note {
+        margin-left: 0;
+        text-align: center;
+    }
 }

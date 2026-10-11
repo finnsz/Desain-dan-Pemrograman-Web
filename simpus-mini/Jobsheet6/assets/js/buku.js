@@ -5,10 +5,10 @@ async function muatDaftarBuku() {
     if (!tbody) return;
 
     loading.style.display = "block";
-    tbody.innerHTML = ""; // Mengosongkan isi tabel sebelum memuat data baru
+    tbody.innerHTML = "";
 
     try {
-        // Simulasi delay jaringan agar loading indicator terlihat
+        // simulasi delay jaringan agar loading indicator terlihat
         await new Promise((resolve) => setTimeout(resolve, 600));
 
         const res = await fetch("../data/buku.json");
@@ -24,7 +24,6 @@ async function muatDaftarBuku() {
                 "<td>" + buku.pengarang + "</td>" +
                 "<td>" + buku.tahun + "</td>" +
                 "<td>" + buku.stok + "</td>" +
-                "<td>" + (buku.kategori || "-") + "</td>" +
                 "<td>" +
                 "<button type=\"button\">Edit</button> " +
                 "<button type=\"button\" class=\"btn-hapus\">Hapus</button>" +
@@ -39,16 +38,4 @@ async function muatDaftarBuku() {
     }
 }
 
-// Inisialisasi event listener saat halaman dimuat
-document.addEventListener("DOMContentLoaded", function () {
-    // 1. Muat data otomatis pertama kali
-    muatDaftarBuku();
-
-    // 2. Pasang event listener pada tombol "Muat Ulang"
-    const reloadBtn = document.getElementById("btn-reload");
-    if (reloadBtn) {
-        reloadBtn.addEventListener("click", function () {
-            muatDaftarBuku();
-        });
-    }
-});
+document.addEventListener("DOMContentLoaded", muatDaftarBuku);

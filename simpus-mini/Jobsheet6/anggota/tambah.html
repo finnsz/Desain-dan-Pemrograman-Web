@@ -12,11 +12,12 @@
         <button type="button" id="nav-toggle-btn" class="nav-toggle-label" aria-label="Menu">&#9776;</button>
         <nav>
             <ul>
+                <!-- [DIUBAH] Menu sidebar diseragamkan: 5 item dengan urutan sama di semua halaman -->
                 <li><a href="../index.html">Beranda</a></li>
-                <li><a href="../buku/list.html">Daftar Buku</a></li>
                 <li><a href="../buku/tambah.html">Tambah Buku</a></li>
+                <li><a href="tambah.html" class="active">Tambah Anggota</a></li>
+                <li><a href="../buku/list.html">Daftar Buku</a></li>
                 <li><a href="list.html">Daftar Anggota</a></li>
-                <li><a href="tambah.html">Tambah Anggota</a></li>
             </ul>
         </nav>
     </header>
@@ -24,21 +25,22 @@
     <main>
         <section>
             <h2>Tambah Anggota</h2>
-            <form id="form-tambah" novalidate>
+            <form id="form-tambah">
+                <!-- [DIUBAH] Tag <br> antara label dan input dihapus; spacing kini diatur CSS (margin-bottom pada label) -->
                 <p>
-                    <label for="nama">Nama</label><br>
-                    <input type="text" id="nama" name="nama">
+                    <label for="nama">Nama</label>
+                    <input type="text" id="nama" name="nama" required>
                 </p>
                 <p>
-                    <label for="no_anggota">No. Anggota</label><br>
-                    <input type="text" id="no_anggota" name="no_anggota">
+                    <label for="no_anggota">No. Anggota</label>
+                    <input type="text" id="no_anggota" name="no_anggota" required>
                 </p>
                 <p>
-                    <label for="alamat">Alamat</label><br>
+                    <label for="alamat">Alamat</label>
                     <input type="text" id="alamat" name="alamat">
                 </p>
                 <p>
-                    <label for="no_hp">No. HP</label><br>
+                    <label for="no_hp">No. HP</label>
                     <input type="text" id="no_hp" name="no_hp">
                 </p>
                 <p>

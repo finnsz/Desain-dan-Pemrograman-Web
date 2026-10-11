@@ -1,22 +1,21 @@
-# Jobsheet 6
- <b>Nama: Geraldi Rama Nugraha<br>
- Kelas: TI 2D<br>
- NIM: 254107020100</b>
+# Jobsheet 6 — Fetch API & JSON
 
-## 8.4 Ide Latihan Tambahan (Opsional)
-<b> 1. menambah tombol muat ulang
+Sub-CPMK: Menerapkan komunikasi asinkron (AJAX/fetch, JSON).
 
-<img width="957" height="180" alt="image" src="https://github.com/user-attachments/assets/2c3b5d33-5528-4a82-8069-d2fd1db06998" />
+## Perubahan dari Jobsheet 5
+- Tambah `data/buku.json` (10 objek) dan `data/anggota.json` (4 objek) sebagai pengganti sementara API sungguhan.
+- `buku/list.html` & `anggota/list.html`: `<tbody>` dikosongkan, baris kini dirender dinamis oleh `assets/js/buku.js` / `assets/js/anggota.js` menggunakan `fetch` + `async/await`.
+- Loading indicator (`#loading-indicator`) tampil selama proses fetch (disimulasikan dengan delay 600ms).
+- Penanganan error (`try/catch`) menampilkan pesan di dalam tabel bila fetch gagal.
+- `app.js`: `initHapusConfirm` diubah ke **event delegation** (`document.addEventListener("click", ...)`) karena tombol Hapus sekarang berada di baris yang dibuat setelah halaman selesai dimuat.
 
-<img width="445" height="387" alt="image" src="https://github.com/user-attachments/assets/718da3a1-841b-4949-bbd4-670cf096dd7a" />
+## Cara menjalankan
+**Penting:** `fetch()` ke file lokal akan diblokir kebijakan CORS jika dibuka langsung dengan `file://`. Jalankan lewat server lokal, misalnya:
+```bash
+php -S localhost:8000
+```
+lalu buka `http://localhost:8000/index.html`. Bisa juga memakai ekstensi "Live Server" di VSCode.
 
-<img width="633" height="318" alt="image" src="https://github.com/user-attachments/assets/326593e2-73ea-456f-be32-cadfbbb345dd" />
-
-
-3. menambah kolom kategori buku
-
-<img width="581" height="127" alt="image" src="https://github.com/user-attachments/assets/42573e53-ea90-4d41-9cec-23e39d9cd125" />
-
-<img width="810" height="352" alt="image" src="https://github.com/user-attachments/assets/be7c8cfd-bb15-4dbf-9c26-d87253ac8851" />
-
-<img width="422" height="228" alt="image" src="https://github.com/user-attachments/assets/65fa9edb-4def-43e7-b4e2-e0c993bfe783" />
+## Catatan
+- Uji error handling dengan mengganti sementara nama file di `fetch(...)` menjadi nama yang salah.
+- Pola `fetch` + `async/await` di sini akan dipakai ulang untuk memanggil endpoint PHP sungguhan mulai Jobsheet 9 (setelah back-end PostgreSQL siap di Jobsheet 8), meskipun mulai Jobsheet 7 rendering utama berpindah ke server-side PHP.

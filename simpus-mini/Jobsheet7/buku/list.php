@@ -1,44 +1,39 @@
 <?php
-$base = '../';
-$title = 'SIMPUS-Mini | Daftar Buku';
-include '../includes/header.php';
+$page_title = "Daftar Buku";
+include __DIR__ . '/../includes/header.php';
 
-$buku_list = $_SESSION['buku'] ?? [];
+$flash = $_SESSION['flash'] ?? null;
+unset($_SESSION['flash']);
+$daftarBuku = $_SESSION['buku'] ?? [];
 ?>
+        <section class="card-list-section">
+            <h2>Daftar Buku</h2>
 
-<section>
-    <h2>Daftar Buku</h2>
+            <?php if ($flash): ?>
+                <p class="flash flash-<?php echo $flash['type']; ?>"><?php echo $flash['pesan']; ?></p>
+            <?php endif; ?>
 
-    <div class="table-responsive">
-        <table>
-            <thead>
-                <tr>
-                    <th>Judul</th>
-                    <th>Pengarang</th>
-                    <th>Tahun</th>
-                    <th>ISBN</th>
-                    <th>Stok</th>
-                    <th>Kategori</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php if (empty($buku_list)): ?>
-                    <tr><td colspan="6">Belum ada data buku.</td></tr>
-                <?php else: ?>
-                    <?php foreach ($buku_list as $buku): ?>
-                        <tr>
-                            <td><?= htmlspecialchars($buku['judul']) ?></td>
-                            <td><?= htmlspecialchars($buku['pengarang']) ?></td>
-                            <td><?= htmlspecialchars($buku['tahun']) ?></td>
-                            <td><?= htmlspecialchars($buku['isbn'] ?? '-') ?></td>
-                            <td><?= htmlspecialchars($buku['stok']) ?></td>
-                            <td><?= htmlspecialchars($buku['kategori']) ?></td>
-                        </tr>
-                    <?php endforeach; ?>
-                <?php endif; ?>
-            </tbody>
-        </table>
-    </div>
-</section>
+            <div class="search-box">
+                <label for="search-input">Cari Judul Buku</label>
+                <input type="text" id="search-input" placeholder="Ketik judul buku...">
+            </div>
 
-<?php include '../includes/footer.php'; ?>
+            <?php if (empty($daftarBuku)): ?>
+                <p class="empty-state">Belum ada data buku. Silakan tambah lewat menu "Tambah Buku".</p>
+            <?php else: ?>
+            <div class="card-grid">
+                <?php foreach ($daftarBuku as $buku): ?>
+                <article class="card-item">
+                    <h3><?php echo htmlspecialchars($buku['judul']); ?></h3>
+                    <p class="card-meta"><?php echo htmlspecialchars($buku['pengarang']); ?> &middot; <?php echo htmlspecialchars($buku['tahun']); ?></p>
+                    <p class="card-stok">Stok: <strong><?php echo (int)$buku['stok']; ?></strong></p>
+                    <div class="card-actions">
+                        <a href="<?php echo $base; ?>buku/tambah.php" class="btn-edit">Edit</a>
+                        <button type="button" class="btn-hapus" onclick="return confirm('Yakin hapus buku ini?')">Hapus</button>
+                    </div>
+                </article>
+                <?php endforeach; ?>
+            </div>
+            <?php endif; ?>
+        </section>
+<?php include __DIR__ . '/../includes/footer.php'; ?>

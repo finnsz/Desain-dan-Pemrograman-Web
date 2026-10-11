@@ -1,16 +1,34 @@
-// ===== 1. Hamburger menu =====
+// ===== Sidebar toggle (mobile) =====
 function initNavToggle() {
     const toggleBtn = document.getElementById("nav-toggle-btn");
-    const nav = document.querySelector("header nav");
-    if (!toggleBtn || !nav) return;
+    const sidebar = document.getElementById("sidebar");
+    const overlay = document.getElementById("sidebar-overlay");
+    if (!toggleBtn || !sidebar) return;
+
+    function closeSidebar() {
+        sidebar.classList.remove("sidebar-open");
+        if (overlay) overlay.classList.remove("overlay-open");
+    }
 
     toggleBtn.addEventListener("click", function () {
-        nav.classList.toggle("nav-open");
+        const isOpen = sidebar.classList.toggle("sidebar-open");
+        if (overlay) overlay.classList.toggle("overlay-open", isOpen);
+    });
+
+    if (overlay) {
+        overlay.addEventListener("click", closeSidebar);
+    }
+
+    // Tutup sidebar saat link diklik (mobile)
+    sidebar.querySelectorAll("nav a").forEach(function (link) {
+        link.addEventListener("click", function () {
+            if (window.innerWidth <= 768) closeSidebar();
+        });
     });
 }
 
-// ===== 2. Konfirmasi hapus =====
-// Memakai event delegation di document karena baris tabel sekarang
+// ===== Konfirmasi hapus (front-end only, belum ke server) =====
+// Memakai event delegation di document karena baris tabel / card sekarang
 // dirender dinamis via fetch (lihat buku.js/anggota.js) sehingga
 // tombol .btn-hapus belum tentu ada saat DOMContentLoaded.
 function initHapusConfirm() {
@@ -18,33 +36,31 @@ function initHapusConfirm() {
         const btn = e.target.closest(".btn-hapus");
         if (!btn) return;
 
-        const row = btn.closest("tr");
-        const nama = row ? row.querySelector("td")?.textContent : "data ini";
+        const target = btn.closest("tr") || btn.closest(".card-item");
+        const nama = target ? target.textContent.trim() : "data ini";
         const yakin = confirm("Yakin ingin menghapus \"" + nama + "\"?");
-        if (yakin && row) {
-            row.remove();
+        if (yakin && target) {
+            target.remove();
         }
     });
 }
 
-// ===== 3. Filter/pencarian tabel real-time =====
+// ===== Filter/pencarian real-time (tabel & card) =====
 function initTableFilter() {
     const input = document.getElementById("search-input");
-    // Fleksibel: mencari table langsung baik dengan atau tanpa .table-responsive
-    const table = document.querySelector(".table-responsive table") || document.querySelector("table");
-    if (!input || !table) return;
+    const rows = document.querySelectorAll(".table-responsive table tbody tr, .card-grid .card-item");
+    if (!input || rows.length === 0) return;
 
     input.addEventListener("keyup", function () {
         const keyword = input.value.toLowerCase();
-        const rows = table.querySelectorAll("tbody tr");
-        rows.forEach(function (row) {
-            const teks = row.textContent.toLowerCase();
-            row.style.display = teks.includes(keyword) ? "" : "none";
+        rows.forEach(function (item) {
+            const teks = item.textContent.toLowerCase();
+            item.style.display = teks.includes(keyword) ? "" : "none";
         });
     });
 }
 
-// ===== 4. Validasi form =====
+// ===== Validasi form (client-side) =====
 function tampilkanError(input, pesan) {
     hapusError(input);
     const span = document.createElement("span");
@@ -67,32 +83,42 @@ function initValidasiForm() {
     form.addEventListener("submit", function (e) {
         let valid = true;
 
-        // Validasi Nama atau Judul
-        const fieldUtama = form.querySelector("[name='nama'], [name='judul']");
-        if (fieldUtama && fieldUtama.value.trim() === "") {
-            tampilkanError(fieldUtama, "Field ini wajib diisi.");
+        const judul = form.querySelector("[name='judul'], [name='nama']");
+        if (judul && judul.value.trim() === "") {
+            tampilkanError(judul, "Field ini wajib diisi.");
             valid = false;
-        } else if (fieldUtama) {
-            hapusError(fieldUtama);
+        } else if (judul) {
+            hapusError(judul);
         }
 
-        // Validasi No Anggota (jika di halaman anggota)
-        const noAnggota = form.querySelector("[name='no_anggota']");
-        if (noAnggota && noAnggota.value.trim() === "") {
-            tampilkanError(noAnggota, "No. Anggota wajib diisi.");
+        const pengarang = form.querySelector("[name='pengarang']");
+        if (pengarang && pengarang.value.trim() === "") {
+            tampilkanError(pengarang, "Pengarang wajib diisi.");
             valid = false;
-        } else if (noAnggota) {
-            hapusError(noAnggota);
+        } else if (pengarang) {
+            hapusError(pengarang);
         }
 
-        // Validasi ISBN (hanya angka dan tanda hubung jika diisi)
-        const isbn = form.querySelector("[name='isbn']");
-        const regexIsbn = /^[0-9-]+$/;
-        if (isbn && isbn.value.trim() !== "" && !regexIsbn.test(isbn.value.trim())) {
-            tampilkanError(isbn, "ISBN hanya boleh berisi angka dan tanda hubung (-).");
-            valid = false;
-        } else if (isbn) {
-            hapusError(isbn);
+        const tahun = form.querySelector("[name='tahun']");
+        if (tahun) {
+            const nilai = parseInt(tahun.value, 10);
+            if (isNaN(nilai) || nilai < 1900 || nilai > 2026) {
+                tampilkanError(tahun, "Tahun harus di antara 1900-2026.");
+                valid = false;
+            } else {
+                hapusError(tahun);
+            }
+        }
+
+        const stok = form.querySelector("[name='stok']");
+        if (stok) {
+            const nilai = parseInt(stok.value, 10);
+            if (isNaN(nilai) || nilai < 0) {
+                tampilkanError(stok, "Stok tidak boleh negatif.");
+                valid = false;
+            } else {
+                hapusError(stok);
+            }
         }
 
         if (!valid) {

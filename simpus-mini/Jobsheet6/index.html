@@ -1,59 +1,69 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>SIMPUS-Mini | Beranda</title>
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
-
 <body>
     <header>
         <h1>SIMPUS-Mini</h1>
         <button type="button" id="nav-toggle-btn" class="nav-toggle-label" aria-label="Menu">&#9776;</button>
         <nav>
             <ul>
-                <li><a href="index.html">Beranda</a></li>
-                <li><a href="buku/list.html">Daftar Buku</a></li>
+                <!-- [DIUBAH] Menu sidebar diseragamkan: 5 item dengan urutan sama di semua halaman -->
+                <li><a href="index.html" class="active">Beranda</a></li>
                 <li><a href="buku/tambah.html">Tambah Buku</a></li>
-                <li><a href="anggota/list.html">Daftar Anggota</a></li>
                 <li><a href="anggota/tambah.html">Tambah Anggota</a></li>
+                <li><a href="buku/list.html">Daftar Buku</a></li>
+                <li><a href="anggota/list.html">Daftar Anggota</a></li>
             </ul>
         </nav>
     </header>
 
     <main>
-        <section>
-            <h2>Selamat Datang di Sistem Perpustakaan Mini</h2>
-            <p>Aplikasi sederhana untuk mengelola data buku dan anggota perpustakaan.</p>
+        <!-- [DIUBAH] class="welcome-banner" ditambahkan: section ini jadi banner gradient biru -->
+        <section class="welcome-banner">
+            <div class="welcome-text">
+                <h2>Selamat Datang di Sistem Perpustakaan Mini</h2>
+                <p>Aplikasi sederhana untuk mengelola data buku dan anggota perpustakaan.</p>
+            </div>
+            <!-- [BARU] Tombol cepat ke halaman Tambah Buku & Tambah Anggota yang sudah ada -->
+            <div class="welcome-actions">
+                <a href="buku/tambah.html" class="btn-welcome">+ Tambah Buku</a>
+                <a href="anggota/tambah.html" class="btn-welcome">+ Tambah Anggota</a>
+            </div>
         </section>
 
-        <section>
+        <!-- [BARU] Kutipan motivasi perpustakaan (HTML + CSS saja) -->
+        <blockquote class="quote-banner">
+            <p>&ldquo;Buku adalah jendela dunia, dan perpustakaan adalah gerbangnya.&rdquo;</p>
+            <cite>&mdash; Anonim</cite>
+        </blockquote>
+
+        <!-- [DIUBAH] class="stat-section" ditambahkan: section ini jadi grid kartu statistik -->
+        <section class="stat-section">
             <h2>Ringkasan</h2>
             <article>
                 <h3>Total Buku</h3>
-                <p>21</p>
+                <p>12</p>
             </article>
             <article>
                 <h3>Total Anggota</h3>
-                <p>2</p>
+                <p>8</p>
             </article>
             <article>
                 <h3>Sedang Dipinjam</h3>
                 <p>3</p>
             </article>
-            <article>
-                <h3>Buku Terlambat</h3>
-                <p>5</p>
-            </article>
         </section>
+
     </main>
 
     <footer>
-        <p>&copy; 2026 SIMPUS-Mini &mdash; Jobsheet 6   </p>
+        <p>&copy; 2026 SIMPUS-Mini &mdash; Jobsheet 6</p>
     </footer>
     <script src="assets/js/app.js"></script>
 </body>
-
 </html>

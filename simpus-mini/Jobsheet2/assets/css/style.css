@@ -6,14 +6,14 @@
 }
 
 body {
-  font-family: 'Poppins', 'Futura', 'Century Gothic', sans-serif;
-    color: rgb(225, 225, 225);
-    background-color: rgb(25, 25, 25);
+    font-family: "Segoe UI", Arial, sans-serif;
+    color: #111827;
+    background-color: #f8f9fb;
     line-height: 1.5;
 }
 
 a {
-    color: #1d5b8a;
+    color: #3b82f6;
     text-decoration: none;
 }
 
@@ -23,9 +23,9 @@ a:hover {
 
 /* ===== Header & Navbar (Flexbox) ===== */
 header {
-    background-color: rgb(22, 73, 114);
-    color: rgb(225, 225, 225);
-    padding: 1.25rem 1.25rem;
+    background-color: #ffffff;
+    color: #111827;
+    padding: 1rem 1.5rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -34,6 +34,7 @@ header {
 
 header h1 {
     font-size: 1.4rem;
+    color: #3b82f6;
 }
 
 header nav ul {
@@ -43,26 +44,19 @@ header nav ul {
 }
 
 header nav a {
-    color: rgb(225, 225, 225);
-    font-weight: 600;
-    border-radius: 8px;
-    padding: 0.3rem 0.3rem;
-}
-
-nav a:hover {
-    background-color: rgb(17, 57, 90);
-    transition: all 0.1s ease;
+    color: #6b7280;
+    font-weight: 500;
 }
 
 /* ===== Main Layout ===== */
 main {
     max-width: 1000px;
     margin: 2rem auto;
-    padding: 0 1.25rem;
+    padding: 0 1.5rem;
 }
 
 section {
-    background-color: rgb(35, 35, 35);
+    background-color: #ffffff;
     border-radius: 8px;
     padding: 1.5rem;
     margin-bottom: 1.5rem;
@@ -71,18 +65,31 @@ section {
 
 section h2 {
     margin-bottom: 1rem;
-    color: #2d88cd;
+    color: #111827;
+}
+
+/* ===== Kartu Sambutan (hanya section yang berisi paragraf langsung) ===== */
+main section:has(> p) {
+    background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+}
+
+main section:has(> p) h2 {
+    color: #ffffff;
+}
+
+main section:has(> p) p {
+    color: rgba(255, 255, 255, 0.95);
 }
 
 /* ===== Kartu Statistik (CSS Grid) ===== */
 main section:nth-of-type(2) {
     display: grid;
-    grid-template-columns: repeat(1, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 1rem;
 }
 
 main section:nth-of-type(2) article {
-    background-color: rgb(24, 71, 110);
+    background-color: #dbeafe;
     border-radius: 8px;
     padding: 1.25rem;
     text-align: center;
@@ -90,14 +97,14 @@ main section:nth-of-type(2) article {
 
 main section:nth-of-type(2) article h3 {
     font-size: 0.95rem;
-    color: rgb(235, 235, 235);
+    color: #6b7280;
     margin-bottom: 0.5rem;
 }
 
 main section:nth-of-type(2) article p {
     font-size: 1.8rem;
     font-weight: 700;
-    color: rgb(225, 225, 225);
+    color: #111827;
 }
 
 /* ===== Tabel ===== */
@@ -109,20 +116,20 @@ table {
 th, td {
     text-align: left;
     padding: 0.65rem 0.75rem;
-    border-bottom: 1px solid #e2e6ea;
+    border-bottom: 1px solid #e5e7eb;
 }
 
 thead {
-    background-color: #1d5b8a;
-    color: rgb(225, 225, 225);
+    background-color: #3b82f6;
+    color: #ffffff;
 }
 
 tbody tr:nth-child(even) {
-    background-color: #303030;
+    background-color: #f9fafb;
 }
 
 tbody tr:hover {
-    background-color: #9f9f9f76;
+    background-color: #dbeafe;
 }
 
 td button {
@@ -135,23 +142,13 @@ td button {
 }
 
 td button:first-of-type {
-    background-color: #417ef0;
-    color: #fff;
-    font-weight: 700;
-
+    background-color: #dbeafe;
+    color: #3b82f6;
 }
 
 td button:last-of-type {
-    background-color: #d7433e;
-    color: #fff;
-    font-weight: 700;
-
-}
-
-.btn-detail {
-    background-color: #14c423;
-    color: #fff;
-    font-weight: 700;
+    background-color: #fee2e2;
+    color: #dc2626;
 }
 
 /* ===== Form ===== */
@@ -160,8 +157,10 @@ form p {
 }
 
 form label {
+    display: block;
+    margin-bottom: 0.35rem;
     font-weight: 600;
-    color: rgb(225, 225, 225);
+    color: #6b7280;
 }
 
 form input,
@@ -169,14 +168,16 @@ form select {
     width: 100%;
     max-width: 400px;
     padding: 0.55rem 0.7rem;
-    border: 1px solid #cdd4da;
+    border: 1px solid #e5e7eb;
     border-radius: 4px;
     font-size: 1rem;
+    color: #111827;
+    background-color: #ffffff;
 }
 
 form button[type="submit"] {
-    background-color: #1d5b8a;
-    color: #fff;
+    background-color: #3b82f6;
+    color: #ffffff;
     border: none;
     padding: 0.6rem 1.5rem;
     border-radius: 4px;
@@ -185,14 +186,13 @@ form button[type="submit"] {
 }
 
 form button[type="submit"]:hover {
-    background-color: #164869;
+    background-color: #2563eb;
 }
 
 /* ===== Footer ===== */
 footer {
     text-align: center;
     padding: 1.25rem;
-    color: #c7c7c7;
+    color: #9ca3af;
     font-size: 0.9rem;
 }
-

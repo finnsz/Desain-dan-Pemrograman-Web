@@ -1,24 +1,23 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>SIMPUS-Mini | Tambah Buku</title>
     <link rel="stylesheet" href="../assets/css/style.css">
 </head>
-
 <body>
     <header>
         <h1>SIMPUS-Mini</h1>
         <button type="button" id="nav-toggle-btn" class="nav-toggle-label" aria-label="Menu">&#9776;</button>
         <nav>
             <ul>
+                <!-- [DIUBAH] Menu sidebar diseragamkan: 5 item dengan urutan sama di semua halaman -->
                 <li><a href="../index.html">Beranda</a></li>
-                <li><a href="list.html">Daftar Buku</a></li>
-                <li><a href="tambah.html">Tambah Buku</a></li>
-                <li><a href="../anggota/list.html">Daftar Anggota</a></li>
+                <li><a href="tambah.html" class="active">Tambah Buku</a></li>
                 <li><a href="../anggota/tambah.html">Tambah Anggota</a></li>
+                <li><a href="list.html">Daftar Buku</a></li>
+                <li><a href="../anggota/list.html">Daftar Anggota</a></li>
             </ul>
         </nav>
     </header>
@@ -26,29 +25,32 @@
     <main>
         <section>
             <h2>Tambah Buku</h2>
-            <form id="form-tambah" novalidate>
+            <!-- [DIUBAH] Tag <br> setelah setiap <label> dihapus;
+                 Gaya SimKos sudah membuat label display:block, sehingga <br> tidak perlu
+                 dan justru menyisakan jarak ganda. -->
+            <form id="form-tambah">
                 <p>
-                    <label for="judul">Judul</label><br>
-                    <input type="text" id="judul" name="judul">
+                    <label for="judul">Judul</label>
+                    <input type="text" id="judul" name="judul" required>
                 </p>
                 <p>
-                    <label for="pengarang">Pengarang</label><br>
-                    <input type="text" id="pengarang" name="pengarang">
+                    <label for="pengarang">Pengarang</label>
+                    <input type="text" id="pengarang" name="pengarang" required>
                 </p>
                 <p>
-                    <label for="tahun">Tahun Terbit</label><br>
-                    <input type="number" id="tahun" name="tahun">
+                    <label for="tahun">Tahun Terbit</label>
+                    <input type="number" id="tahun" name="tahun" min="1900" max="2026" required>
                 </p>
                 <p>
-                    <label for="isbn">ISBN</label><br>
+                    <label for="isbn">ISBN</label>
                     <input type="text" id="isbn" name="isbn">
                 </p>
                 <p>
-                    <label for="stok">Stok</label><br>
-                    <input type="number" id="stok" name="stok">
+                    <label for="stok">Stok</label>
+                    <input type="number" id="stok" name="stok" min="0" required>
                 </p>
                 <p>
-                    <label for="kategori">Kategori</label><br>
+                    <label for="kategori">Kategori</label>
                     <select id="kategori" name="kategori">
                         <option value="fiksi">Fiksi</option>
                         <option value="non-fiksi">Non-Fiksi</option>
@@ -67,5 +69,4 @@
     </footer>
     <script src="../assets/js/app.js"></script>
 </body>
-
 </html>

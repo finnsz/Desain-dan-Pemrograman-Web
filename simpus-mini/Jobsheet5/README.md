@@ -1,13 +1,17 @@
-# Jobsheet 5
- <b>Nama: Geraldi Rama Nugraha<br>
- Kelas: TI 2D<br>
- NIM: 254107020100</b>
+# Jobsheet 5 — JavaScript DOM & Event
 
-## 8.4 Ide Latihan Tambahan (Opsional)
-<b>1. menambah validasi isbn
+Sub-CPMK: Menerapkan manipulasi DOM & event JavaScript.
 
-<img width="847" height="358" alt="image" src="https://github.com/user-attachments/assets/131de264-1ca8-43a8-9e88-7e5790c72777" />
+## Perubahan dari Jobsheet 4
+- Tambah `assets/js/app.js`.
+- Hamburger menu: checkbox hack (CSS) diganti tombol + JS (`nav.classList.toggle("nav-open")`).
+- Form Tambah Buku & Tambah Anggota: validasi client-side (`initValidasiForm`) — field wajib, rentang tahun, stok non-negatif — pesan error tampil inline via manipulasi DOM (`insertAdjacentElement`).
+- Tabel Daftar Buku & Daftar Anggota: kolom pencarian real-time (`initTableFilter`) yang menyaring baris via `keyup`.
+- Tombol Hapus (`.btn-hapus`): menampilkan `confirm()` lalu menghapus baris dari tampilan (masih front-end saja, belum ke server).
 
-   2. menambahkan animasi menu
+## Cara menjalankan
+Buka `index.html` di browser. Coba: submit form kosong (muncul error), ketik di kolom cari (tabel tersaring), klik Hapus (muncul konfirmasi).
 
-<img width="872" height="440" alt="image" src="https://github.com/user-attachments/assets/d2b07146-aa5b-4145-8cef-22136d9b4d44" />
+## Catatan
+- Validasi di sini murni client-side dan bisa dilewati (nonaktifkan JS). Validasi server-side ditambahkan di Jobsheet 7 sebagai lapisan kedua yang wajib.
+- Hapus baris di jobsheet ini hanya menghilangkan dari tampilan (belum persisten) — akan diganti proses hapus sungguhan ke database mulai Jobsheet 9.
